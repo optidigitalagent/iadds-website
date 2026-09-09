@@ -1,0 +1,14 @@
+[
+  {
+    "name": "AI_Content_Site_Package_v1.zip",
+    "sha256": "485075db34d7fa2477d443a4b0e14aaf60e1ab039adb58b8a29a50b58b4b2d47"
+  },
+  {
+    "name": "iADDS_Media_Package_v1.zip",
+    "sha256": "9ce441a5c64c31a3ad7986cb857204104cb9a595c1bd484418d16c0d2105a0d5"
+  },
+  {
+    "name": "iADDS_Codex_Prompt_Handoff_v3.zip",
+    "sha256": "ea9610bc151367c688716f9762e8cdd148e3e08b7dfd636cea73e92d8d07503e"
+  }
+]

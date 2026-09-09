@@ -195,7 +195,7 @@ Local browser review: **passed**. 9 ширин, 18 проверок Axe. JavaScr
 
 ```json
 {
-  "status": "validated; private publication pending",
+  "status": "completed",
   "lint": "passed",
   "typecheck": "passed",
   "unit": {
@@ -279,7 +279,23 @@ Local browser review: **passed**. 9 ширин, 18 проверок Axe. JavaScr
   "sites": {
     "url": "https://iadds-by-antonov-digital.funckj.chatgpt.site",
     "audience": "owner-only",
-    "status": "awaiting private publication"
+    "status": "succeeded",
+    "version": 1,
+    "environmentRevision": 1,
+    "sourceCommit": "8c682f38eec6036d5faa22e8883c2d23c56e5bdf",
+    "browserHandoff": "Existing tab navigation was blocked by Browser Use URL policy because that tab contained a data: connection-error page from stopped localhost. Deployment itself succeeded; use the returned Sites URL."
+  },
+  "archive": {
+    "status": "passed",
+    "fileCount": 126,
+    "sha256": "db3fc5ee2c8e875bf84d722127d34d4c1b8bd92366243d6f94d9363bfce747f2",
+    "bytes": 4803677,
+    "symlinks": 0,
+    "matchesValidatedArtifact": true
+  },
+  "screenshotValidation": {
+    "uk": "passed",
+    "en": "passed"
   }
 }
 ```
@@ -311,3 +327,10 @@ Local browser review: **passed**. 9 ширин, 18 проверок Axe. JavaScr
 Публичные маршруты этой итерации сохранены; добавлен только служебный локальный GET /api/format-media/[filename]. Ранее добавленные /ai-systems и /pricing сохранены. Основные тексты услуг, цены, FAQ, timeline и founder story: src/content/{uk,en}/{services,experience,process,site}.ts; коммерческие поля: src/content/site/service-commercial.ts.
 
 Хостинг сохраняет Next.js через официальный OpenNext adapter: [OpenNext guide](https://opennext.js.org/cloudflare/get-started), [Cloudflare framework guide](https://developers.cloudflare.com/workers/framework-guides/web-apps/opennext/). Локальная Windows-обёртка Sites build-site.mjs ошиблась при поиске npm-cli; тот же package build успешно выполнен напрямую. Для упаковки используется штатный Sites helper через установленный Git Bash. Это ограничение локального инструмента, а не отключённая проверка приложения.
+
+
+Публикация завершена: https://iadds-by-antonov-digital.funckj.chatgpt.site (приватно, версия 1). Локальная дата завершения: 10 сентября 2026, Asia/Hebron. Все 126 файлов архива побайтно совпали с проверенным production artifact; неподтверждённых бинарников — 0. Полный checksum архивов: qa/iadds-v3/source-archives.json.
+
+После полного E2E-прогона переносимость OG была исправлена отдельно; оба PNG и все 20 основных маршрутов повторно проверены уже на точном Worker из публикационного архива. Lighthouse отражает лабораторный мобильный запуск на этом ПК, а не измерение реальных посетителей.
+
+Техническое ограничение передачи вкладки: Browser Use URL policy остановила переход из старой data: страницы ошибки localhost. Sites подтвердил успешную публикацию; сайт доступен владельцу по ссылке выше. Ошибка переключения вкладки не меняет статус публикации.

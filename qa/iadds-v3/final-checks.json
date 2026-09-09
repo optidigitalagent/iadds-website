@@ -1,5 +1,5 @@
 {
-  "status": "validated; private publication pending",
+  "status": "completed",
   "lint": "passed",
   "typecheck": "passed",
   "unit": {
@@ -83,6 +83,22 @@
   "sites": {
     "url": "https://iadds-by-antonov-digital.funckj.chatgpt.site",
     "audience": "owner-only",
-    "status": "awaiting private publication"
+    "status": "succeeded",
+    "version": 1,
+    "environmentRevision": 1,
+    "sourceCommit": "8c682f38eec6036d5faa22e8883c2d23c56e5bdf",
+    "browserHandoff": "Existing tab navigation was blocked by Browser Use URL policy because that tab contained a data: connection-error page from stopped localhost. Deployment itself succeeded; use the returned Sites URL."
+  },
+  "archive": {
+    "status": "passed",
+    "fileCount": 126,
+    "sha256": "db3fc5ee2c8e875bf84d722127d34d4c1b8bd92366243d6f94d9363bfce747f2",
+    "bytes": 4803677,
+    "symlinks": 0,
+    "matchesValidatedArtifact": true
+  },
+  "screenshotValidation": {
+    "uk": "passed",
+    "en": "passed"
   }
 }

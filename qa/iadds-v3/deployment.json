@@ -1,0 +1,33 @@
+{
+  "deployment": {
+    "id": "appgdep_6aa1ccf0e8708191bc17eb176291747f",
+    "project_id": "appgprj_6aa1bf1d22388191952c4f2570644211",
+    "title": "iADDS — By Antonov Digital",
+    "version_id": "appgprj_6aa1bf1d22388191952c4f2570644211~appgver_2795062b0c7c819188cd52e942e7022c",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://iadds-by-antonov-digital.funckj.chatgpt.site",
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6aa1bf1d22388191952c4f2570644211",
+    "failure_message": null,
+    "env_set_revision": 1,
+    "updated_at": "2026-09-09T21:17:56.661345+00:00"
+  },
+  "version": {
+    "id": "appgprj_6aa1bf1d22388191952c4f2570644211~appgver_2795062b0c7c819188cd52e942e7022c",
+    "project_id": "appgprj_6aa1bf1d22388191952c4f2570644211",
+    "version_number": 1,
+    "source": {
+      "commit_sha": "8c682f38eec6036d5faa22e8883c2d23c56e5bdf"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_000000008788820a9e124c35c00c3fe2",
+      "content_hash": "sha256:310e12f15f2e9d57272082a173a9bd728987815144b222c9e57ff4b116706fc3",
+      "size_bytes": 14049280,
+      "file_count": 126
+    },
+    "screenshot_url": null
+  },
+  "browserHandoff": "Existing tab navigation was blocked by Browser Use URL policy because that tab contained a data: connection-error page from stopped localhost. Deployment itself succeeded; use the returned Sites URL."
+}
