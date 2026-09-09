@@ -1,0 +1,111 @@
+{
+  "status": "passed",
+  "mode": "local review",
+  "throttle": {
+    "latencyMs": 400,
+    "downloadKbps": 500,
+    "uploadKbps": 250
+  },
+  "loadMs": 6687,
+  "mp4Requests": 0,
+  "resources": [
+    {
+      "url": "http://127.0.0.1:3100/fonts/manrope-cyrillic.woff2",
+      "bytes": 14800
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/css/ce030aaa362594a0.css",
+      "bytes": 5195
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/css/6cd794abd409bd58.css",
+      "bytes": 3723
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/css/041d3311b3d5a2c1.css",
+      "bytes": 6451
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/webpack-6437611ecfb575a5.js",
+      "bytes": 2063
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/main-app-8eb984d69c6e3a77.js",
+      "bytes": 813
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/4bd1b696-92152b0f5947070d.js",
+      "bytes": 63599
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/794-d1a40dcf24d651d9.js",
+      "bytes": 65903
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/500-b13bb91f5a6311b6.js",
+      "bytes": 3853
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/513-45c596b1b6733343.js",
+      "bytes": 4328
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/app/%5Blocale%5D/layout-d3818f1b467e89e5.js",
+      "bytes": 3879
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/app/%5Blocale%5D/page-1435be38efe343da.js",
+      "bytes": 4804
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/app/%5Blocale%5D/error-a81a79338a9ef515.js",
+      "bytes": 3809
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/chunks/app/%5Blocale%5D/not-found-b17d00009d31785e.js",
+      "bytes": 964
+    },
+    {
+      "url": "http://127.0.0.1:3100/_next/static/css/63144ee9fb808f37.css",
+      "bytes": 1228
+    },
+    {
+      "url": "http://127.0.0.1:3100/api/format-media/example-06-mobile.avif",
+      "bytes": 24393
+    },
+    {
+      "url": "http://127.0.0.1:3100/media/brand/iadds-symbol-128.png",
+      "bytes": 44644
+    },
+    {
+      "url": "http://127.0.0.1:3100/fonts/manrope-latin.woff2",
+      "bytes": 25136
+    },
+    {
+      "url": "http://127.0.0.1:3100/api/format-media/example-41-mobile.avif",
+      "bytes": 8430
+    },
+    {
+      "url": "http://127.0.0.1:3100/api/format-media/example-30-mobile.avif",
+      "bytes": 11703
+    },
+    {
+      "url": "http://127.0.0.1:3100/api/format-media/example-33-mobile.avif",
+      "bytes": 4873
+    },
+    {
+      "url": "http://127.0.0.1:3100/api/format-media/example-12-mobile.avif",
+      "bytes": 13462
+    },
+    {
+      "url": "http://127.0.0.1:3100/api/format-media/example-40-mobile.avif",
+      "bytes": 8652
+    },
+    {
+      "url": "http://127.0.0.1:3100/api/format-media/example-19-mobile.avif",
+      "bytes": 11823
+    }
+  ],
+  "range206": true,
+  "range416": true
+}

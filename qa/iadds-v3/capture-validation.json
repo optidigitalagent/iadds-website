@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "method": "Instant scroll through every section; each image decoded; every reveal visible before screenshot.",
+  "results": [
+    {
+      "name": "home",
+      "width": 390,
+      "loadedImages": 14,
+      "pendingReveals": 0
+    },
+    {
+      "name": "home",
+      "width": 1440,
+      "loadedImages": 14,
+      "pendingReveals": 0
+    },
+    {
+      "name": "about",
+      "width": 390,
+      "loadedImages": 8,
+      "pendingReveals": 0
+    },
+    {
+      "name": "about",
+      "width": 1440,
+      "loadedImages": 8,
+      "pendingReveals": 0
+    },
+    {
+      "name": "ai-video-ads",
+      "width": 390,
+      "loadedImages": 10,
+      "pendingReveals": 0
+    },
+    {
+      "name": "ai-video-ads",
+      "width": 1440,
+      "loadedImages": 10,
+      "pendingReveals": 0
+    },
+    {
+      "name": "product-visuals",
+      "width": 390,
+      "loadedImages": 10,
+      "pendingReveals": 0
+    },
+    {
+      "name": "product-visuals",
+      "width": 1440,
+      "loadedImages": 10,
+      "pendingReveals": 0
+    },
+    {
+      "name": "virtual-models",
+      "width": 390,
+      "loadedImages": 8,
+      "pendingReveals": 0
+    },
+    {
+      "name": "virtual-models",
+      "width": 1440,
+      "loadedImages": 8,
+      "pendingReveals": 0
+    },
+    {
+      "name": "video-localization",
+      "width": 390,
+      "loadedImages": 5,
+      "pendingReveals": 0
+    },
+    {
+      "name": "video-localization",
+      "width": 1440,
+      "loadedImages": 5,
+      "pendingReveals": 0
+    },
+    {
+      "name": "performance-creatives",
+      "width": 390,
+      "loadedImages": 11,
+      "pendingReveals": 0
+    },
+    {
+      "name": "performance-creatives",
+      "width": 1440,
+      "loadedImages": 11,
+      "pendingReveals": 0
+    }
+  ]
+}

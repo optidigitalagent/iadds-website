@@ -1,0 +1,1812 @@
+{
+  "createdAt": "2026-09-09T20:04:31.093Z",
+  "sourceRoot": "C:/Users/Admin/AppData/Local/Temp/iadds-v3-sources-4393855296b54fe6bf82fc1c461e3341",
+  "counts": {
+    "unique": 41,
+    "videos": 27,
+    "images": 14,
+    "selected": 30,
+    "reserve": 11,
+    "founders": 7,
+    "contactSheets": 7,
+    "curatedCopies": 52
+  },
+  "missingOrCorrupt": [],
+  "assets": [
+    {
+      "id": 1,
+      "original_filename": "0e94fe86-e661-5bb7-bfc1-1fc42b107fcc.avif",
+      "renamed_filename": "01_yellow_beverage_cans_grass.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Lifestyle product still: yellow beverage cans in grass and crate",
+      "tags": "product still, beverage, lifestyle",
+      "resolution": "1080x1609",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/01_yellow_beverage_cans_grass.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1609,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 279231,
+      "sha256": "82ca2ccf38ceb0a17f63c1f87ba9b02198c5794d7d1b63de72fdaf999f4906ea",
+      "curatedCopies": [
+        "02_website_curated/02_product_photos_videos/01_source-01_yellow_beverage_cans_grass.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 2,
+      "original_filename": "0ede1f77-36e5-5ccb-bd21-eac35fdab8a9.avif",
+      "renamed_filename": "02_limber_can_graphic_background.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Graphic product still: blue Limber can on yellow/pink set",
+      "tags": "product still, beverage, graphic",
+      "resolution": "1080x1080",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/02_limber_can_graphic_background.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1080,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 101672,
+      "sha256": "b46df3d1a8b2102733f902d041b5365620aadecd6dfb040266397574fb0b0bad",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/02_limber_can_graphic_background.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 3,
+      "original_filename": "10549795-1814-4ad4-b992-511f475a0e4a.mp4",
+      "renamed_filename": "03_candle_brand_motion_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Candle product ad with editorial typography and brand frames",
+      "tags": "product ad, candle, typography",
+      "resolution": "600x1066",
+      "duration": "7.3s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/03_candle_brand_motion_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 7.296,
+      "hasAudio": true,
+      "bytes": 1069952,
+      "sha256": "665e404e18d6cc91854b3bc5c6c256bd74d5cecb76567ffab307fb5795acf834",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/03_candle_brand_motion_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 4,
+      "original_filename": "12970b70-6064-5ba4-a3f2-57f5425f70e2.avif",
+      "renamed_filename": "04_bobbin_tinted_lip_balm.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Cosmetics product still: Bobbin tinted lip balm compact",
+      "tags": "product still, cosmetics",
+      "resolution": "1080x1609",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/04_bobbin_tinted_lip_balm.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1609,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 29784,
+      "sha256": "142572d69156101477b0b26677e89cf15f5cf9897791a5facc739dac2d488b1c",
+      "curatedCopies": [
+        "02_website_curated/02_product_photos_videos/02_source-04_bobbin_tinted_lip_balm.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 5,
+      "original_filename": "1ca5e4aa-bcff-5be8-9ccc-b97094c713a6.avif",
+      "renamed_filename": "05_orova_body_oil_closeup.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Premium body oil close-up in warm light",
+      "tags": "product still, beauty, premium",
+      "resolution": "1080x1340",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/05_orova_body_oil_closeup.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1340,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 57705,
+      "sha256": "781e56a834cf6ed175fe7f828d34dffd5efcb10716c50090dd94d6fe628c87e8",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/05_orova_body_oil_closeup.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 6,
+      "original_filename": "1cc0289d-074e-4eff-b273-4d430e416c61.mp4",
+      "renamed_filename": "06_tomato_can_dynamic_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Dynamic canned tomato advertising video with product transformation",
+      "tags": "product ad, food, dynamic",
+      "resolution": "600x1066",
+      "duration": "7.3s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/06_tomato_can_dynamic_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 7.296,
+      "hasAudio": true,
+      "bytes": 2590594,
+      "sha256": "57f71b61d42084c5e8a4dd9817585e23a4137f9f0f3fec9fc224be11a80caa7e",
+      "curatedCopies": [
+        "02_website_curated/01_advertising_videos/01_source-06_tomato_can_dynamic_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 7,
+      "original_filename": "255c248c-529d-5d32-89a6-b5da9bc83d50.avif",
+      "renamed_filename": "07_splash_cans_fridge.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Beverage cans arranged in a refrigerator",
+      "tags": "product still, beverage, marketplace",
+      "resolution": "1080x1340",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/07_splash_cans_fridge.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1340,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 148796,
+      "sha256": "51fa5a677434788a9083aa5e5e6bfd4818e329096644c4107adfc093c8f7c29c",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/07_splash_cans_fridge.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 8,
+      "original_filename": "30ff2469-cd60-4b50-9cc3-3001670b8a56.mp4",
+      "renamed_filename": "08_blackberry_preserve_pop_art_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Pop-art campaign video for blackberry preserve jar",
+      "tags": "product ad, food, pop-art",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/08_blackberry_preserve_pop_art_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 4772400,
+      "sha256": "398ebe90fa520faa4c8413680a0637c275eed1f5f85be069c5be0f40e116befb",
+      "curatedCopies": [
+        "02_website_curated/01_advertising_videos/02_source-08_blackberry_preserve_pop_art_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 9,
+      "original_filename": "36052145-6b41-51f2-95c1-7a0f0393a112.avif",
+      "renamed_filename": "09_hesper_row_cream_jar.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Cream jar lifestyle close-up",
+      "tags": "product still, beauty, lifestyle",
+      "resolution": "1080x1446",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/09_hesper_row_cream_jar.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1446,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 171569,
+      "sha256": "432b6a2e2c2cf667597c936bfddc52c309239682037cd1b6a4ff0c8bc14818f6",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/09_hesper_row_cream_jar.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 10,
+      "original_filename": "3adb2415-e7d8-50e5-b745-f69ab47bad89.avif",
+      "renamed_filename": "10_green_beverage_mint_water.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Green beverage package with mint and water macro scene",
+      "tags": "product still, beverage, macro",
+      "resolution": "1080x1446",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/10_green_beverage_mint_water.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1446,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 138227,
+      "sha256": "0f9e785556f0b766cfe72148587a24bec736866973deb9645d235f2806cde388",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/10_green_beverage_mint_water.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 11,
+      "original_filename": "44059e81-8722-4e77-9eb9-08973d03e163.mp4",
+      "renamed_filename": "11_gold_serum_product_motion.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Luxury serum/oil product motion in gold environment",
+      "tags": "product ad, beauty, premium",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/11_gold_serum_product_motion.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 1492302,
+      "sha256": "deb38c55d876e629e2f8c1c95543c92c0156f301ef63903eda3a21a67774a15c",
+      "curatedCopies": [
+        "02_website_curated/02_product_photos_videos/03_source-11_gold_serum_product_motion.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 12,
+      "original_filename": "4b69fc5c-74ad-5745-886b-3ede4df9b69e.avif",
+      "renamed_filename": "12_cosmetic_tube_ice_berries.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Cosmetic tube on ice blocks with berries",
+      "tags": "product still, cosmetics, studio",
+      "resolution": "1080x1340",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/12_cosmetic_tube_ice_berries.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1340,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 100615,
+      "sha256": "e6d8670db835c84b314c612f348c670f2c5fd3292efad5d6ecfae759dbf67eb0",
+      "curatedCopies": [
+        "02_website_curated/02_product_photos_videos/04_source-12_cosmetic_tube_ice_berries.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 13,
+      "original_filename": "4f850ef0-78aa-4df9-bb60-cb32e12c6672.mp4",
+      "renamed_filename": "13_perfume_multi_scene_campaign.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Fragrance campaign with multiple visual worlds and collage styling",
+      "tags": "product ad, fragrance, multi-scene",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/13_perfume_multi_scene_campaign.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 2913574,
+      "sha256": "8a5d82f52f9c3c78a2720cef308fc4cac0c1afc226682adb56dd6554ce69e1a9",
+      "curatedCopies": [
+        "02_website_curated/01_advertising_videos/03_source-13_perfume_multi_scene_campaign.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 14,
+      "original_filename": "593b1f6d-1967-4dce-ac20-2d5df33e94b0.mp4",
+      "renamed_filename": "14_rosehip_lifestyle_campaign.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Rosehip product lifestyle campaign across sunny scenes",
+      "tags": "product ad, beauty, lifestyle",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/14_rosehip_lifestyle_campaign.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 3180261,
+      "sha256": "f5010783a3b1cf35bd4b0c168e1fd06716600966fcc7c14591f0cb5fd18a4bfd",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/14_rosehip_lifestyle_campaign.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 15,
+      "original_filename": "5d920c0b-523d-443f-b122-a09de57d66f7-7421d168255a357a.mp4",
+      "renamed_filename": "15_marshmallow_creator_ugc.mp4",
+      "primary_category": "UGC-Style Video Ads",
+      "description": "Direct-to-camera creator tasting and showing a marshmallow product",
+      "tags": "UGC, creator, food, direct-to-camera",
+      "resolution": "506x900",
+      "duration": "12.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/04_ugc_style_ads/15_marshmallow_creator_ugc.mp4",
+      "kind": "video",
+      "width": 506,
+      "height": 900,
+      "durationSeconds": 12.050998,
+      "hasAudio": true,
+      "bytes": 1869033,
+      "sha256": "7421d168255a357ad3f307c1186a5a5367fdc0aac5b9f9a6fbad851df3a46c5e",
+      "curatedCopies": [
+        "02_website_curated/04_ugc_style_ads/01_source-15_marshmallow_creator_ugc.mp4",
+        "02_website_curated/05_ai_presenters/02_source-15_marshmallow_creator_ugc.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 16,
+      "original_filename": "685a6465-c7cc-4b55-a05f-357ecc3ee7f7.mp4",
+      "renamed_filename": "16_manuka_honey_macro_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Manuka honey product animation with macro ingredient/letter visuals",
+      "tags": "product ad, wellness, macro",
+      "resolution": "600x1066",
+      "duration": "8.0s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/16_manuka_honey_macro_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 8,
+      "hasAudio": true,
+      "bytes": 2962606,
+      "sha256": "f1e7a61838151953842ca7c21781a7a8d007fe27c7414910f812cb9769e9481a",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/16_manuka_honey_macro_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 17,
+      "original_filename": "711ecf09-1b4a-4441-adb5-b0856f756f7b.avif",
+      "renamed_filename": "17_model_holding_lume_product.avif",
+      "primary_category": "Virtual Models",
+      "description": "Commercial model holding a beauty product",
+      "tags": "virtual model placeholder, beauty, model-led",
+      "resolution": "1080x1443",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/03_virtual_models/17_model_holding_lume_product.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1443,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 97148,
+      "sha256": "9779a8f18d2ecbd73c4ea6b8050391951c87fd104d36dc13ee7f87d1fa9a0375",
+      "curatedCopies": [
+        "02_website_curated/03_virtual_models/01_source-17_model_holding_lume_product.avif",
+        "02_website_curated/09_ad_creative_variations/02_LUME_model_and_billboard/01_source-17_model_holding_lume_product.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 18,
+      "original_filename": "742a9540-c728-4f89-921e-bed6bc6079ca.mp4",
+      "renamed_filename": "18_gelato_tennis_surreal_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Surreal sports-themed gelato product campaign",
+      "tags": "product ad, food, surreal",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/18_gelato_tennis_surreal_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 2880696,
+      "sha256": "0730ff4b438317a98c1c7c1c173cdcbc7f4363839ba3d1ec76f4cf1de738bbf7",
+      "curatedCopies": [
+        "02_website_curated/08_brand_characters/03_source-18_gelato_tennis_surreal_ad.mp4",
+        "02_website_curated/10_reserve/18_gelato_tennis_surreal_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 19,
+      "original_filename": "775ac6dc-a83d-4c4e-a11a-69d9f8cd43d5-3aa4479f2fdb479b.mp4",
+      "renamed_filename": "19_beauty_device_presenter_demo.mp4",
+      "primary_category": "AI Presenters & Avatars",
+      "description": "Direct-to-camera presenter demonstrating a beauty device",
+      "tags": "presenter, UGC, beauty, tutorial",
+      "resolution": "676x900",
+      "duration": "14.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/05_ai_presenters/19_beauty_device_presenter_demo.mp4",
+      "kind": "video",
+      "width": 676,
+      "height": 900,
+      "durationSeconds": 14.070998,
+      "hasAudio": true,
+      "bytes": 1470652,
+      "sha256": "3aa4479f2fdb479b9684a5a5df333cddb9895883091bb1a5a64da99c470074f6",
+      "curatedCopies": [
+        "02_website_curated/04_ugc_style_ads/02_source-19_beauty_device_presenter_demo.mp4",
+        "02_website_curated/05_ai_presenters/01_source-19_beauty_device_presenter_demo.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 20,
+      "original_filename": "82772c0a-9518-472c-9825-3d84b74f3ee0.mp4",
+      "renamed_filename": "20_wallet_feature_explainer.mp4",
+      "primary_category": "Explainer Videos",
+      "description": "Product feature explainer for a wallet: weight, materials, construction",
+      "tags": "explainer, product specs, accessories",
+      "resolution": "600x1066",
+      "duration": "5.7s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/07_explainer_videos/20_wallet_feature_explainer.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 5.666667,
+      "hasAudio": true,
+      "bytes": 1043652,
+      "sha256": "f2211fddc9cbe444a9ab45ba1b8b391081ed7ced974865283b4026250130c1e9",
+      "curatedCopies": [
+        "02_website_curated/07_explainer_videos/01_source-20_wallet_feature_explainer.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 21,
+      "original_filename": "862de749-aa5c-4816-b028-7e254d969759.avif",
+      "renamed_filename": "21_model_holding_solv_product.avif",
+      "primary_category": "Virtual Models",
+      "description": "Commercial model portrait holding a wellness/beauty product",
+      "tags": "virtual model placeholder, model-led, beauty",
+      "resolution": "1080x1443",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/03_virtual_models/21_model_holding_solv_product.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1443,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 85416,
+      "sha256": "68ed0c009ffcc9f856ad3ef8bd1182293084cc0864a4402a0d4d6603bf037a32",
+      "curatedCopies": [
+        "02_website_curated/03_virtual_models/02_source-21_model_holding_solv_product.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 22,
+      "original_filename": "90030962-0830-5ccb-b0d2-d6d2b00af47f.avif",
+      "renamed_filename": "22_studio_hands_balm_bag.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Hand balm product placed inside a handbag",
+      "tags": "product still, beauty, lifestyle",
+      "resolution": "1080x1446",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/22_studio_hands_balm_bag.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1446,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 115646,
+      "sha256": "95b827568edcffc431a00e8bd7eaf447b4f4a21202378bfa8d219b3c22fe6d62",
+      "curatedCopies": [
+        "02_website_curated/09_ad_creative_variations/03_STUDIO_HANDS_two_product_visuals/01_source-22_studio_hands_balm_bag.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 23,
+      "original_filename": "912e3fb0-ec08-4963-b833-c258bfe32e6a.mp4",
+      "renamed_filename": "23_lume_billboard_city_campaign.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Lume outdoor/billboard campaign in a stylized miniature city",
+      "tags": "campaign ad, billboard, beauty",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/23_lume_billboard_city_campaign.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 1659155,
+      "sha256": "08eb147e990dcfa57f30247c54811bad5ac88108749175d5866a47831b6e3015",
+      "curatedCopies": [
+        "02_website_curated/09_ad_creative_variations/02_LUME_model_and_billboard/02_source-23_lume_billboard_city_campaign.mp4",
+        "02_website_curated/10_reserve/23_lume_billboard_city_campaign.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 24,
+      "original_filename": "97dae601-98ff-5efb-be81-fb2068305452.avif",
+      "renamed_filename": "24_limetta_vitamins_lemons.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Women’s multivitamin bottle with lemon product staging",
+      "tags": "product still, wellness, studio",
+      "resolution": "1080x1080",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/24_limetta_vitamins_lemons.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1080,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 45724,
+      "sha256": "fe47615f9e8b01a99d4e6dd5ae0134ff5caa1192c2709b26900f1f536fee164d",
+      "curatedCopies": [
+        "02_website_curated/02_product_photos_videos/05_source-24_limetta_vitamins_lemons.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 25,
+      "original_filename": "987c5b31-e651-4c84-b93a-20106b0c9f93.avif",
+      "renamed_filename": "25_male_model_food_jar.avif",
+      "primary_category": "Virtual Models",
+      "description": "Male commercial model presenting a packaged food product",
+      "tags": "virtual model placeholder, model-led, food",
+      "resolution": "1080x1620",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/03_virtual_models/25_male_model_food_jar.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1620,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 110313,
+      "sha256": "4e4478cca0b98e49cd9bcfb45ddbd5c9b58c501348ebe14432cf96cd8836ef70",
+      "curatedCopies": [
+        "02_website_curated/03_virtual_models/03_source-25_male_model_food_jar.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 26,
+      "original_filename": "9f8bc173-e29a-4fa9-8809-4f6ba0475974-74d89c050f6fa165.mp4",
+      "renamed_filename": "26_jewelry_unboxing_hands_ugc.mp4",
+      "primary_category": "UGC-Style Video Ads",
+      "description": "Hands-only unboxing and demonstration of jewelry packaging",
+      "tags": "UGC, unboxing, jewelry, hands-only",
+      "resolution": "676x900",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/04_ugc_style_ads/26_jewelry_unboxing_hands_ugc.mp4",
+      "kind": "video",
+      "width": 676,
+      "height": 900,
+      "durationSeconds": 15.069002,
+      "hasAudio": true,
+      "bytes": 1923033,
+      "sha256": "74d89c050f6fa165ece11a7379003fc49370afe4d39ce074370050260c28a252",
+      "curatedCopies": [
+        "02_website_curated/04_ugc_style_ads/03_source-26_jewelry_unboxing_hands_ugc.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 27,
+      "original_filename": "a9c8bc31-ff80-4f43-8e64-293671999d67.mp4",
+      "renamed_filename": "27_olive_oil_pop_art_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Colorful pop-art olive oil product video",
+      "tags": "product ad, food, pop-art",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/27_olive_oil_pop_art_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 2974786,
+      "sha256": "539085e3d5927e58dd2838624c9a96c9319bf0acd389b9ca302c38c689d22fc6",
+      "curatedCopies": [
+        "02_website_curated/08_brand_characters/02_source-27_olive_oil_pop_art_ad.mp4",
+        "02_website_curated/10_reserve/27_olive_oil_pop_art_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 28,
+      "original_filename": "aeb9239a-f83b-4958-825f-f95c3a197896.mp4",
+      "renamed_filename": "28_typographic_brand_motion.mp4",
+      "primary_category": "Explainer Videos",
+      "description": "Typographic brand/message motion piece; useful as a motion-design placeholder, not a full explainer",
+      "tags": "motion design, typography, weak explainer",
+      "resolution": "600x450",
+      "duration": "12.3s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/07_explainer_videos/28_typographic_brand_motion.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 450,
+      "durationSeconds": 12.256,
+      "hasAudio": true,
+      "bytes": 450807,
+      "sha256": "1de2e66fc0ebfdf9b7e3ce60a8988f0287f94cfb546347860bbe223b98e11e0d",
+      "curatedCopies": [
+        "02_website_curated/07_explainer_videos/04_source-28_typographic_brand_motion.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 29,
+      "original_filename": "aef59e19-f388-4dcc-b55a-e43a5c48c835.mp4",
+      "renamed_filename": "29_watch_engineering_explainer.mp4",
+      "primary_category": "Explainer Videos",
+      "description": "Technical watch explainer with exploded parts and specifications",
+      "tags": "explainer, engineering, product specs",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/07_explainer_videos/29_watch_engineering_explainer.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 2703332,
+      "sha256": "c0177c08106fb8630afde6871b88263f4a3c66abb13187a6e6f9c6e0a68546e6",
+      "curatedCopies": [
+        "02_website_curated/07_explainer_videos/02_source-29_watch_engineering_explainer.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 30,
+      "original_filename": "af2f10cf-8cf4-4f8c-a8ad-9e19aaf9ea1c.mp4",
+      "renamed_filename": "30_plip_metallic_orange_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Metallic orange PLIP product campaign",
+      "tags": "product ad, beauty, art direction",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/30_plip_metallic_orange_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 2776667,
+      "sha256": "4cab0bf49f75dd0785c7bad347700d3b2773d58078f256e0c89cc43b9dba6e6e",
+      "curatedCopies": [
+        "02_website_curated/09_ad_creative_variations/01_PLIP_two_art_directions/01_source-30_plip_metallic_orange_ad.mp4",
+        "02_website_curated/10_reserve/30_plip_metallic_orange_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 31,
+      "original_filename": "b2d7f46d-2650-43d2-93ac-407728c5fedd.mp4",
+      "renamed_filename": "31_calendula_oil_bubbles_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Calendula oil product video with floating bubbles",
+      "tags": "product ad, wellness, 3D",
+      "resolution": "600x1066",
+      "duration": "5.2s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/31_calendula_oil_bubbles_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 5.184,
+      "hasAudio": true,
+      "bytes": 861604,
+      "sha256": "f62a66fda30e538467d30325284c4c906c8265f4f96f1c2b716fe306510dbcc8",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/31_calendula_oil_bubbles_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 32,
+      "original_filename": "db4f2714-5085-4759-84f4-0e1596ed8d7e.mp4",
+      "renamed_filename": "32_nibbo_cartoon_brand_world.mp4",
+      "primary_category": "Brand Characters & Mascots",
+      "description": "Product campaign built around illustrated almond/ingredient characters",
+      "tags": "brand characters, food, illustrated world",
+      "resolution": "600x1066",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/08_brand_characters/32_nibbo_cartoon_brand_world.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 3022650,
+      "sha256": "68fea4670201144e4b301cbfb1bce79c2eae942bcdd830196c19e5cd0203d6e4",
+      "curatedCopies": [
+        "02_website_curated/08_brand_characters/01_source-32_nibbo_cartoon_brand_world.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 33,
+      "original_filename": "e4e200ac-d0e6-44c8-b12c-b755ed1c39b9.mp4",
+      "renamed_filename": "33_plip_pop_art_green_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Green/pink pop-art PLIP product execution",
+      "tags": "product ad, beauty, variation",
+      "resolution": "600x338",
+      "duration": "15.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/33_plip_pop_art_green_ad.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 338,
+      "durationSeconds": 15.104,
+      "hasAudio": true,
+      "bytes": 813220,
+      "sha256": "0f1d265a2e379bdc0e9e594cc86606257cf2c41361345166585842c47ed9af8e",
+      "curatedCopies": [
+        "02_website_curated/09_ad_creative_variations/01_PLIP_two_art_directions/02_source-33_plip_pop_art_green_ad.mp4",
+        "02_website_curated/10_reserve/33_plip_pop_art_green_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 34,
+      "original_filename": "e5cbf89c-209b-4045-8471-407c20ddd700.mp4",
+      "renamed_filename": "34_nami_shoe_wave_campaign.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Sneaker campaign with stylized wave world",
+      "tags": "product ad, footwear, graphic world",
+      "resolution": "600x1066",
+      "duration": "12.3s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/34_nami_shoe_wave_campaign.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 12.256,
+      "hasAudio": true,
+      "bytes": 2920110,
+      "sha256": "db3fc5fc0ea9f4a35db5f2013159c7a9abeee7fdcbf531b042223621309c49e7",
+      "curatedCopies": [
+        "02_website_curated/01_advertising_videos/04_source-34_nami_shoe_wave_campaign.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 35,
+      "original_filename": "f0899b11-b706-43d5-850f-9d71c44e5db1.mp4",
+      "renamed_filename": "35_brand_system_motion_explainer.mp4",
+      "primary_category": "Explainer Videos",
+      "description": "Abstract brand-system motion explaining a signal/response idea; not a conventional product explainer",
+      "tags": "motion design, brand system, weak explainer",
+      "resolution": "600x1066",
+      "duration": "10.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/07_explainer_videos/35_brand_system_motion_explainer.mp4",
+      "kind": "video",
+      "width": 600,
+      "height": 1066,
+      "durationSeconds": 10.144,
+      "hasAudio": true,
+      "bytes": 1428024,
+      "sha256": "9ec6582266ce2c309b78e9545a1e30ded6afb2e2b9eec86b0eefc696e15b309e",
+      "curatedCopies": [
+        "02_website_curated/07_explainer_videos/03_source-35_brand_system_motion_explainer.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 36,
+      "original_filename": "fa989118-0ecd-5ed9-8ff4-fb2cfde7643a.avif",
+      "renamed_filename": "36_studio_hands_balm_set.avif",
+      "primary_category": "Product Photos & Videos",
+      "description": "Studio Hands Balm products in a colorful campaign set",
+      "tags": "product still, beauty, art direction",
+      "resolution": "1080x1340",
+      "duration": "",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/36_studio_hands_balm_set.avif",
+      "kind": "image",
+      "width": 1080,
+      "height": 1340,
+      "durationSeconds": null,
+      "hasAudio": false,
+      "bytes": 101723,
+      "sha256": "ee740aaa5bc8eff4b3171fc2ad8c6c2b1abe0ad226ff777292518a384614835a",
+      "curatedCopies": [
+        "02_website_curated/09_ad_creative_variations/03_STUDIO_HANDS_two_product_visuals/02_source-36_studio_hands_balm_set.avif",
+        "02_website_curated/10_reserve/36_studio_hands_balm_set.avif"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 37,
+      "original_filename": "marketing-studio-slider-poster-Ads.mp4",
+      "renamed_filename": "37_fizzy_poster_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Poster-style beverage ad with CTA",
+      "tags": "ad creative, beverage, poster",
+      "resolution": "500x376",
+      "duration": "5.0s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/37_fizzy_poster_ad.mp4",
+      "kind": "video",
+      "width": 500,
+      "height": 376,
+      "durationSeconds": 5.041667,
+      "hasAudio": false,
+      "bytes": 207830,
+      "sha256": "d94d3e9b39baf6580c823b26673272a5c5230d7c6c63ea9cac941eaab6e3facf",
+      "curatedCopies": [
+        "02_website_curated/08_brand_characters/04_source-37_fizzy_poster_ad.mp4",
+        "02_website_curated/10_reserve/37_fizzy_poster_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 38,
+      "original_filename": "marketing-studio-slider-poster-Marketplace.mp4",
+      "renamed_filename": "38_body_wash_marketplace_motion.mp4",
+      "primary_category": "Product Photos & Videos",
+      "description": "Compact marketplace/product-card motion for body wash",
+      "tags": "product motion, marketplace, beauty",
+      "resolution": "500x376",
+      "duration": "5.2s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/02_product_photos_videos/38_body_wash_marketplace_motion.mp4",
+      "kind": "video",
+      "width": 500,
+      "height": 376,
+      "durationSeconds": 5.166667,
+      "hasAudio": false,
+      "bytes": 178878,
+      "sha256": "ab78eae398ed5243ebe6de728c0bd6c39b6d3cefa2668e7c57f2bc4354004f8c",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/38_body_wash_marketplace_motion.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 39,
+      "original_filename": "marketing-studio-slider-poster-Motion.mp4",
+      "renamed_filename": "39_chips_package_motion_ad.mp4",
+      "primary_category": "Advertising Videos",
+      "description": "Motion-design ad for chips packaging",
+      "tags": "product ad, food, motion",
+      "resolution": "500x376",
+      "duration": "10.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/01_advertising_videos/39_chips_package_motion_ad.mp4",
+      "kind": "video",
+      "width": 500,
+      "height": 376,
+      "durationSeconds": 10.125,
+      "hasAudio": false,
+      "bytes": 1006749,
+      "sha256": "3f0ebcc5f1c22f23b9935058ef58684625caf015b46e13e6d3f4e84b90379bac",
+      "curatedCopies": [
+        "02_website_curated/10_reserve/39_chips_package_motion_ad.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "reserve",
+      "reason": "Not in final editorial selection; retained privately to avoid repetitive galleries."
+    },
+    {
+      "id": 40,
+      "original_filename": "marketing-studio-slider-poster-Product.mp4",
+      "renamed_filename": "40_biojuss_model_campaign.mp4",
+      "primary_category": "Virtual Models",
+      "description": "Polished beauty product campaign featuring commercial models",
+      "tags": "virtual model placeholder, beauty, campaign",
+      "resolution": "500x376",
+      "duration": "7.1s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/03_virtual_models/40_biojuss_model_campaign.mp4",
+      "kind": "video",
+      "width": 500,
+      "height": 376,
+      "durationSeconds": 7.08,
+      "hasAudio": false,
+      "bytes": 632505,
+      "sha256": "1d2d8c733330132ab904f387b9726404005f7040a671cfad6c11c00c39ef33f5",
+      "curatedCopies": [
+        "02_website_curated/01_advertising_videos/05_source-40_biojuss_model_campaign.mp4",
+        "02_website_curated/03_virtual_models/04_source-40_biojuss_model_campaign.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    },
+    {
+      "id": 41,
+      "original_filename": "marketing-studio-slider-poster-UGC.mp4",
+      "renamed_filename": "41_handbag_creator_ugc.mp4",
+      "primary_category": "UGC-Style Video Ads",
+      "description": "Creator-style handbag demonstration and contents reveal",
+      "tags": "UGC, fashion accessory, direct-to-camera",
+      "resolution": "500x376",
+      "duration": "12.0s",
+      "rights_status": "UNVERIFIED — use as prototype/reference until ownership or license is confirmed",
+      "sourcePath": "01_primary_library/04_ugc_style_ads/41_handbag_creator_ugc.mp4",
+      "kind": "video",
+      "width": 500,
+      "height": 376,
+      "durationSeconds": 12.04,
+      "hasAudio": false,
+      "bytes": 769706,
+      "sha256": "8c220c9408865c87cfa6b656a69be2b15318ae5e678442a10a3fa46cb22cbb98",
+      "curatedCopies": [
+        "02_website_curated/04_ugc_style_ads/04_source-41_handbag_creator_ugc.mp4"
+      ],
+      "rightsStatus": "unverified",
+      "status": "staging-only",
+      "reason": "Selected by final editorial mapping; production blocked until per-asset approval."
+    }
+  ],
+  "files": [
+    {
+      "file": "AI_Content_Site_Package/AI_Content_Master_Website_Content_v1.md",
+      "bytes": 86503,
+      "sha256": "de51a625bcf7c948f9f5bacaf5d63d064f9b7ddc2b116e9fe6a99413585373db",
+      "role": "Source document read and applied using final override precedence"
+    },
+    {
+      "file": "AI_Content_Site_Package/AI_Content_Site_Agent_Implementation_Prompt_v1.txt",
+      "bytes": 5909,
+      "sha256": "dbba71f528f62f690f474e1fc2ae8e59a7cf139ff094bf436914e5753bfe90cc",
+      "role": "Source document read and applied using final override precedence"
+    },
+    {
+      "file": "AI_Content_Site_Package/assets/founder/01_founder_portrait_sea_cap.png",
+      "bytes": 688822,
+      "sha256": "085c1f3a59f1e498427f8073c4c87f9a97e559a6a7ce5c7190470b6bdc7f804c",
+      "role": "First-party editorial source; privacy crop and responsive derivatives"
+    },
+    {
+      "file": "AI_Content_Site_Package/assets/founder/02_founder_hockey_team_action.png",
+      "bytes": 1807619,
+      "sha256": "7f717c45ccb71f9350cd280f533a4e1456ba464d46daf71089cc2180d0a5710e",
+      "role": "First-party editorial source; privacy crop and responsive derivatives"
+    },
+    {
+      "file": "AI_Content_Site_Package/assets/founder/03_founder_hockey_puck_action.png",
+      "bytes": 1749103,
+      "sha256": "fbed41c5b3445561fe847f7fffb03fbac49f12e94a83a955541c5259835ff9b2",
+      "role": "First-party editorial source; privacy crop and responsive derivatives"
+    },
+    {
+      "file": "AI_Content_Site_Package/assets/founder/04_founder_urban_event_source.png",
+      "bytes": 2472711,
+      "sha256": "47b76929316b8c00a56204f3f3473af25d8ec033d207ca39c518115cee49bfc1",
+      "role": "First-party editorial source; privacy crop and responsive derivatives"
+    },
+    {
+      "file": "AI_Content_Site_Package/assets/founder/05_founder_gopro_water.png",
+      "bytes": 1601008,
+      "sha256": "178d7c49a285999cd30dbbe7478384f35921c6be395860c8f8be26d38b010b73",
+      "role": "First-party editorial source; privacy crop and responsive derivatives"
+    },
+    {
+      "file": "AI_Content_Site_Package/assets/founder/06_founder_boat.png",
+      "bytes": 1352479,
+      "sha256": "161da207ee43897c1a962b737484c6c0e9081f048c4cae1469f2f55e9ecc2921",
+      "role": "First-party editorial source; privacy crop and responsive derivatives"
+    },
+    {
+      "file": "AI_Content_Site_Package/assets/founder/07_founder_jetski.jpg",
+      "bytes": 82837,
+      "sha256": "0870b0ab32c1b1b1db50a79673aa67548654b8e3ddab5956442b76678eeddf71",
+      "role": "First-party editorial source; privacy crop and responsive derivatives"
+    },
+    {
+      "file": "AI_Content_Site_Package/FOUNDER_ASSET_MAP.md",
+      "bytes": 1313,
+      "sha256": "66fbeb575025ba54ad6e144ab6cd7339624a14eeab6e3f19669da58d9b25c930",
+      "role": "Source document read and applied using final override precedence"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/03_candle_brand_motion_ad.mp4",
+      "bytes": 1069952,
+      "sha256": "665e404e18d6cc91854b3bc5c6c256bd74d5cecb76567ffab307fb5795acf834",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/06_tomato_can_dynamic_ad.mp4",
+      "bytes": 2590594,
+      "sha256": "57f71b61d42084c5e8a4dd9817585e23a4137f9f0f3fec9fc224be11a80caa7e",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/08_blackberry_preserve_pop_art_ad.mp4",
+      "bytes": 4772400,
+      "sha256": "398ebe90fa520faa4c8413680a0637c275eed1f5f85be069c5be0f40e116befb",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/11_gold_serum_product_motion.mp4",
+      "bytes": 1492302,
+      "sha256": "deb38c55d876e629e2f8c1c95543c92c0156f301ef63903eda3a21a67774a15c",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/13_perfume_multi_scene_campaign.mp4",
+      "bytes": 2913574,
+      "sha256": "8a5d82f52f9c3c78a2720cef308fc4cac0c1afc226682adb56dd6554ce69e1a9",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/14_rosehip_lifestyle_campaign.mp4",
+      "bytes": 3180261,
+      "sha256": "f5010783a3b1cf35bd4b0c168e1fd06716600966fcc7c14591f0cb5fd18a4bfd",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/16_manuka_honey_macro_ad.mp4",
+      "bytes": 2962606,
+      "sha256": "f1e7a61838151953842ca7c21781a7a8d007fe27c7414910f812cb9769e9481a",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/18_gelato_tennis_surreal_ad.mp4",
+      "bytes": 2880696,
+      "sha256": "0730ff4b438317a98c1c7c1c173cdcbc7f4363839ba3d1ec76f4cf1de738bbf7",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/23_lume_billboard_city_campaign.mp4",
+      "bytes": 1659155,
+      "sha256": "08eb147e990dcfa57f30247c54811bad5ac88108749175d5866a47831b6e3015",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/27_olive_oil_pop_art_ad.mp4",
+      "bytes": 2974786,
+      "sha256": "539085e3d5927e58dd2838624c9a96c9319bf0acd389b9ca302c38c689d22fc6",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/30_plip_metallic_orange_ad.mp4",
+      "bytes": 2776667,
+      "sha256": "4cab0bf49f75dd0785c7bad347700d3b2773d58078f256e0c89cc43b9dba6e6e",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/31_calendula_oil_bubbles_ad.mp4",
+      "bytes": 861604,
+      "sha256": "f62a66fda30e538467d30325284c4c906c8265f4f96f1c2b716fe306510dbcc8",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/33_plip_pop_art_green_ad.mp4",
+      "bytes": 813220,
+      "sha256": "0f1d265a2e379bdc0e9e594cc86606257cf2c41361345166585842c47ed9af8e",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/34_nami_shoe_wave_campaign.mp4",
+      "bytes": 2920110,
+      "sha256": "db3fc5fc0ea9f4a35db5f2013159c7a9abeee7fdcbf531b042223621309c49e7",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/37_fizzy_poster_ad.mp4",
+      "bytes": 207830,
+      "sha256": "d94d3e9b39baf6580c823b26673272a5c5230d7c6c63ea9cac941eaab6e3facf",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/01_advertising_videos/39_chips_package_motion_ad.mp4",
+      "bytes": 1006749,
+      "sha256": "3f0ebcc5f1c22f23b9935058ef58684625caf015b46e13e6d3f4e84b90379bac",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/01_yellow_beverage_cans_grass.avif",
+      "bytes": 279231,
+      "sha256": "82ca2ccf38ceb0a17f63c1f87ba9b02198c5794d7d1b63de72fdaf999f4906ea",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/02_limber_can_graphic_background.avif",
+      "bytes": 101672,
+      "sha256": "b46df3d1a8b2102733f902d041b5365620aadecd6dfb040266397574fb0b0bad",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/04_bobbin_tinted_lip_balm.avif",
+      "bytes": 29784,
+      "sha256": "142572d69156101477b0b26677e89cf15f5cf9897791a5facc739dac2d488b1c",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/05_orova_body_oil_closeup.avif",
+      "bytes": 57705,
+      "sha256": "781e56a834cf6ed175fe7f828d34dffd5efcb10716c50090dd94d6fe628c87e8",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/07_splash_cans_fridge.avif",
+      "bytes": 148796,
+      "sha256": "51fa5a677434788a9083aa5e5e6bfd4818e329096644c4107adfc093c8f7c29c",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/09_hesper_row_cream_jar.avif",
+      "bytes": 171569,
+      "sha256": "432b6a2e2c2cf667597c936bfddc52c309239682037cd1b6a4ff0c8bc14818f6",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/10_green_beverage_mint_water.avif",
+      "bytes": 138227,
+      "sha256": "0f9e785556f0b766cfe72148587a24bec736866973deb9645d235f2806cde388",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/12_cosmetic_tube_ice_berries.avif",
+      "bytes": 100615,
+      "sha256": "e6d8670db835c84b314c612f348c670f2c5fd3292efad5d6ecfae759dbf67eb0",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/22_studio_hands_balm_bag.avif",
+      "bytes": 115646,
+      "sha256": "95b827568edcffc431a00e8bd7eaf447b4f4a21202378bfa8d219b3c22fe6d62",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/24_limetta_vitamins_lemons.avif",
+      "bytes": 45724,
+      "sha256": "fe47615f9e8b01a99d4e6dd5ae0134ff5caa1192c2709b26900f1f536fee164d",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/36_studio_hands_balm_set.avif",
+      "bytes": 101723,
+      "sha256": "ee740aaa5bc8eff4b3171fc2ad8c6c2b1abe0ad226ff777292518a384614835a",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/02_product_photos_videos/38_body_wash_marketplace_motion.mp4",
+      "bytes": 178878,
+      "sha256": "ab78eae398ed5243ebe6de728c0bd6c39b6d3cefa2668e7c57f2bc4354004f8c",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/03_virtual_models/17_model_holding_lume_product.avif",
+      "bytes": 97148,
+      "sha256": "9779a8f18d2ecbd73c4ea6b8050391951c87fd104d36dc13ee7f87d1fa9a0375",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/03_virtual_models/21_model_holding_solv_product.avif",
+      "bytes": 85416,
+      "sha256": "68ed0c009ffcc9f856ad3ef8bd1182293084cc0864a4402a0d4d6603bf037a32",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/03_virtual_models/25_male_model_food_jar.avif",
+      "bytes": 110313,
+      "sha256": "4e4478cca0b98e49cd9bcfb45ddbd5c9b58c501348ebe14432cf96cd8836ef70",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/03_virtual_models/40_biojuss_model_campaign.mp4",
+      "bytes": 632505,
+      "sha256": "1d2d8c733330132ab904f387b9726404005f7040a671cfad6c11c00c39ef33f5",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/04_ugc_style_ads/15_marshmallow_creator_ugc.mp4",
+      "bytes": 1869033,
+      "sha256": "7421d168255a357ad3f307c1186a5a5367fdc0aac5b9f9a6fbad851df3a46c5e",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/04_ugc_style_ads/26_jewelry_unboxing_hands_ugc.mp4",
+      "bytes": 1923033,
+      "sha256": "74d89c050f6fa165ece11a7379003fc49370afe4d39ce074370050260c28a252",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/04_ugc_style_ads/41_handbag_creator_ugc.mp4",
+      "bytes": 769706,
+      "sha256": "8c220c9408865c87cfa6b656a69be2b15318ae5e678442a10a3fa46cb22cbb98",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/05_ai_presenters/19_beauty_device_presenter_demo.mp4",
+      "bytes": 1470652,
+      "sha256": "3aa4479f2fdb479b9684a5a5df333cddb9895883091bb1a5a64da99c470074f6",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/07_explainer_videos/20_wallet_feature_explainer.mp4",
+      "bytes": 1043652,
+      "sha256": "f2211fddc9cbe444a9ab45ba1b8b391081ed7ced974865283b4026250130c1e9",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/07_explainer_videos/28_typographic_brand_motion.mp4",
+      "bytes": 450807,
+      "sha256": "1de2e66fc0ebfdf9b7e3ce60a8988f0287f94cfb546347860bbe223b98e11e0d",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/07_explainer_videos/29_watch_engineering_explainer.mp4",
+      "bytes": 2703332,
+      "sha256": "c0177c08106fb8630afde6871b88263f4a3c66abb13187a6e6f9c6e0a68546e6",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/07_explainer_videos/35_brand_system_motion_explainer.mp4",
+      "bytes": 1428024,
+      "sha256": "9ec6582266ce2c309b78e9545a1e30ded6afb2e2b9eec86b0eefc696e15b309e",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/01_primary_library/08_brand_characters/32_nibbo_cartoon_brand_world.mp4",
+      "bytes": 3022650,
+      "sha256": "68fea4670201144e4b301cbfb1bce79c2eae942bcdd830196c19e5cd0203d6e4",
+      "role": "Canonical service media — internal catalog"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/01_advertising_videos/01_source-06_tomato_can_dynamic_ad.mp4",
+      "bytes": 2590594,
+      "sha256": "57f71b61d42084c5e8a4dd9817585e23a4137f9f0f3fec9fc224be11a80caa7e",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/01_advertising_videos/02_source-08_blackberry_preserve_pop_art_ad.mp4",
+      "bytes": 4772400,
+      "sha256": "398ebe90fa520faa4c8413680a0637c275eed1f5f85be069c5be0f40e116befb",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/01_advertising_videos/03_source-13_perfume_multi_scene_campaign.mp4",
+      "bytes": 2913574,
+      "sha256": "8a5d82f52f9c3c78a2720cef308fc4cac0c1afc226682adb56dd6554ce69e1a9",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/01_advertising_videos/04_source-34_nami_shoe_wave_campaign.mp4",
+      "bytes": 2920110,
+      "sha256": "db3fc5fc0ea9f4a35db5f2013159c7a9abeee7fdcbf531b042223621309c49e7",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/01_advertising_videos/05_source-40_biojuss_model_campaign.mp4",
+      "bytes": 632505,
+      "sha256": "1d2d8c733330132ab904f387b9726404005f7040a671cfad6c11c00c39ef33f5",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/02_product_photos_videos/01_source-01_yellow_beverage_cans_grass.avif",
+      "bytes": 279231,
+      "sha256": "82ca2ccf38ceb0a17f63c1f87ba9b02198c5794d7d1b63de72fdaf999f4906ea",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/02_product_photos_videos/02_source-04_bobbin_tinted_lip_balm.avif",
+      "bytes": 29784,
+      "sha256": "142572d69156101477b0b26677e89cf15f5cf9897791a5facc739dac2d488b1c",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/02_product_photos_videos/03_source-11_gold_serum_product_motion.mp4",
+      "bytes": 1492302,
+      "sha256": "deb38c55d876e629e2f8c1c95543c92c0156f301ef63903eda3a21a67774a15c",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/02_product_photos_videos/04_source-12_cosmetic_tube_ice_berries.avif",
+      "bytes": 100615,
+      "sha256": "e6d8670db835c84b314c612f348c670f2c5fd3292efad5d6ecfae759dbf67eb0",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/02_product_photos_videos/05_source-24_limetta_vitamins_lemons.avif",
+      "bytes": 45724,
+      "sha256": "fe47615f9e8b01a99d4e6dd5ae0134ff5caa1192c2709b26900f1f536fee164d",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/03_virtual_models/01_source-17_model_holding_lume_product.avif",
+      "bytes": 97148,
+      "sha256": "9779a8f18d2ecbd73c4ea6b8050391951c87fd104d36dc13ee7f87d1fa9a0375",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/03_virtual_models/02_source-21_model_holding_solv_product.avif",
+      "bytes": 85416,
+      "sha256": "68ed0c009ffcc9f856ad3ef8bd1182293084cc0864a4402a0d4d6603bf037a32",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/03_virtual_models/03_source-25_male_model_food_jar.avif",
+      "bytes": 110313,
+      "sha256": "4e4478cca0b98e49cd9bcfb45ddbd5c9b58c501348ebe14432cf96cd8836ef70",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/03_virtual_models/04_source-40_biojuss_model_campaign.mp4",
+      "bytes": 632505,
+      "sha256": "1d2d8c733330132ab904f387b9726404005f7040a671cfad6c11c00c39ef33f5",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/04_ugc_style_ads/01_source-15_marshmallow_creator_ugc.mp4",
+      "bytes": 1869033,
+      "sha256": "7421d168255a357ad3f307c1186a5a5367fdc0aac5b9f9a6fbad851df3a46c5e",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/04_ugc_style_ads/02_source-19_beauty_device_presenter_demo.mp4",
+      "bytes": 1470652,
+      "sha256": "3aa4479f2fdb479b9684a5a5df333cddb9895883091bb1a5a64da99c470074f6",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/04_ugc_style_ads/03_source-26_jewelry_unboxing_hands_ugc.mp4",
+      "bytes": 1923033,
+      "sha256": "74d89c050f6fa165ece11a7379003fc49370afe4d39ce074370050260c28a252",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/04_ugc_style_ads/04_source-41_handbag_creator_ugc.mp4",
+      "bytes": 769706,
+      "sha256": "8c220c9408865c87cfa6b656a69be2b15318ae5e678442a10a3fa46cb22cbb98",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/05_ai_presenters/01_source-19_beauty_device_presenter_demo.mp4",
+      "bytes": 1470652,
+      "sha256": "3aa4479f2fdb479b9684a5a5df333cddb9895883091bb1a5a64da99c470074f6",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/05_ai_presenters/02_source-15_marshmallow_creator_ugc.mp4",
+      "bytes": 1869033,
+      "sha256": "7421d168255a357ad3f307c1186a5a5367fdc0aac5b9f9a6fbad851df3a46c5e",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/07_explainer_videos/01_source-20_wallet_feature_explainer.mp4",
+      "bytes": 1043652,
+      "sha256": "f2211fddc9cbe444a9ab45ba1b8b391081ed7ced974865283b4026250130c1e9",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/07_explainer_videos/02_source-29_watch_engineering_explainer.mp4",
+      "bytes": 2703332,
+      "sha256": "c0177c08106fb8630afde6871b88263f4a3c66abb13187a6e6f9c6e0a68546e6",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/07_explainer_videos/03_source-35_brand_system_motion_explainer.mp4",
+      "bytes": 1428024,
+      "sha256": "9ec6582266ce2c309b78e9545a1e30ded6afb2e2b9eec86b0eefc696e15b309e",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/07_explainer_videos/04_source-28_typographic_brand_motion.mp4",
+      "bytes": 450807,
+      "sha256": "1de2e66fc0ebfdf9b7e3ce60a8988f0287f94cfb546347860bbe223b98e11e0d",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/08_brand_characters/01_source-32_nibbo_cartoon_brand_world.mp4",
+      "bytes": 3022650,
+      "sha256": "68fea4670201144e4b301cbfb1bce79c2eae942bcdd830196c19e5cd0203d6e4",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/08_brand_characters/02_source-27_olive_oil_pop_art_ad.mp4",
+      "bytes": 2974786,
+      "sha256": "539085e3d5927e58dd2838624c9a96c9319bf0acd389b9ca302c38c689d22fc6",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/08_brand_characters/03_source-18_gelato_tennis_surreal_ad.mp4",
+      "bytes": 2880696,
+      "sha256": "0730ff4b438317a98c1c7c1c173cdcbc7f4363839ba3d1ec76f4cf1de738bbf7",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/08_brand_characters/04_source-37_fizzy_poster_ad.mp4",
+      "bytes": 207830,
+      "sha256": "d94d3e9b39baf6580c823b26673272a5c5230d7c6c63ea9cac941eaab6e3facf",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/09_ad_creative_variations/01_PLIP_two_art_directions/01_source-30_plip_metallic_orange_ad.mp4",
+      "bytes": 2776667,
+      "sha256": "4cab0bf49f75dd0785c7bad347700d3b2773d58078f256e0c89cc43b9dba6e6e",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/09_ad_creative_variations/01_PLIP_two_art_directions/02_source-33_plip_pop_art_green_ad.mp4",
+      "bytes": 813220,
+      "sha256": "0f1d265a2e379bdc0e9e594cc86606257cf2c41361345166585842c47ed9af8e",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/09_ad_creative_variations/02_LUME_model_and_billboard/01_source-17_model_holding_lume_product.avif",
+      "bytes": 97148,
+      "sha256": "9779a8f18d2ecbd73c4ea6b8050391951c87fd104d36dc13ee7f87d1fa9a0375",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/09_ad_creative_variations/02_LUME_model_and_billboard/02_source-23_lume_billboard_city_campaign.mp4",
+      "bytes": 1659155,
+      "sha256": "08eb147e990dcfa57f30247c54811bad5ac88108749175d5866a47831b6e3015",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/09_ad_creative_variations/03_STUDIO_HANDS_two_product_visuals/01_source-22_studio_hands_balm_bag.avif",
+      "bytes": 115646,
+      "sha256": "95b827568edcffc431a00e8bd7eaf447b4f4a21202378bfa8d219b3c22fe6d62",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/09_ad_creative_variations/03_STUDIO_HANDS_two_product_visuals/02_source-36_studio_hands_balm_set.avif",
+      "bytes": 101723,
+      "sha256": "ee740aaa5bc8eff4b3171fc2ad8c6c2b1abe0ad226ff777292518a384614835a",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/02_limber_can_graphic_background.avif",
+      "bytes": 101672,
+      "sha256": "b46df3d1a8b2102733f902d041b5365620aadecd6dfb040266397574fb0b0bad",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/03_candle_brand_motion_ad.mp4",
+      "bytes": 1069952,
+      "sha256": "665e404e18d6cc91854b3bc5c6c256bd74d5cecb76567ffab307fb5795acf834",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/05_orova_body_oil_closeup.avif",
+      "bytes": 57705,
+      "sha256": "781e56a834cf6ed175fe7f828d34dffd5efcb10716c50090dd94d6fe628c87e8",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/07_splash_cans_fridge.avif",
+      "bytes": 148796,
+      "sha256": "51fa5a677434788a9083aa5e5e6bfd4818e329096644c4107adfc093c8f7c29c",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/09_hesper_row_cream_jar.avif",
+      "bytes": 171569,
+      "sha256": "432b6a2e2c2cf667597c936bfddc52c309239682037cd1b6a4ff0c8bc14818f6",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/10_green_beverage_mint_water.avif",
+      "bytes": 138227,
+      "sha256": "0f9e785556f0b766cfe72148587a24bec736866973deb9645d235f2806cde388",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/14_rosehip_lifestyle_campaign.mp4",
+      "bytes": 3180261,
+      "sha256": "f5010783a3b1cf35bd4b0c168e1fd06716600966fcc7c14591f0cb5fd18a4bfd",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/16_manuka_honey_macro_ad.mp4",
+      "bytes": 2962606,
+      "sha256": "f1e7a61838151953842ca7c21781a7a8d007fe27c7414910f812cb9769e9481a",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/18_gelato_tennis_surreal_ad.mp4",
+      "bytes": 2880696,
+      "sha256": "0730ff4b438317a98c1c7c1c173cdcbc7f4363839ba3d1ec76f4cf1de738bbf7",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/23_lume_billboard_city_campaign.mp4",
+      "bytes": 1659155,
+      "sha256": "08eb147e990dcfa57f30247c54811bad5ac88108749175d5866a47831b6e3015",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/27_olive_oil_pop_art_ad.mp4",
+      "bytes": 2974786,
+      "sha256": "539085e3d5927e58dd2838624c9a96c9319bf0acd389b9ca302c38c689d22fc6",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/30_plip_metallic_orange_ad.mp4",
+      "bytes": 2776667,
+      "sha256": "4cab0bf49f75dd0785c7bad347700d3b2773d58078f256e0c89cc43b9dba6e6e",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/31_calendula_oil_bubbles_ad.mp4",
+      "bytes": 861604,
+      "sha256": "f62a66fda30e538467d30325284c4c906c8265f4f96f1c2b716fe306510dbcc8",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/33_plip_pop_art_green_ad.mp4",
+      "bytes": 813220,
+      "sha256": "0f1d265a2e379bdc0e9e594cc86606257cf2c41361345166585842c47ed9af8e",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/36_studio_hands_balm_set.avif",
+      "bytes": 101723,
+      "sha256": "ee740aaa5bc8eff4b3171fc2ad8c6c2b1abe0ad226ff777292518a384614835a",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/37_fizzy_poster_ad.mp4",
+      "bytes": 207830,
+      "sha256": "d94d3e9b39baf6580c823b26673272a5c5230d7c6c63ea9cac941eaab6e3facf",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/38_body_wash_marketplace_motion.mp4",
+      "bytes": 178878,
+      "sha256": "ab78eae398ed5243ebe6de728c0bd6c39b6d3cefa2668e7c57f2bc4354004f8c",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/02_website_curated/10_reserve/39_chips_package_motion_ad.mp4",
+      "bytes": 1006749,
+      "sha256": "3f0ebcc5f1c22f23b9935058ef58684625caf015b46e13e6d3f4e84b90379bac",
+      "role": "Editorial mapping only; duplicate hash verified, never independently copied"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/03_visual_index/sheet_01.jpg",
+      "bytes": 385892,
+      "sha256": "73bb345b893266035025b3b726f90378c944168eb03c8e1644ac71b3584cb732",
+      "role": "Internal visual review/index, never served"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/03_visual_index/sheet_02.jpg",
+      "bytes": 415628,
+      "sha256": "592f84fb043caa0a5334a40d780c3c76f37bf0c4a5a5d280102d4f2b49b03f8b",
+      "role": "Internal visual review/index, never served"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/03_visual_index/sheet_03.jpg",
+      "bytes": 447986,
+      "sha256": "9b57b9c089423753b607d6076c2d185201807f6cd6a3ccb7bda49632b2cc00a3",
+      "role": "Internal visual review/index, never served"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/03_visual_index/sheet_04.jpg",
+      "bytes": 330125,
+      "sha256": "aed25e83474eecca77d9bb749e80ad3a9c8a721a71085ae8e1962805033e9454",
+      "role": "Internal visual review/index, never served"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/03_visual_index/sheet_05.jpg",
+      "bytes": 338421,
+      "sha256": "d90d077484f29a512396653ba5f2e614d87c1bff4dcb46049e747a3c09ad4c41",
+      "role": "Internal visual review/index, never served"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/03_visual_index/sheet_06.jpg",
+      "bytes": 401483,
+      "sha256": "fc07c403e2ebaf83f0053c81fc6acff3806b915993eaa75940836c4b8398c18d",
+      "role": "Internal visual review/index, never served"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/03_visual_index/sheet_07.jpg",
+      "bytes": 300100,
+      "sha256": "d8b500e6d9335d934ae85afa70d618e1021aa4927bd9c7ebd3a29beb13454cf9",
+      "role": "Internal visual review/index, never served"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/03_visual_index/source_index.tsv",
+      "bytes": 1873,
+      "sha256": "8fc9ef3e25dc3ab9e830760272498f32896640c945b143a1337e5ddb6826075b",
+      "role": "Internal visual review/index, never served"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/04_brand/iADDS_logo_source_black_square.png",
+      "bytes": 1001840,
+      "sha256": "d0923f90312fbb8134be06b983e592929c069fc2e5dec6ec7416ea1e95da9488",
+      "role": "First-party symbol source; derive transparent brand assets"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/05_founder_assets/founder_boat.png",
+      "bytes": 1352479,
+      "sha256": "161da207ee43897c1a962b737484c6c0e9081f048c4cae1469f2f55e9ecc2921",
+      "role": "First-party editorial source; privacy crop and responsive derivatives",
+      "previousSource": "AI_Content_Site_Package/assets/founder/06_founder_boat.png"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/05_founder_assets/founder_close_portrait.png",
+      "bytes": 688822,
+      "sha256": "085c1f3a59f1e498427f8073c4c87f9a97e559a6a7ce5c7190470b6bdc7f804c",
+      "role": "First-party editorial source; privacy crop and responsive derivatives",
+      "previousSource": "AI_Content_Site_Package/assets/founder/01_founder_portrait_sea_cap.png"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/05_founder_assets/founder_fullbody_city.png",
+      "bytes": 2472711,
+      "sha256": "47b76929316b8c00a56204f3f3473af25d8ec033d207ca39c518115cee49bfc1",
+      "role": "First-party editorial source; privacy crop and responsive derivatives",
+      "previousSource": "AI_Content_Site_Package/assets/founder/04_founder_urban_event_source.png"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/05_founder_assets/founder_gopro.png",
+      "bytes": 1601008,
+      "sha256": "178d7c49a285999cd30dbbe7478384f35921c6be395860c8f8be26d38b010b73",
+      "role": "First-party editorial source; privacy crop and responsive derivatives",
+      "previousSource": "AI_Content_Site_Package/assets/founder/05_founder_gopro_water.png"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/05_founder_assets/founder_hockey_puck_action.png",
+      "bytes": 1749103,
+      "sha256": "fbed41c5b3445561fe847f7fffb03fbac49f12e94a83a955541c5259835ff9b2",
+      "role": "First-party editorial source; privacy crop and responsive derivatives",
+      "previousSource": "AI_Content_Site_Package/assets/founder/03_founder_hockey_puck_action.png"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/05_founder_assets/founder_hockey_team_action.png",
+      "bytes": 1807619,
+      "sha256": "7f717c45ccb71f9350cd280f533a4e1456ba464d46daf71089cc2180d0a5710e",
+      "role": "First-party editorial source; privacy crop and responsive derivatives",
+      "previousSource": "AI_Content_Site_Package/assets/founder/02_founder_hockey_team_action.png"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/05_founder_assets/founder_main_jetski.jpg",
+      "bytes": 82837,
+      "sha256": "0870b0ab32c1b1b1db50a79673aa67548654b8e3ddab5956442b76678eeddf71",
+      "role": "First-party editorial source; privacy crop and responsive derivatives",
+      "previousSource": "AI_Content_Site_Package/assets/founder/07_founder_jetski.jpg"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/CLASSIFICATION_AND_RECOMMENDATIONS.md",
+      "bytes": 7394,
+      "sha256": "1b718d4f9db80d4e79f37f77c836c343ec58bf0a4908bd9e1ab0c29ebd45d0b4",
+      "role": "Source document read and applied using final override precedence"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/material_manifest.csv",
+      "bytes": 11813,
+      "sha256": "3d80f507377aac557152d9a66e6cdd1ef6b69b5c724847f3c19517ada5bdc11c",
+      "role": "Source document read and applied using final override precedence"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/material_manifest.json",
+      "bytes": 19860,
+      "sha256": "5ee3d6c178b52b83317c507a4da06008778e7b856c0e5dff4e30fe2a3168cee5",
+      "role": "Source document read and applied using final override precedence"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/MISSING_MATERIALS_BRIEF.md",
+      "bytes": 1498,
+      "sha256": "8c1e098f0b0705f917d34728f57aaf1d01693de8a98ec76a4ae2f9591280809f",
+      "role": "Source document read and applied using final override precedence"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/NEXT_FIX_BRIEF.md",
+      "bytes": 2510,
+      "sha256": "e9bd7caa3b5da411f7914cd16e556fc64a94e4dc684d69838bf96a4de3bf9a13",
+      "role": "Source document read and applied using final override precedence"
+    },
+    {
+      "file": "iADDS_Media_Package_v1/README.md",
+      "bytes": 975,
+      "sha256": "b3aa700549d897c5df9d67302f4af46339e6b388097c4c912b1e049f69b7eebd",
+      "role": "Source document read and applied using final override precedence"
+    }
+  ]
+}

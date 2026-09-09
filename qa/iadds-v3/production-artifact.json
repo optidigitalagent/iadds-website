@@ -1,0 +1,638 @@
+{
+  "status": "passed",
+  "unverifiedBinaries": 0,
+  "reviewUrlsInClient": 0,
+  "sourceProvenanceInClient": 0,
+  "files": [
+    {
+      "file": "dist/.openai/hosting.json",
+      "bytes": 58,
+      "sha256": "1c6cddf649afb1658824c601ff522d886c1675b804b61f5820b8feb5b6ecf7de"
+    },
+    {
+      "file": "dist/client/BUILD_ID",
+      "bytes": 21,
+      "sha256": "4eb963c9b818c7c706b695970afaf91959bc7e1a4136237db20c0c1a654a821b"
+    },
+    {
+      "file": "dist/client/fonts/manrope-cyrillic-og.ttf",
+      "bytes": 18004,
+      "sha256": "c548ddd5e02af92fc4da539f174a910ce7293d06894483ff3aa779177c387d42"
+    },
+    {
+      "file": "dist/client/fonts/manrope-cyrillic.woff2",
+      "bytes": 14500,
+      "sha256": "c268b459a9329e59fecf39a17618efd44c71735532048d60b12aab76a8c14914"
+    },
+    {
+      "file": "dist/client/fonts/manrope-latin-og.ttf",
+      "bytes": 35640,
+      "sha256": "b8cc3da79c0892eae95c0e4e3075db577a06d200a3ad83436e030a2311087ee5"
+    },
+    {
+      "file": "dist/client/fonts/manrope-latin.woff2",
+      "bytes": 24836,
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+    },
+    {
+      "file": "dist/client/fonts/OFL.txt",
+      "bytes": 4383,
+      "sha256": "d826ab6583b12c26807d8716a545bdbbb672df04f48608a364ba9efdbe501c30"
+    },
+    {
+      "file": "dist/client/media/ai-spokesperson-mobile.webp",
+      "bytes": 4498,
+      "sha256": "7ee431d735f4ce4c9de98f23ea3034a4b091bfca5a652d76822594f7887a8b28"
+    },
+    {
+      "file": "dist/client/media/ai-spokesperson.svg",
+      "bytes": 5422,
+      "sha256": "c147ab81f8774e1da1dfa61f55238a1ba6f61df6ecbd4705f9f55fcc6c4ea500"
+    },
+    {
+      "file": "dist/client/media/ai-spokesperson.webp",
+      "bytes": 7982,
+      "sha256": "1ea485dedc6d3a13b8ccc7a000476f9bcd31e3266a5fafe3a7b16a70d13989ef"
+    },
+    {
+      "file": "dist/client/media/ai-ugc-mobile.webp",
+      "bytes": 7774,
+      "sha256": "07f662fa6cfd0f6a34258a531bbf853f3bf226f628af8034e3c76f1f17cb664d"
+    },
+    {
+      "file": "dist/client/media/ai-ugc.svg",
+      "bytes": 2559,
+      "sha256": "af4cc796bfce3aedb2d5a5af8770708870af8ada1cc4c957896fa5a428f4c2e6"
+    },
+    {
+      "file": "dist/client/media/ai-ugc.webp",
+      "bytes": 14162,
+      "sha256": "3ecbd0f78ce8ef0fd8c99978257961a9c27bc43da49d43a1c35d10486f5093f6"
+    },
+    {
+      "file": "dist/client/media/ai-video-ads-mobile.webp",
+      "bytes": 6984,
+      "sha256": "15067e67d5bd5bf529477f0d6ff966a23dfbf913b4bb0634c40daececad9ab4c"
+    },
+    {
+      "file": "dist/client/media/ai-video-ads.svg",
+      "bytes": 2352,
+      "sha256": "e9c914cf5f2c32efb8ab356e0bb0223459ec32674eb1cf74bd8f29f81155e178"
+    },
+    {
+      "file": "dist/client/media/ai-video-ads.webp",
+      "bytes": 12830,
+      "sha256": "b2494aca71f891877d841e71a36b54c1fe7b79d06432de74fbbb64e5976fe71c"
+    },
+    {
+      "file": "dist/client/media/brand/iadds-app-180.png",
+      "bytes": 57189,
+      "sha256": "e716e39617c7e2d8069461943cac0ba3770b806c8be1cf13b1e817584dadf634"
+    },
+    {
+      "file": "dist/client/media/brand/iadds-endorsed.svg",
+      "bytes": 206105,
+      "sha256": "487587578be9ae843f86459b62a9a2bc164c8dd178255e26ed418f1ad2a23b2e"
+    },
+    {
+      "file": "dist/client/media/brand/iadds-favicon-32.png",
+      "bytes": 3345,
+      "sha256": "38228f365eb0abe4f434d3f95ba23b8b6712e136153185510841e7f992f087c1"
+    },
+    {
+      "file": "dist/client/media/brand/iadds-favicon-48.png",
+      "bytes": 7010,
+      "sha256": "010c73ce799ce915c320a098b0a8c0dd0b1911d725ce88c66ff6aa1381046326"
+    },
+    {
+      "file": "dist/client/media/brand/iadds-horizontal.svg",
+      "bytes": 205998,
+      "sha256": "4eee1fa301374cad9c78f3d295df1fc181fe0529fb1faeea642b95db6c659ce6"
+    },
+    {
+      "file": "dist/client/media/brand/iadds-symbol-128.png",
+      "bytes": 44344,
+      "sha256": "78b860ab6b420b05bad2e8736224194aa48622fe4c9d71664c2083a9ecda76f0"
+    },
+    {
+      "file": "dist/client/media/brand/iadds-symbol-256.png",
+      "bytes": 154231,
+      "sha256": "1efbaca87cdf9832eb1c2bae004d3251b6a9ad3095fed00d7715c4d5a5eedf8f"
+    },
+    {
+      "file": "dist/client/media/brand/iadds-symbol-white-128.png",
+      "bytes": 7904,
+      "sha256": "9080c77da480e853ce69151ea13303640e8490694243129c6b10166b1b688772"
+    },
+    {
+      "file": "dist/client/media/brand-characters-mobile.webp",
+      "bytes": 5670,
+      "sha256": "aa17a37f254905bb97ea5c53a41163031289fc203620325bc14f60ec51a71e11"
+    },
+    {
+      "file": "dist/client/media/brand-characters.svg",
+      "bytes": 2394,
+      "sha256": "ba2a2a9e1a7709c21a1e85633012205a13c39b7a120d801c178686e89769f861"
+    },
+    {
+      "file": "dist/client/media/brand-characters.webp",
+      "bytes": 10896,
+      "sha256": "c995c0e111dd2a72b75dc1410ecb57216243120e2773ac97a354d5cb25c26692"
+    },
+    {
+      "file": "dist/client/media/explainer-videos-mobile.webp",
+      "bytes": 5894,
+      "sha256": "7a37899f97ad412aad8af594fd316a49c7b6b1bc7675d4bda2001dfa31798886"
+    },
+    {
+      "file": "dist/client/media/explainer-videos.svg",
+      "bytes": 3245,
+      "sha256": "764028f3b5a967bd9f681e119769b9f458972b52c5095df88251e5d9fc8c2992"
+    },
+    {
+      "file": "dist/client/media/explainer-videos.webp",
+      "bytes": 10822,
+      "sha256": "bb91b41d71969bf513fb36442507516e9b4f3f0e5cb169e5aa42c47c6c5207e4"
+    },
+    {
+      "file": "dist/client/media/founder/boat-desktop.avif",
+      "bytes": 19282,
+      "sha256": "c69ad280ba256ff9bea30c118ae579089261d05098bf5f690aa3029f1addbc51"
+    },
+    {
+      "file": "dist/client/media/founder/boat-desktop.webp",
+      "bytes": 35556,
+      "sha256": "a873287440f8aa9d5d124a854989bac129e6587abeb8029517a7ae210b70afa5"
+    },
+    {
+      "file": "dist/client/media/founder/boat-mobile.avif",
+      "bytes": 16294,
+      "sha256": "a85f4d2324fecb1be9a09adfc1c6fba259c93f9db0dc78462ff88f2a9dfe699c"
+    },
+    {
+      "file": "dist/client/media/founder/boat-mobile.webp",
+      "bytes": 32514,
+      "sha256": "9a475b8c36d050b8239a1eb82d37b51feff29037c464c733e554a9e7711fb9dc"
+    },
+    {
+      "file": "dist/client/media/founder/gopro-desktop.avif",
+      "bytes": 40859,
+      "sha256": "468984679a38d714eddd64e443f2144648b3c95f0fb9f53039b13a1dc74ff5db"
+    },
+    {
+      "file": "dist/client/media/founder/gopro-desktop.webp",
+      "bytes": 84354,
+      "sha256": "fcb8ba1a9900012b60335b7a4cb79bcc068a1aaaae6c15479011509212ad7fb0"
+    },
+    {
+      "file": "dist/client/media/founder/gopro-mobile.avif",
+      "bytes": 29400,
+      "sha256": "740e544787e487d6d36d87c9f12e5d14ad0e7b3cab075c532804f2aed2a662b9"
+    },
+    {
+      "file": "dist/client/media/founder/gopro-mobile.webp",
+      "bytes": 60134,
+      "sha256": "a0fedad4df6bede432060bc10ab1a8370200ff6cb72c43dda678cdb2661ceddf"
+    },
+    {
+      "file": "dist/client/media/founder/hockey-puck-desktop.avif",
+      "bytes": 23949,
+      "sha256": "0c1f32f3c4b23635668a95e2e80d519d6fd89e39d5bb1a9796bc51158ce808b4"
+    },
+    {
+      "file": "dist/client/media/founder/hockey-puck-desktop.webp",
+      "bytes": 47084,
+      "sha256": "923cdf3845ee3ae4afcb29490d1f61c907661687954722227b52fdabb46e1d01"
+    },
+    {
+      "file": "dist/client/media/founder/hockey-puck-mobile.avif",
+      "bytes": 16562,
+      "sha256": "605a9315ffaefe1e6959aeaa051a576ad879b8d74072f10ccbd8afd007b61f12"
+    },
+    {
+      "file": "dist/client/media/founder/hockey-puck-mobile.webp",
+      "bytes": 30978,
+      "sha256": "13be3e6caa10b7e11fe0519fe461153575260001c3a3d32c6af40e61557824d5"
+    },
+    {
+      "file": "dist/client/media/founder/hockey-team-desktop.avif",
+      "bytes": 34997,
+      "sha256": "d0a915242f5df7b809d9fef7b9688304e45b5cfe21594af70aaf39aff790c34f"
+    },
+    {
+      "file": "dist/client/media/founder/hockey-team-desktop.webp",
+      "bytes": 73894,
+      "sha256": "ed0e8dd925165a107294edadf95e24288f2f351dd33d95eaa2e184f578114888"
+    },
+    {
+      "file": "dist/client/media/founder/hockey-team-mobile.avif",
+      "bytes": 21509,
+      "sha256": "cfa66ea7baa54c19d252c2f35b873b3ce79794d2a2429f5716db18600fa5a8dd"
+    },
+    {
+      "file": "dist/client/media/founder/hockey-team-mobile.webp",
+      "bytes": 45366,
+      "sha256": "a9e7f90ee964eb37739ba7ca50d91ad0fbe120390e757bbcd47ab7703eb36b4f"
+    },
+    {
+      "file": "dist/client/media/founder/jetski-desktop.avif",
+      "bytes": 15123,
+      "sha256": "a5c2c0525337e055fcaf10fe68217778473933b6466a75d94da834bc1ca264d6"
+    },
+    {
+      "file": "dist/client/media/founder/jetski-desktop.webp",
+      "bytes": 31910,
+      "sha256": "2f2876e22b98add0753fcb80370ecfe51fb2e869619ddfea10ab696beaab8176"
+    },
+    {
+      "file": "dist/client/media/founder/jetski-mobile.avif",
+      "bytes": 14223,
+      "sha256": "9cd6c8862ab0bf37ddf9d76ab05f0a8023283d42d73f9e7b6492b4db4fe0144d"
+    },
+    {
+      "file": "dist/client/media/founder/jetski-mobile.webp",
+      "bytes": 29136,
+      "sha256": "a9f9cbd74679c5c0b91643279d1cab028dede4a87c73db1139b3aa3928ee0f38"
+    },
+    {
+      "file": "dist/client/media/founder/portrait-desktop.avif",
+      "bytes": 19588,
+      "sha256": "3f9b3b1835d7dfc64a7d134d61d89f76231c5b4cfb26f72abbe43a982f47cf6f"
+    },
+    {
+      "file": "dist/client/media/founder/portrait-desktop.webp",
+      "bytes": 36660,
+      "sha256": "910d416f8c366ab8ea59f698ea760de6cd14c176b8af1b8f990076393671ca0b"
+    },
+    {
+      "file": "dist/client/media/founder/portrait-mobile.avif",
+      "bytes": 17819,
+      "sha256": "77df5471cbdbc9c61a49d89ed7b4d87300fb5ee4ff4cc44ef36f5ace6fc41a3b"
+    },
+    {
+      "file": "dist/client/media/founder/portrait-mobile.webp",
+      "bytes": 33132,
+      "sha256": "aad60f096e2232daddeecad0656a559fc850ace28cc96eb269b0a7f25176afc0"
+    },
+    {
+      "file": "dist/client/media/founder/urban-desktop.avif",
+      "bytes": 43447,
+      "sha256": "3c8859d4150e767275f4267ec323f0934f84c2112dbd95da8900d2fd1eb49549"
+    },
+    {
+      "file": "dist/client/media/founder/urban-desktop.webp",
+      "bytes": 102768,
+      "sha256": "67e0e9975df885c6779c4ac64a338a033bb6b8dbe490e58014d4ab807b7c3fb6"
+    },
+    {
+      "file": "dist/client/media/founder/urban-mobile.avif",
+      "bytes": 28389,
+      "sha256": "278951b7738bc1fb15d2e3a141c0ecc03f6e306b0208a14d42299a7de0082a9f"
+    },
+    {
+      "file": "dist/client/media/founder/urban-mobile.webp",
+      "bytes": 67138,
+      "sha256": "5e9e46d3c62d9ce4e047f2e4bcf982c49c9ffd41640c734c5479c236dc5cbf9b"
+    },
+    {
+      "file": "dist/client/media/hero-mobile.svg",
+      "bytes": 3215,
+      "sha256": "e3f1f2da7b47914312ba634f658e667a2f2172eebe470245d0e85e0ca991cc5f"
+    },
+    {
+      "file": "dist/client/media/hero-mobile.webp",
+      "bytes": 13580,
+      "sha256": "ace924a433bcbcf94d04a57b04c372aa8253b7ca53a40731d917ab0514b0fdae"
+    },
+    {
+      "file": "dist/client/media/hero.svg",
+      "bytes": 3213,
+      "sha256": "d69255db4dfa6cbb41b9725b2b488352e82b15afe9023a17fbc36d1562139c8f"
+    },
+    {
+      "file": "dist/client/media/hero.webp",
+      "bytes": 26100,
+      "sha256": "791e7709e93661ae6df94e8e9821bfaa532ade26c0ef095d9d8740b3ba5b12a8"
+    },
+    {
+      "file": "dist/client/media/performance-creatives-mobile.webp",
+      "bytes": 12774,
+      "sha256": "738d6cee80ef383aac571a54f16e3d1973f43f5dfcd6ed41ff1bc057a6e141d1"
+    },
+    {
+      "file": "dist/client/media/performance-creatives.svg",
+      "bytes": 3926,
+      "sha256": "cf15f716d6ff37b58610aa8bbc68aaa5613f40599e8eb7daca9aa232d389e052"
+    },
+    {
+      "file": "dist/client/media/performance-creatives.webp",
+      "bytes": 22596,
+      "sha256": "5ea3f31420d978f2e4504d94ec68fce09d85e427eaad1a63e1f9e7915bad9d0c"
+    },
+    {
+      "file": "dist/client/media/product-visuals-mobile.webp",
+      "bytes": 7296,
+      "sha256": "eeefeea4e7d367e2c54b5a3e77cb18069fbf04fb692d92fcec7c93d575455657"
+    },
+    {
+      "file": "dist/client/media/product-visuals.svg",
+      "bytes": 2460,
+      "sha256": "a595719d7a093685710a5c67ddd420769c5693d9ff6169319b0ead1080844c9c"
+    },
+    {
+      "file": "dist/client/media/product-visuals.webp",
+      "bytes": 13808,
+      "sha256": "705671d6472633a304d7ec1e21ed2184f17d6cdde0726d8283cbb915b0c841cc"
+    },
+    {
+      "file": "dist/client/media/video-localization-mobile.webp",
+      "bytes": 6232,
+      "sha256": "5d1e9c809eeedb5b4baacd601136bb15409e9d1d20512ba962d240f4be754a42"
+    },
+    {
+      "file": "dist/client/media/video-localization.svg",
+      "bytes": 6428,
+      "sha256": "902067772d7cb7ef3f842b69a8ebdfc8f590230b06f0c1b16e42a60ad5a17a59"
+    },
+    {
+      "file": "dist/client/media/video-localization.webp",
+      "bytes": 11022,
+      "sha256": "9eece1f858afdcc29ec15f6b09e8a96dd626d43747442ac0dd050eb1ca952bfa"
+    },
+    {
+      "file": "dist/client/media/virtual-models-mobile.webp",
+      "bytes": 4824,
+      "sha256": "b4ae4d78ecaffc9ad97799d137f5f1a1566fe59015c83b90bb5dcf88a7847c43"
+    },
+    {
+      "file": "dist/client/media/virtual-models.svg",
+      "bytes": 2396,
+      "sha256": "49bc097b62840692ccb361fc6121db5540a5ba0eaca577ce8fd2345c21f7e9f7"
+    },
+    {
+      "file": "dist/client/media/virtual-models.webp",
+      "bytes": 9148,
+      "sha256": "a3b8f9bf7ebc25e75a3d1fcb70e12d9f4bcddd6fdffca1238da930e5db853a3a"
+    },
+    {
+      "file": "dist/client/media-manifest.json",
+      "bytes": 21270,
+      "sha256": "5e6fb3144da75e6860d34edf1fd7ee44ef62747956944e57803f8b5747ba0c11"
+    },
+    {
+      "file": "dist/client/_next/static/8H6N55nSSq-82rLrQl_2I/_buildManifest.js",
+      "bytes": 1054,
+      "sha256": "0f9221e02bb1819af8f0b57deb3c1d66edf84ad52fb674e9ef556913902852a2"
+    },
+    {
+      "file": "dist/client/_next/static/8H6N55nSSq-82rLrQl_2I/_ssgManifest.js",
+      "bytes": 389,
+      "sha256": "408dafc483b18159c9781f1dd6214a55215d164ce75596d54bea8cf8933db628"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/4bd1b696-92152b0f5947070d.js",
+      "bytes": 201054,
+      "sha256": "8dc2c1d71557b434c654ec58acb1441bc0fb200c520ff548f606d88e689ee643"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/500-b13bb91f5a6311b6.js",
+      "bytes": 8631,
+      "sha256": "90b50c491e9d92c4274ce087933c46c73aeae42f49ae1ae9896587b77a4ce95e"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/513-45c596b1b6733343.js",
+      "bytes": 9091,
+      "sha256": "3b2aa3aba468b62b99afd3b6bab5b0548b76b4eb3cc710365a9efe04b28fd774"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/794-d1a40dcf24d651d9.js",
+      "bytes": 240795,
+      "sha256": "6faa7e3b69df2ae34032f0eb1e042ac3716c41336a3927d377abf34cb7a26082"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/899.5ce6b3cbad015b59.js",
+      "bytes": 4752,
+      "sha256": "12b23761a7567937753843f56b2c72493d50928d7753d25f1db4e84e97e3d018"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/966.1775eb621d8d3e09.js",
+      "bytes": 753,
+      "sha256": "4e64e06b8deba77cbbf9487c6d48373939b8a99f235a67a4f71a6b45ad68b055"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/api/consultation/route-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/api/format-media/[filename]/route-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/robots.txt/route-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/sitemap.xml/route-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/about/page-c9f8ca94bbd0366d.js",
+      "bytes": 11813,
+      "sha256": "c6d41dbdd4e4dbfd3fb2a906a9c3d5b1ebb69f04b9adaeccbe92f92fa6c90969"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/ai-systems/page-b01ef89f1f1c4a19.js",
+      "bytes": 5944,
+      "sha256": "96dd4e91689b0b8dc2d59ca32fab1d25d8ced647b94dc762642f7d879459c3a4"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/cases/loading-9e873e3c820bfd15.js",
+      "bytes": 8232,
+      "sha256": "3e86748f733f1bac55aa0ccc995d7d29f42fa8ec833c6a37c645207a62695353"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/cases/page-e004f25c9d4ff25f.js",
+      "bytes": 10464,
+      "sha256": "7a05ba66e2d9aa3b67b9948c075ee61a84bf3f39670be7f78c1f997e8a27e5ce"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/cases/[slug]/page-e004f25c9d4ff25f.js",
+      "bytes": 10464,
+      "sha256": "7a05ba66e2d9aa3b67b9948c075ee61a84bf3f39670be7f78c1f997e8a27e5ce"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/consultation/page-f91b6dd1d2be95d0.js",
+      "bytes": 12594,
+      "sha256": "b9dcc3f69349a5926dcaa8d21fb0baad3a9d5ce70910f4725fca790c882158da"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/contact/page-b01ef89f1f1c4a19.js",
+      "bytes": 5944,
+      "sha256": "96dd4e91689b0b8dc2d59ca32fab1d25d8ced647b94dc762642f7d879459c3a4"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/error-a81a79338a9ef515.js",
+      "bytes": 8222,
+      "sha256": "46cef0975db6c84c95a784633b66e4455e0faec0b9d13b78586afb1cd2eccc2c"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/layout-d3818f1b467e89e5.js",
+      "bytes": 9773,
+      "sha256": "a3a2c4cf1a0eb0a77231f94f35bafc6902c36363affa5f7ebb45ced7e40bca66"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/not-found-b17d00009d31785e.js",
+      "bytes": 1205,
+      "sha256": "2567319d53e7b48dc0902e697b3ab859898ff0c6ff2dff3f4feb3d14513e3bcf"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/opengraph-image/route-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/page-1435be38efe343da.js",
+      "bytes": 11811,
+      "sha256": "5f4a3d285ece1d9418b14ef73ade68b0e2b4e7598562684354e3aca5aabdd220"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/pricing/page-c9f8ca94bbd0366d.js",
+      "bytes": 11813,
+      "sha256": "c6d41dbdd4e4dbfd3fb2a906a9c3d5b1ebb69f04b9adaeccbe92f92fa6c90969"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/process/page-b01ef89f1f1c4a19.js",
+      "bytes": 5944,
+      "sha256": "96dd4e91689b0b8dc2d59ca32fab1d25d8ced647b94dc762642f7d879459c3a4"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/services/loading-29fc31b3984c340b.js",
+      "bytes": 8231,
+      "sha256": "5ddb3154e2e60f656bd1a5b38452fbf5d695b192e171cebd4c33ae5928ae0282"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/services/page-1435be38efe343da.js",
+      "bytes": 11811,
+      "sha256": "5f4a3d285ece1d9418b14ef73ade68b0e2b4e7598562684354e3aca5aabdd220"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/services/[slug]/page-c1ac4296896ce7af.js",
+      "bytes": 11853,
+      "sha256": "364fe0db7fe1dc4fd1ba9e9c76cc473e531a241d767ab441e352f06fca26fcce"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/[locale]/[...notFound]/page-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/_global-error/page-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/app/_not-found/page-0625873d1f91c9f4.js",
+      "bytes": 2665,
+      "sha256": "ffecc4234a6b3d1497bcdd4fa7a2ef8257159a8be4f77bf412ee0db9ded2f618"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/framework-6860ebc283a60d07.js",
+      "bytes": 189664,
+      "sha256": "099914a36cc97ca8b0dcf8ac41ebb0d9fd52d0072aa9ee24493962d6d5a8c11c"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/main-19c0ede34f585d6b.js",
+      "bytes": 133846,
+      "sha256": "635b89d5543f68b947a589e8d8521000689ae7803cfbbc0fbd263e8afd44e636"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/main-app-8eb984d69c6e3a77.js",
+      "bytes": 513,
+      "sha256": "86a4f8d9af11a9ae2fadd368034f1e5e64bc3c806a09c1bbd2183a07679f6cbe"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/next/dist/client/components/builtin/app-error-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/next/dist/client/components/builtin/forbidden-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/next/dist/client/components/builtin/global-error-7be87ce6746257ef.js",
+      "bytes": 179,
+      "sha256": "7e3a9ce2191cf3292c72ed08da18456329e68043ba0d5936d2101eac2dfa12bc"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/next/dist/client/components/builtin/layout-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/next/dist/client/components/builtin/not-found-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/next/dist/client/components/builtin/unauthorized-60965e6a022107da.js",
+      "bytes": 175,
+      "sha256": "c9bd24f859440eab32cd5720fcbf666032ba68a74a9e4f5c9dcf2e7875bb24eb"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/polyfills-42372ed130431b0a.js",
+      "bytes": 112594,
+      "sha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683"
+    },
+    {
+      "file": "dist/client/_next/static/chunks/webpack-6437611ecfb575a5.js",
+      "bytes": 3435,
+      "sha256": "2f40b252cda40eb84d54dd20c506912c3fe35fc3f6f401c0446f0fb476807c07"
+    },
+    {
+      "file": "dist/client/_next/static/css/041d3311b3d5a2c1.css",
+      "bytes": 26865,
+      "sha256": "673f57b27cd3191eca3c3042935fde9a7fc814553ca0479b27d4a94298eef4af"
+    },
+    {
+      "file": "dist/client/_next/static/css/63144ee9fb808f37.css",
+      "bytes": 928,
+      "sha256": "31c6eb95944bfd1b0c1971122f2d1b16a060fd3c660de4de61184bc0b048b510"
+    },
+    {
+      "file": "dist/client/_next/static/css/6cd794abd409bd58.css",
+      "bytes": 12134,
+      "sha256": "bf4a7556ec3704a9a573db2e6121262b5a9d11e0206ac6ed5ca2f18c75c4c283"
+    },
+    {
+      "file": "dist/client/_next/static/css/ce030aaa362594a0.css",
+      "bytes": 21039,
+      "sha256": "da707a1ead23e2ca38be785d82d9e6385cf800e55897c76e26bcb3d0c58cd61e"
+    },
+    {
+      "file": "dist/server/77d9faebf7af9e421806970ce10a58e9d83116d7-resvg.wasm",
+      "bytes": 1378357,
+      "sha256": "6332e8ff5ef63cb18592370d4f799c8551d886c90b8563e1323fdabee2371e24"
+    },
+    {
+      "file": "dist/server/8a4c78e86e13dbf6e741a84f526dd79481b679db-Geist-Regular.ttf.bin",
+      "bytes": 125956,
+      "sha256": "bde046ddd9f20be35b0bd56cc79eb752b967fb6661a3fe76cb067bb09f871d76"
+    },
+    {
+      "file": "dist/server/a5d4d0ae9bf0a18b666f06b1864089d3fe4057cc-yoga.wasm",
+      "bytes": 71736,
+      "sha256": "7ba9c9483c8c38a468e9aef4a95ed72fad8a43594be8e5123eb3bdb6479edf5b"
+    },
+    {
+      "file": "dist/server/index.js",
+      "bytes": 9141261,
+      "sha256": "2d3eefb025da9f0873310bdd7867b5632494a789af7d692681fe0eef73e2bdc6"
+    }
+  ]
+}

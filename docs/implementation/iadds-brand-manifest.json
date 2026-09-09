@@ -1,0 +1,25 @@
+{
+  "sourceFilename": "iADDS_logo_source_black_square.png",
+  "sourceSha256": "d0923f90312fbb8134be06b983e592929c069fc2e5dec6ec7416ea1e95da9488",
+  "symbolCrop": {
+    "left": 343,
+    "top": 216,
+    "width": 539,
+    "height": 470
+  },
+  "background": "Black removed into alpha; monochrome threshold removes glow",
+  "needsVectorMaster": true,
+  "outputs": [
+    "/media/brand/iadds-favicon-32.png",
+    "/media/brand/iadds-favicon-48.png",
+    "/media/brand/iadds-symbol-128.png",
+    "/media/brand/iadds-symbol-256.png",
+    "/media/brand/iadds-symbol-white-128.png",
+    "/media/brand/iadds-app-180.png",
+    "/media/brand/iadds-horizontal.svg",
+    "/media/brand/iadds-endorsed.svg"
+  ],
+  "header": "Transparent symbol + live HTML wordmark",
+  "mobile": "Same compact HTML lockup",
+  "og": "Localized Next ImageResponse using supplied symbol and live typography"
+}

@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {MediaImage} from '../src/components/ui/media-image';
+import {getAllServices} from '../src/lib/content';
+import {allowPreview,PlaybackCoordinator} from '../src/lib/media/playback-coordinator';
+import type {Media} from '../src/types/content';
+test('video previews render muted, inline, poster-first and without eager video sources',()=>{const media:Media={...getAllServices('uk')[0].cardMedia,type:'video',src:'/media/test.webm',poster:'/media/ai-video-ads.webp'};const html=renderToStaticMarkup(createElement(MediaImage,{media,hero:false,fallbackLabel:'Preview unavailable'}));const video=html.match(/<video[^>]*>/)?.[0]||'';assert.match(video,/muted/);assert.match(video,/playsInline|playsinline/);assert.match(video,/preload="none"/);assert.match(video,/poster=/);assert.doesNotMatch(video,/\ssrc=/);assert.doesNotMatch(video,/controls|autoplay/i);});
+test('reduced motion, Save-Data, touch and offscreen previews remain posters',()=>{const enabled={reducedMotion:false,saveData:false,finePointer:true,inViewport:true};assert.ok(allowPreview(enabled));for(const override of [{reducedMotion:true},{saveData:true},{finePointer:false},{inViewport:false}]) assert.equal(allowPreview({...enabled,...override}),false);});
+test('playback coordinator pauses the previous preview and cancels late playback',async()=>{const coordinator=new PlaybackCoordinator();let aPlaying=false,bPlaying=false,finish:()=>void=()=>undefined;const a={play:()=>new Promise<void>(resolve=>{aPlaying=true;finish=resolve;}),pause:()=>{aPlaying=false;}};const b={play:async()=>{bPlaying=true;},pause:()=>{bPlaying=false;}};const first=coordinator.play(a);await coordinator.play(b);assert.equal(aPlaying,false);assert.equal(bPlaying,true);finish();await first;assert.equal(aPlaying,false);coordinator.stop(b);assert.equal(bPlaying,false);});

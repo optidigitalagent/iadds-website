@@ -1,0 +1,88 @@
+{
+  "status": "validated; private publication pending",
+  "lint": "passed",
+  "typecheck": "passed",
+  "unit": {
+    "passed": 37,
+    "failed": 0
+  },
+  "e2e": {
+    "startTime": "2026-09-09T20:59:14.668Z",
+    "duration": 193462.633,
+    "expected": 36,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "localReview": "passed",
+  "slowNetwork": "passed",
+  "productionWorker": "passed",
+  "productionArtifact": "passed",
+  "productionNextBuild": "passed",
+  "optimizedReviewBuild": "passed",
+  "openNextAndWorkerBuild": "passed",
+  "dependencies": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "lighthouse": [
+    {
+      "page": "uk-home",
+      "performance": 85,
+      "accessibility": 100,
+      "seo": 100,
+      "bestPractices": 100,
+      "lcpMs": 3384.448,
+      "cls": 0,
+      "tbtMs": 291.36799999999994
+    },
+    {
+      "page": "uk-service",
+      "performance": 89,
+      "accessibility": 100,
+      "seo": 100,
+      "bestPractices": 100,
+      "lcpMs": 3110.092,
+      "cls": 0,
+      "tbtMs": 242
+    },
+    {
+      "page": "uk-consultation",
+      "performance": 90,
+      "accessibility": 100,
+      "seo": 100,
+      "bestPractices": 100,
+      "lcpMs": 2894.8319500000002,
+      "cls": 0.003715723068540195,
+      "tbtMs": 254.19467499999973
+    },
+    {
+      "page": "en-home",
+      "performance": 84,
+      "accessibility": 100,
+      "seo": 100,
+      "bestPractices": 100,
+      "lcpMs": 3146.2864999999993,
+      "cls": 0.0005934073970477441,
+      "tbtMs": 380
+    }
+  ],
+  "performanceLimit": "Simulated mobile lab measurements on this constrained PC, not field Core Web Vitals; other validation was running concurrently.",
+  "externalDependencies": [
+    "41 per-asset rights confirmations",
+    "actual vector master",
+    "missing category examples",
+    "persistent production consultation receiver",
+    "client case evidence and permissions",
+    "real legal texts / analytics provider"
+  ],
+  "sites": {
+    "url": "https://iadds-by-antonov-digital.funckj.chatgpt.site",
+    "audience": "owner-only",
+    "status": "awaiting private publication"
+  }
+}

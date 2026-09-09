@@ -1,0 +1,56 @@
+.container { width: min(var(--container), calc(100% - var(--gutter) * 2)); margin-inline: auto; }
+.section { padding-block: var(--section-space); }
+.wordmark { display: inline-flex; align-items: center; gap: 11px; }
+.brandIcon { display:block; width:48px; height:48px; flex:0 0 48px; background-size:contain; background-position:center; background-repeat:no-repeat; }
+.brandText { font-size: 30px; line-height: 1; letter-spacing: -.045em; font-weight: 800; text-transform:none; }
+.brandText > span { display: block; margin-top: 7px; font-size: 9px; font-weight: 550; letter-spacing: .015em; white-space:nowrap; }
+@media(max-width:767px) { .wordmark { gap:7px; }.brandIcon { width:34px; height:34px; flex-basis:34px; }.brandText { font-size:25px; }.brandText > span { font-size:8px; margin-top:5px; } }
+@media(prefers-contrast:more) { .brandIcon { background-image:url('/media/brand/iadds-symbol-white-128.png') !important; } }
+.sectionHeading { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 48px; }
+.sectionHeading > div:first-child { max-width: 900px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; font-size: .7rem; font-weight: 650; letter-spacing: .13em; line-height: 1.7; text-transform: uppercase; color: var(--color-text-muted); }
+.eyebrow > span { width: 6px; height: 6px; flex: 0 0 6px; background: var(--color-acid); border-radius: 50%; }
+.intro { margin-top: 24px; font-size: 1.125rem; color: var(--color-text-muted); max-width: 58ch; }
+.headingAside { flex-shrink: 0; }
+.button { display: inline-flex; justify-content: center; align-items: center; gap: 22px; min-height: 54px; padding: 14px 23px; border-radius: var(--radius-control); background: var(--color-hot); color: var(--color-dark-on-accent); font-size: .85rem; font-weight: 750; line-height: 1.45; border: 1px solid transparent; transition: background 200ms, transform 200ms; text-align: left; }
+.button svg { flex-shrink: 0; }
+.button:active { transform: scale(.98); }
+.secondary { background: rgba(255,255,255,.025); border-color: var(--color-border-strong); color: var(--color-text); }
+.textLink { min-height: 44px; display: inline-flex; align-items: center; gap: 20px; font-size: .9rem; font-weight: 600; }
+.textLink svg { transition: transform 200ms; }
+.tag { display: inline-block; font-size: .68rem; letter-spacing: .035em; padding: 5px 10px; background: rgba(255,255,255,.04); border: 1px solid var(--color-border); border-radius: 999px; }
+.media { position: relative; margin: 0; border-radius: var(--radius-card); overflow: hidden; background: radial-gradient(ellipse at 50% 60%, #30101b, #0b0c0f 70%); }
+.media img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 3 / 2; }
+.media picture { display:block; width:100%; height:100%; }
+.mediaFallback { display:grid; place-items:center; width:100%; height:100%; background:radial-gradient(ellipse at 50% 60%,#261219,#0b0c0f 70%); }
+.mediaFallback span { width:36%; aspect-ratio:1; border:1px solid #b15c73; transform:rotate(-15deg); background:linear-gradient(140deg,#37313a,#0b0c0f); box-shadow:20px 20px 0 #1b1117; }
+.media figcaption { position: absolute; bottom: 18px; left: 20px; padding: 4px 9px; border: 1px solid var(--color-border); border-radius: 999px; background: rgba(5,5,6,.85); color: #b9bac0; font-size: .65rem; letter-spacing: .03em; }
+.detailGrid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 40px 32px; }
+.detailGrid article { padding-top: 24px; border-top: 1px solid var(--color-border); }
+.detailGrid h3 { font-size: 1.35rem; }
+.detailGrid p { margin-top: 16px; color: var(--color-text-muted); }
+.itemNumber { display: block; font-size: .7rem; margin-bottom: 34px; color: var(--color-acid); }
+.bullets { display: grid; gap: 18px; }
+.bullets li { position: relative; padding-left: 25px; color: var(--color-text-muted); }
+.bullets li::before { content: ''; width: 5px; height: 5px; background: var(--color-acid); position: absolute; left: 0; top: .65em; border-radius: 50%; }
+.faq details { border-top: 1px solid var(--color-border); }
+.faq details:last-child { border-bottom: 1px solid var(--color-border); }
+.faq summary { display: flex; align-items: center; gap: 24px; cursor: pointer; list-style: none; min-height: 82px; padding-block: 20px; font-size: 1.1rem; }
+.faq summary::-webkit-details-marker { display: none; }
+.faqNumber { color: var(--color-text-subtle); font-size: .7rem; }
+.plus { width: 16px; height: 16px; position: relative; margin-left: auto; flex-shrink: 0; }
+.plus::before, .plus::after { content: ''; position: absolute; background: var(--color-text); top: 7px; left: 0; width: 16px; height: 1px; }
+.plus::after { transform: rotate(90deg); transition: transform 200ms; }
+.faq details[open] .plus::after { transform: rotate(0); }
+.faq details p { padding: 0 40px 26px; color: var(--color-text-muted); max-width: 78ch; }
+.breadcrumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: .8rem; color: var(--color-text-muted); }
+.breadcrumb li { display: inline-flex; align-items: center; gap: 10px; }
+.breadcrumb li + li::before { content: '/'; color: var(--color-text-subtle); }
+.breadcrumb a { display: inline-flex; align-items: center; min-height: 44px; }
+.breadcrumb [aria-current] { color: var(--color-text); }
+@media (hover: hover) { .button:hover { background: #ff517d; transform: translateY(-2px); } .secondary:hover { background: #202127; } .textLink:hover svg { transform: translateX(4px); } .textLink:hover { text-decoration: underline; text-underline-offset: 5px; } }
+@media (max-width: 1023px) { .detailGrid { grid-template-columns: repeat(2,minmax(0,1fr)); } .sectionHeading { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 767px) { .sectionHeading { margin-bottom: 32px; gap: 20px; } .eyebrow { font-size: .64rem; margin-bottom: 20px; } .detailGrid { grid-template-columns: 1fr; gap: 32px; } .itemNumber { margin-bottom: 18px; } .intro { font-size: 1rem; } .button { gap: 12px; padding-inline: 18px; } .faq summary { font-size: 1rem; gap: 15px; } .faq details p { padding-left: 30px; padding-right: 20px; } }
+.videoPreview { position:relative; width:100%; height:100%; }
+.videoPreview video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; pointer-events:none; }
+.videoPreview[data-playing='true'] video { opacity:1; }

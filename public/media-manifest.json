@@ -1,0 +1,453 @@
+[
+  {
+    "path": "/media/hero.svg",
+    "purpose": "Architectural hero and founder section",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "illustrative",
+    "altText": "",
+    "replacementRequired": false
+  },
+  {
+    "path": "/media/hero.webp",
+    "purpose": "Pre-rendered hero illustration to reduce browser paint work",
+    "type": "webp",
+    "source": "Original /media/hero.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "illustrative",
+    "altText": "",
+    "replacementRequired": false
+  },
+  {
+    "path": "/media/ai-video-ads.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "Original cinematic composition of a luminous red sculptural ribbon inside an advertising frame.",
+      "uk": "Оригінальна кінематографічна композиція з червоною світловою стрічкою в рекламній рамці."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/ai-video-ads.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/ai-video-ads.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "Original cinematic composition of a luminous red sculptural ribbon inside an advertising frame.",
+      "uk": "Оригінальна кінематографічна композиція з червоною світловою стрічкою в рекламній рамці."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/ai-video-ads-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/ai-video-ads.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "Original cinematic composition of a luminous red sculptural ribbon inside an advertising frame.",
+      "uk": "Оригінальна кінематографічна композиція з червоною світловою стрічкою в рекламній рамці."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/product-visuals.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "An unbranded metallic object on a reflective studio pedestal with a restrained green light.",
+      "uk": "Металевий об’єкт без бренду на дзеркальному подіумі зі стриманим зеленим світлом."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/product-visuals.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/product-visuals.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "An unbranded metallic object on a reflective studio pedestal with a restrained green light.",
+      "uk": "Металевий об’єкт без бренду на дзеркальному подіумі зі стриманим зеленим світлом."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/product-visuals-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/product-visuals.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "An unbranded metallic object on a reflective studio pedestal with a restrained green light.",
+      "uk": "Металевий об’єкт без бренду на дзеркальному подіумі зі стриманим зеленим світлом."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/virtual-models.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "Clearly abstract sculptural editorial silhouette inside a pink-lit studio frame.",
+      "uk": "Абстрактна скульптурна фігура в рамці студії з рожевим освітленням."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/virtual-models.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/virtual-models.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "Clearly abstract sculptural editorial silhouette inside a pink-lit studio frame.",
+      "uk": "Абстрактна скульптурна фігура в рамці студії з рожевим освітленням."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/virtual-models-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/virtual-models.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "Clearly abstract sculptural editorial silhouette inside a pink-lit studio frame.",
+      "uk": "Абстрактна скульптурна фігура в рамці студії з рожевим освітленням."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/ai-ugc.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "An abstract smartphone frame with a sculptural product and green editorial interface shapes.",
+      "uk": "Абстрактна рамка смартфона зі скульптурним продуктом і зеленими елементами композиції."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/ai-ugc.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/ai-ugc.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "An abstract smartphone frame with a sculptural product and green editorial interface shapes.",
+      "uk": "Абстрактна рамка смартфона зі скульптурним продуктом і зеленими елементами композиції."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/ai-ugc-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/ai-ugc.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "An abstract smartphone frame with a sculptural product and green editorial interface shapes.",
+      "uk": "Абстрактна рамка смартфона зі скульптурним продуктом і зеленими елементами композиції."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/ai-spokesperson.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "Original abstract presenter silhouette framed by studio lighting and a simple audio waveform.",
+      "uk": "Оригінальна абстрактна фігура ведучого зі студійним світлом і звуковою хвилею."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/ai-spokesperson.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/ai-spokesperson.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "Original abstract presenter silhouette framed by studio lighting and a simple audio waveform.",
+      "uk": "Оригінальна абстрактна фігура ведучого зі студійним світлом і звуковою хвилею."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/ai-spokesperson-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/ai-spokesperson.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "Original abstract presenter silhouette framed by studio lighting and a simple audio waveform.",
+      "uk": "Оригінальна абстрактна фігура ведучого зі студійним світлом і звуковою хвилею."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/video-localization.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "Layered video frames, caption bars and a waveform in a green-lit modular composition.",
+      "uk": "Багатошарові відеорамки, смуги субтитрів і звукова хвиля в зеленій модульній композиції."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/video-localization.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/video-localization.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "Layered video frames, caption bars and a waveform in a green-lit modular composition.",
+      "uk": "Багатошарові відеорамки, смуги субтитрів і звукова хвиля в зеленій модульній композиції."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/video-localization-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/video-localization.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "Layered video frames, caption bars and a waveform in a green-lit modular composition.",
+      "uk": "Багатошарові відеорамки, смуги субтитрів і звукова хвиля в зеленій модульній композиції."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/explainer-videos.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "A clean modular visual sequence connecting three dimensional blocks and interface fragments.",
+      "uk": "Послідовність об’ємних модулів і фрагментів інтерфейсу, поєднаних у чисту візуальну схему."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/explainer-videos.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/explainer-videos.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "A clean modular visual sequence connecting three dimensional blocks and interface fragments.",
+      "uk": "Послідовність об’ємних модулів і фрагментів інтерфейсу, поєднаних у чисту візуальну схему."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/explainer-videos-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/explainer-videos.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "A clean modular visual sequence connecting three dimensional blocks and interface fragments.",
+      "uk": "Послідовність об’ємних модулів і фрагментів інтерфейсу, поєднаних у чисту візуальну схему."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/brand-characters.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "An original rounded sculptural character with two inset eyes on a dark pink-lit plinth.",
+      "uk": "Оригінальний округлий скульптурний персонаж із двома заглибленими очима на рожево освітленому подіумі."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/brand-characters.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/brand-characters.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "An original rounded sculptural character with two inset eyes on a dark pink-lit plinth.",
+      "uk": "Оригінальний округлий скульптурний персонаж із двома заглибленими очима на рожево освітленому подіумі."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/brand-characters-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/brand-characters.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "An original rounded sculptural character with two inset eyes on a dark pink-lit plinth.",
+      "uk": "Оригінальний округлий скульптурний персонаж із двома заглибленими очима на рожево освітленому подіумі."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/performance-creatives.svg",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "svg",
+    "source": "Original procedural SVG, scripts/generate-media.mjs",
+    "license": "Original project artwork; no third-party assets",
+    "status": "temporary",
+    "altText": {
+      "en": "An organized matrix of original pink-lit abstract creative variants in multiple aspect ratios.",
+      "uk": "Упорядкована сітка абстрактних рекламних варіантів різних пропорцій із рожевим освітленням."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/performance-creatives.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/performance-creatives.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "An organized matrix of original pink-lit abstract creative variants in multiple aspect ratios.",
+      "uk": "Упорядкована сітка абстрактних рекламних варіантів різних пропорцій із рожевим освітленням."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/performance-creatives-mobile.webp",
+    "purpose": "Temporary service artwork; replace with approved image or video/poster when available",
+    "type": "webp",
+    "source": "Original /media/performance-creatives.svg, rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "temporary",
+    "altText": {
+      "en": "An organized matrix of original pink-lit abstract creative variants in multiple aspect ratios.",
+      "uk": "Упорядкована сітка абстрактних рекламних варіантів різних пропорцій із рожевим освітленням."
+    },
+    "replacementRequired": true
+  },
+  {
+    "path": "/media/hero-mobile.svg",
+    "purpose": "Mobile hero composition",
+    "type": "svg",
+    "source": "Original procedural SVG",
+    "license": "Original project artwork",
+    "status": "illustrative",
+    "altText": "",
+    "replacementRequired": false
+  },
+  {
+    "path": "/media/hero-mobile.webp",
+    "purpose": "Optimized mobile hero composition",
+    "type": "webp",
+    "source": "Original hero-mobile.svg rasterized with sharp",
+    "license": "Original project artwork",
+    "status": "illustrative",
+    "altText": "",
+    "replacementRequired": false
+  },
+  {
+    "path": "/uk/opengraph-image",
+    "purpose": "Localized social sharing preview",
+    "type": "generated PNG",
+    "source": "src/app/[locale]/opengraph-image.tsx",
+    "license": "Original project artwork",
+    "status": "approved",
+    "altText": "AI-контент для реклами, товарів і комунікації",
+    "replacementRequired": false
+  },
+  {
+    "path": "/en/opengraph-image",
+    "purpose": "Localized social sharing preview",
+    "type": "generated PNG",
+    "source": "src/app/[locale]/opengraph-image.tsx",
+    "license": "Original project artwork",
+    "status": "approved",
+    "altText": "AI content for advertising, products and communication",
+    "replacementRequired": false
+  },
+  {
+    "path": "/fonts/manrope-latin.woff2",
+    "purpose": "Self-hosted variable font",
+    "type": "woff2",
+    "source": "@fontsource-variable/manrope",
+    "license": "SIL Open Font License 1.1; see /fonts/OFL.txt",
+    "status": "approved",
+    "altText": "",
+    "replacementRequired": false
+  },
+  {
+    "path": "/fonts/manrope-cyrillic.woff2",
+    "purpose": "Self-hosted variable font",
+    "type": "woff2",
+    "source": "@fontsource-variable/manrope",
+    "license": "SIL Open Font License 1.1; see /fonts/OFL.txt",
+    "status": "approved",
+    "altText": "",
+    "replacementRequired": false
+  },
+  {
+    "path": "/fonts/manrope-latin-og.ttf",
+    "purpose": "Portable localized Open Graph font",
+    "type": "ttf",
+    "source": "scripts/convert-og-fonts.py; @fontsource-variable/manrope",
+    "license": "SIL Open Font License 1.1; see /fonts/OFL.txt",
+    "status": "approved",
+    "altText": "",
+    "replacementRequired": false
+  },
+  {
+    "path": "/fonts/manrope-cyrillic-og.ttf",
+    "purpose": "Portable localized Open Graph font",
+    "type": "ttf",
+    "source": "scripts/convert-og-fonts.py; @fontsource-variable/manrope",
+    "license": "SIL Open Font License 1.1; see /fonts/OFL.txt",
+    "status": "approved",
+    "altText": "",
+    "replacementRequired": false
+  }
+]

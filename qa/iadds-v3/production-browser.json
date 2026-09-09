@@ -1,0 +1,107 @@
+{
+  "base": "http://127.0.0.1:3102",
+  "status": "passed",
+  "routes": [
+    {
+      "path": "/uk",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/ai-video-ads",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/product-visuals",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/virtual-models",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/ai-ugc",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/ai-spokesperson",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/video-localization",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/explainer-videos",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/brand-characters",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/uk/services/performance-creatives",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/ai-video-ads",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/product-visuals",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/virtual-models",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/ai-ugc",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/ai-spokesperson",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/video-localization",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/explainer-videos",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/brand-characters",
+      "status": 200,
+      "reviewUrls": 0
+    },
+    {
+      "path": "/en/services/performance-creatives",
+      "status": 200,
+      "reviewUrls": 0
+    }
+  ],
+  "errors": []
+}

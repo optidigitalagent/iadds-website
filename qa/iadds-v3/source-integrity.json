@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-09-09T21:14:56.214Z",
+  "unchanged": 125,
+  "failures": [],
+  "handoff": [
+    {
+      "name": "iADDS_Site_Agent_Implementation_Prompt_v3_FINAL.txt",
+      "bytes": 103625,
+      "sha256": "6314d6cb28fa71324f49c725663d3d6c23b38df1dd2529da551f2e072e5405e7",
+      "lines": 1697
+    },
+    {
+      "name": "iADDS_Media_Package_Integration_Addendum_v1.txt",
+      "bytes": 64387,
+      "sha256": "249a24c60e051f427576bf7fa16dfe9970bcd6d6534f42f4ee2fe7eb34822a5b",
+      "lines": 1222
+    }
+  ]
+}

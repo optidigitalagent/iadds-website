@@ -1,0 +1,49 @@
+{
+  "name": "antonov-digital",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/start-review.mjs",
+    "build": "node scripts/build-production.mjs",
+    "start": "next start --hostname 127.0.0.1 --port 3100",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "next typegen && tsc --noEmit",
+    "validate:content": "tsx scripts/validate-content.ts",
+    "generate:media": "tsx scripts/generate-media.mjs",
+    "audit:performance": "node scripts/audit-performance.mjs",
+    "test": "tsx --import ./tests/register-css.mjs --test tests/*.test.ts",
+    "test:e2e": "playwright test",
+    "validate:media": "tsx scripts/validate-iadds-media.ts",
+    "media:publish-approved": "tsx scripts/publish-approved-media.ts",
+    "build:review": "node scripts/build-review.mjs",
+    "preview:review": "node scripts/serve-review.mjs",
+    "build:sites": "node scripts/build-sites.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/manrope": "^5.2.8",
+    "next": "^16.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@opennextjs/cloudflare": "^1.20.6",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.2.0",
+    "sharp": "^0.35.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.0",
+    "wrangler": "^4.125.0"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "overrides": {
+    "sharp": "$sharp"
+  }
+}

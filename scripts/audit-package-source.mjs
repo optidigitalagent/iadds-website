@@ -1,0 +1,12 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {getDictionary,getExperience,getAllServices,getFaq,getProcessSteps,getCommercialNotes} from '../src/lib/content/index.ts';
+import {cases} from '../src/content/cases/index.ts';
+if(!process.argv[2]) throw new Error('Supply the absolute path to AI_Content_Master_Website_Content_v1.md.');
+const master=readFileSync(process.argv[2],'utf8');
+const strings=(x)=>typeof x==='string'?[x]:x&&typeof x==='object'?Object.values(x).flatMap(strings):[];
+const normalize=s=>s.replace(/AI Content/gi,'iADDS').replace(/[ʼ’‘]/g,"'").replace(/[—–]/g,'-').replace(/\s+/g,' ').trim().toLowerCase();
+const graph=['uk','en'].flatMap(locale=>strings({dictionary:getDictionary(locale),experience:getExperience(locale),services:getAllServices(locale),faq:getFaq(locale),steps:getProcessSteps(locale),notes:getCommercialNotes(locale)}));
+const publicText=normalize(graph.join(' '));const draftText=normalize(strings(cases).join(' '));
+const entries=[...master.matchAll(/^`([^`\r\n]+)`\s*$/gm)].map(m=>({line:master.slice(0,m.index).split('\n').length,text:m[1]})).filter(m=>m.text.length>65).map(m=>({...m,status:publicText.includes(normalize(m.text))?'public':draftText.includes(normalize(m.text))?'draft':'review'}));
+writeFileSync(process.env.IADDS_SOURCE_AUDIT_OUTPUT||'qa/package-v1-source-audit.json',JSON.stringify({method:'Exact standalone source paragraphs >65 characters; whitespace, apostrophe, dash normalization and mandatory AI Content → iADDS brand substitution. Non-matches reviewed separately.',entries},null,2));
+console.log(JSON.stringify({counts:entries.reduce((a,m)=>(a[m.status]=(a[m.status]||0)+1,a),{}),review:entries.filter(m=>m.status==='review')},null,2));

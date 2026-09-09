@@ -1,0 +1,1244 @@
+{
+  "mode": "local",
+  "base": "http://127.0.0.1:3100",
+  "createdAt": "2026-09-09T20:50:03.786Z",
+  "widths": [
+    {
+      "width": 320,
+      "overflow": 0,
+      "footerHeight": 731.734375,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 112.125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 288,
+          "height": 54,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 288,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 288,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 288,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 288,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 288,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 171.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 111.625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 58.5625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 63.921875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    },
+    {
+      "width": 360,
+      "overflow": 0,
+      "footerHeight": 731.734375,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 112.125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 320,
+          "height": 54,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 320,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 320,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 320,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 320,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 320,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 171.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 111.625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 58.5625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 63.921875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "overflow": 0,
+      "footerHeight": 731.734375,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 112.125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 335,
+          "height": 54,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 335,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 335,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 335,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 335,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 335,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 171.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 111.625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 58.5625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 63.921875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "overflow": 0,
+      "footerHeight": 731.734375,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 112.125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 350,
+          "height": 54,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 350,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 350,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 350,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 350,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 350,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 171.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 111.625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 58.5625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 63.921875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "overflow": 0,
+      "footerHeight": 643.734375,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 112.125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 390,
+          "height": 54,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 180,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 180,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 180,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 180,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 180,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 171.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 111.625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 58.5625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 63.921875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "overflow": 0,
+      "footerHeight": 388.140625,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 144.359375,
+          "height": 48,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 213.171875,
+          "height": 69.40625,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 177.640625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 177.640625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 177.640625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 177.640625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 177.640625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 167.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 109.03125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 57.1875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 62.4375,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "overflow": 0,
+      "footerHeight": 388.140625,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 144.359375,
+          "height": 48,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 221.734375,
+          "height": 54,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 243.515625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 243.515625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 243.515625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 243.515625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 243.515625,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 167.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 109.03125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 57.1875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 62.4375,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "overflow": 0,
+      "footerHeight": 388.140625,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 144.359375,
+          "height": 48,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 221.734375,
+          "height": 54,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 167.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 109.03125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 57.1875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 62.4375,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "overflow": 0,
+      "footerHeight": 388.140625,
+      "links": [
+        {
+          "text": "iADDS By Antonov Digital",
+          "width": 144.359375,
+          "height": 48,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Обговорити задачу",
+          "width": 221.734375,
+          "height": 54,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Послуги",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "AI-системи",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Про нас",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Контакти",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Вартість",
+          "width": 347.046875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "ant.artem20111@gmail.com",
+          "width": 167.53125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "+380 98 042 16 19",
+          "width": 109.03125,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Telegram",
+          "width": 57.1875,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "Instagram",
+          "width": 62.4375,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "UK✓",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        },
+        {
+          "text": "EN",
+          "width": 44,
+          "height": 44,
+          "wordBreak": "normal"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "locale": "uk",
+      "slug": "ai-video-ads",
+      "gallery": [
+        6,
+        8,
+        13,
+        40
+      ],
+      "coverage": "strong"
+    },
+    {
+      "locale": "uk",
+      "slug": "product-visuals",
+      "gallery": [
+        1,
+        4,
+        12,
+        24
+      ],
+      "coverage": "strong"
+    },
+    {
+      "locale": "uk",
+      "slug": "virtual-models",
+      "gallery": [
+        17,
+        21,
+        25
+      ],
+      "coverage": "temporary"
+    },
+    {
+      "locale": "uk",
+      "slug": "ai-ugc",
+      "gallery": [
+        19,
+        26,
+        41
+      ],
+      "coverage": "strong"
+    },
+    {
+      "locale": "uk",
+      "slug": "ai-spokesperson",
+      "gallery": [
+        15
+      ],
+      "coverage": "temporary"
+    },
+    {
+      "locale": "uk",
+      "slug": "video-localization",
+      "gallery": [],
+      "coverage": "missing"
+    },
+    {
+      "locale": "uk",
+      "slug": "explainer-videos",
+      "gallery": [
+        20,
+        35,
+        28
+      ],
+      "coverage": "temporary"
+    },
+    {
+      "locale": "uk",
+      "slug": "brand-characters",
+      "gallery": [
+        27,
+        18,
+        37
+      ],
+      "coverage": "temporary"
+    },
+    {
+      "locale": "uk",
+      "slug": "performance-creatives",
+      "gallery": [
+        30,
+        33,
+        17,
+        23,
+        22,
+        36
+      ],
+      "coverage": "paired"
+    },
+    {
+      "locale": "en",
+      "slug": "ai-video-ads",
+      "gallery": [
+        6,
+        8,
+        13,
+        40
+      ],
+      "coverage": "strong"
+    },
+    {
+      "locale": "en",
+      "slug": "product-visuals",
+      "gallery": [
+        1,
+        4,
+        12,
+        24
+      ],
+      "coverage": "strong"
+    },
+    {
+      "locale": "en",
+      "slug": "virtual-models",
+      "gallery": [
+        17,
+        21,
+        25
+      ],
+      "coverage": "temporary"
+    },
+    {
+      "locale": "en",
+      "slug": "ai-ugc",
+      "gallery": [
+        19,
+        26,
+        41
+      ],
+      "coverage": "strong"
+    },
+    {
+      "locale": "en",
+      "slug": "ai-spokesperson",
+      "gallery": [
+        15
+      ],
+      "coverage": "temporary"
+    },
+    {
+      "locale": "en",
+      "slug": "video-localization",
+      "gallery": [],
+      "coverage": "missing"
+    },
+    {
+      "locale": "en",
+      "slug": "explainer-videos",
+      "gallery": [
+        20,
+        35,
+        28
+      ],
+      "coverage": "temporary"
+    },
+    {
+      "locale": "en",
+      "slug": "brand-characters",
+      "gallery": [
+        27,
+        18,
+        37
+      ],
+      "coverage": "temporary"
+    },
+    {
+      "locale": "en",
+      "slug": "performance-creatives",
+      "gallery": [
+        30,
+        33,
+        17,
+        23,
+        22,
+        36
+      ],
+      "coverage": "paired"
+    },
+    {
+      "locale": "uk",
+      "route": "about",
+      "width": 390,
+      "cityFrame": {
+        "x": 75,
+        "y": 10415.25,
+        "width": 240,
+        "height": 320
+      }
+    },
+    {
+      "locale": "uk",
+      "route": "about",
+      "width": 1440,
+      "cityFrame": {
+        "x": 80,
+        "y": 7911.46875,
+        "width": 300,
+        "height": 400
+      }
+    },
+    {
+      "locale": "en",
+      "route": "about",
+      "width": 390,
+      "cityFrame": {
+        "x": 75,
+        "y": 10129.140625,
+        "width": 240,
+        "height": 320
+      }
+    },
+    {
+      "locale": "en",
+      "route": "about",
+      "width": 1440,
+      "cityFrame": {
+        "x": 80,
+        "y": 7831.765625,
+        "width": 300,
+        "height": 400
+      }
+    }
+  ],
+  "network": {
+    "initialRequests": [
+      {
+        "url": "http://127.0.0.1:3100/fonts/manrope-cyrillic.woff2",
+        "bytes": 14800,
+        "kind": "link"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/css/ce030aaa362594a0.css",
+        "bytes": 5195,
+        "kind": "link"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/css/6cd794abd409bd58.css",
+        "bytes": 3723,
+        "kind": "link"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/css/041d3311b3d5a2c1.css",
+        "bytes": 6451,
+        "kind": "link"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/webpack-6437611ecfb575a5.js",
+        "bytes": 2063,
+        "kind": "link"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/4bd1b696-92152b0f5947070d.js",
+        "bytes": 63599,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/794-d1a40dcf24d651d9.js",
+        "bytes": 65903,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/main-app-8eb984d69c6e3a77.js",
+        "bytes": 813,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/500-b13bb91f5a6311b6.js",
+        "bytes": 3853,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/513-45c596b1b6733343.js",
+        "bytes": 4328,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/app/%5Blocale%5D/layout-d3818f1b467e89e5.js",
+        "bytes": 3879,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/app/%5Blocale%5D/page-1435be38efe343da.js",
+        "bytes": 4804,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/app/%5Blocale%5D/error-a81a79338a9ef515.js",
+        "bytes": 3809,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/css/63144ee9fb808f37.css",
+        "bytes": 1228,
+        "kind": "link"
+      },
+      {
+        "url": "http://127.0.0.1:3100/_next/static/chunks/app/%5Blocale%5D/not-found-b17d00009d31785e.js",
+        "bytes": 964,
+        "kind": "script"
+      },
+      {
+        "url": "http://127.0.0.1:3100/api/format-media/example-06-desktop.avif",
+        "bytes": 33364,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/media/brand/iadds-symbol-128.png",
+        "bytes": 44644,
+        "kind": "css"
+      },
+      {
+        "url": "http://127.0.0.1:3100/fonts/manrope-latin.woff2",
+        "bytes": 25136,
+        "kind": "css"
+      },
+      {
+        "url": "http://127.0.0.1:3100/api/format-media/example-41-desktop.avif",
+        "bytes": 9059,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/api/format-media/example-30-desktop.avif",
+        "bytes": 15652,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/api/format-media/example-33-desktop.avif",
+        "bytes": 6620,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/api/format-media/example-12-desktop.avif",
+        "bytes": 40010,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/api/format-media/example-40-desktop.avif",
+        "bytes": 9022,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/api/format-media/example-19-desktop.avif",
+        "bytes": 17959,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/media/video-localization.webp",
+        "bytes": 11322,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/api/format-media/example-29-desktop.avif",
+        "bytes": 11824,
+        "kind": "img"
+      },
+      {
+        "url": "http://127.0.0.1:3100/media/brand/iadds-favicon-32.png",
+        "bytes": 3645,
+        "kind": "other"
+      }
+    ],
+    "initialBytes": 413669,
+    "initialMediaBytes": 203121,
+    "mediaFailures": []
+  },
+  "playback": {
+    "firstPreviewLoaded": true,
+    "oneAtATime": true,
+    "pauseOutOfView": true,
+    "detailControls": true,
+    "routeStopsPlayback": true,
+    "reduced-motion": "poster only",
+    "save-data": "poster only",
+    "touch": "poster only",
+    "videoError": "poster retained"
+  },
+  "axe": [
+    {
+      "locale": "uk",
+      "slug": "ai-video-ads",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "slug": "product-visuals",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "slug": "virtual-models",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "slug": "ai-ugc",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "slug": "ai-spokesperson",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "slug": "video-localization",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "slug": "explainer-videos",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "slug": "brand-characters",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "slug": "performance-creatives",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "ai-video-ads",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "product-visuals",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "virtual-models",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "ai-ugc",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "ai-spokesperson",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "video-localization",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "explainer-videos",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "brand-characters",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "slug": "performance-creatives",
+      "violations": []
+    }
+  ],
+  "errors": [],
+  "zoom200": true,
+  "status": "passed"
+}

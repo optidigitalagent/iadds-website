@@ -1,0 +1,3 @@
+import {spawnSync} from 'node:child_process';
+const env={...process.env,NODE_ENV:'production',NODE_OPTIONS:'--max-old-space-size=768',IADDS_MEDIA_MODE:'production',IADDS_REVIEW_BUILD:'false',SITE_URL:process.env.SITE_URL||'https://iadds-by-antonov-digital.funckj.chatgpt.site',NEXT_TELEMETRY_DISABLED:'1'};
+for(const args of [['--import','tsx','scripts/validate-content.ts'],['--import','tsx','scripts/validate-iadds-media.ts'],['node_modules/next/dist/bin/next','build','--webpack']]){const r=spawnSync(process.execPath,args,{stdio:'inherit',env,windowsHide:true});if(r.status!==0){process.exitCode=r.status??1;break;}}

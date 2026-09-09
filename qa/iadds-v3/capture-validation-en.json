@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "method": "Instant scroll through every section; each image decoded; every reveal visible before screenshot.",
+  "results": [
+    {
+      "locale": "en",
+      "name": "home",
+      "width": 390,
+      "loadedImages": 14,
+      "pendingReveals": 0
+    },
+    {
+      "locale": "en",
+      "name": "home",
+      "width": 1440,
+      "loadedImages": 14,
+      "pendingReveals": 0
+    },
+    {
+      "locale": "en",
+      "name": "about",
+      "width": 390,
+      "loadedImages": 8,
+      "pendingReveals": 0
+    },
+    {
+      "locale": "en",
+      "name": "about",
+      "width": 1440,
+      "loadedImages": 8,
+      "pendingReveals": 0
+    }
+  ]
+}

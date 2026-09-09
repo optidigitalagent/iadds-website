@@ -1,0 +1,44 @@
+[
+  {
+    "filename": "01_founder_portrait_sea_cap.png",
+    "unchanged": true,
+    "sha256": "085c1f3a59f1e498427f8073c4c87f9a97e559a6a7ce5c7190470b6bdc7f804c",
+    "derivatives": 4
+  },
+  {
+    "filename": "02_founder_hockey_team_action.png",
+    "unchanged": true,
+    "sha256": "7f717c45ccb71f9350cd280f533a4e1456ba464d46daf71089cc2180d0a5710e",
+    "derivatives": 4
+  },
+  {
+    "filename": "03_founder_hockey_puck_action.png",
+    "unchanged": true,
+    "sha256": "fbed41c5b3445561fe847f7fffb03fbac49f12e94a83a955541c5259835ff9b2",
+    "derivatives": 4
+  },
+  {
+    "filename": "04_founder_urban_event_source.png",
+    "unchanged": true,
+    "sha256": "47b76929316b8c00a56204f3f3473af25d8ec033d207ca39c518115cee49bfc1",
+    "derivatives": 4
+  },
+  {
+    "filename": "05_founder_gopro_water.png",
+    "unchanged": true,
+    "sha256": "178d7c49a285999cd30dbbe7478384f35921c6be395860c8f8be26d38b010b73",
+    "derivatives": 4
+  },
+  {
+    "filename": "06_founder_boat.png",
+    "unchanged": true,
+    "sha256": "161da207ee43897c1a962b737484c6c0e9081f048c4cae1469f2f55e9ecc2921",
+    "derivatives": 4
+  },
+  {
+    "filename": "07_founder_jetski.jpg",
+    "unchanged": true,
+    "sha256": "0870b0ab32c1b1b1db50a79673aa67548654b8e3ddab5956442b76678eeddf71",
+    "derivatives": 4
+  }
+]
