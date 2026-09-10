@@ -16,13 +16,19 @@ if(process.argv.includes('--sites-auth-stdin')){
   headers={'OAI-Sites-Authorization':`Bearer ${token}`};
 }
 const result={base,status:'pending',routes:[],assets:[],errors:[],browser:[]};
+async function batch(items,check){
+  let cursor=0;
+  await Promise.all(Array.from({length:Math.min(4,items.length)},async()=>{
+    while(cursor<items.length){const item=items[cursor++];await check(item);}
+  }));
+}
 const client=await request.newContext({extraHTTPHeaders:headers});
 const browser=await chromium.launch({channel:'chromium'});
 try{
   const services=['ai-video-ads','product-visuals','virtual-models','ai-ugc','ai-spokesperson','video-localization','explainer-videos','brand-characters','performance-creatives'];
   const pages=['','/services','/ai-systems','/pricing','/process','/about','/consultation','/contact','/cases',...services.map(slug=>'/services/'+slug)];
   const root=await client.get(base+'/',{maxRedirects:0});assert.equal(root.status(),307);assert.ok(root.headers().location.endsWith('/uk'));
-  for(const locale of ['uk','en'])for(const route of pages){
+  await batch(['uk','en'].flatMap(locale=>pages.map(route=>({locale,route}))),async({locale,route})=>{
     const url='/'+locale+route,response=await client.get(base+url,{maxRedirects:0});
     assert.equal(response.status(),200,url);const html=await response.text();
     assert.ok(html.includes('iADDS'),url);assert.ok(!html.includes('/api/format-media/'),url);
@@ -30,7 +36,7 @@ try{
     assert.ok(html.includes(`lang="${locale}"`),url);
     if(route==='/cases')assert.match(html,/noindex/);
     result.routes.push({path:url,status:response.status()});
-  }
+  });
   for(const route of ['/uk/services/missing','/en/services/missing','/uk/cases/moda-castle','/api/format-media/example-06-preview.mp4','/media/examples/example-06-preview.mp4']){
     const response=await client.get(base+route,{maxRedirects:0});assert.equal(response.status(),404,route);result.routes.push({path:route,status:404});
   }
@@ -41,17 +47,21 @@ try{
   for(const locale of ['uk','en']){
     const response=await client.get(`${base}/${locale}/opengraph-image`,{maxRedirects:0});assert.equal(response.status(),200);assert.match(response.headers()['content-type'],/image\/png/);
   }
+  const assetFiles=[];
   async function assets(dir='public'){
     for(const entry of await fs.readdir(dir,{withFileTypes:true})){
       const file=dir+'/'+entry.name;if(entry.isDirectory()){await assets(file);continue;}
+      assetFiles.push(file);
+    }
+  }
+  await assets();
+  await batch(assetFiles,async file=>{
       const route=file.slice('public'.length),response=await client.get(base+route,{maxRedirects:0});
       assert.equal(response.status(),200,route);
       const expected=createHash('sha256').update(await fs.readFile(file)).digest('hex');
       assert.equal(createHash('sha256').update(await response.body()).digest('hex'),expected,route);
       result.assets.push({path:route,status:200,sha256:expected});
-    }
-  }
-  await assets();
+  });
   for(const width of [1440,390]){
     const context=await browser.newContext({viewport:{width,height:900}});
     // Never send the Sites bearer to any other origin (including redirects).
@@ -76,4 +86,4 @@ try{
   assert.deepEqual(result.errors,[]);result.status='passed';
   console.log(`Smoke passed: ${result.routes.length} routes, ${result.assets.length} asset hashes, 8 browser views, no real submissions.`);
 }catch(error){result.status='failed';result.failure=String(error);process.exitCode=1;console.error(String(error));}
-finally{await fs.mkdir(path.dirname(out),{recursive:true});await fs.writeFile(out,JSON.stringify(result,null,2)+'\n');await browser.close();await client.dispose();}
+finally{result.routes.sort((a,b)=>a.path.localeCompare(b.path));result.assets.sort((a,b)=>a.path.localeCompare(b.path));await fs.mkdir(path.dirname(out),{recursive:true});await fs.writeFile(out,JSON.stringify(result,null,2)+'\n');await browser.close();await client.dispose();}
