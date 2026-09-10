@@ -8,6 +8,7 @@ import approvals from '../src/content/internal/media-approvals.json';
 import {approvalEvidenceComplete,publicationApproved,mediaEnvironment} from '../src/lib/media/policy';
 import {selectExample,getServiceMedia} from '../src/lib/media/service-media';
 import {serviceMediaMap} from '../src/content/site/service-media-map';
+import {getMediaCopy} from '../src/content/site/media-copy';
 import {siteConfig} from '../src/content/site/settings';
 import {BrandWordmark} from '../src/components/ui/primitives';
 import {WhoBehind} from '../src/components/sections/experience-sections';
@@ -41,6 +42,6 @@ test('branding is exact and founder preview contains only the jet-ski visual',()
  for(const locale of ['uk','en'] as const){const html=renderToStaticMarkup(createElement(WhoBehind,{locale}));assert.match(html,/data-founder-photo="jetski"/);assert.equal((html.match(/data-founder-photo=/g)||[]).length,1);assert.doesNotMatch(html,/previewInset|AI Content|AI CONTENT/);}
 });
 test('actual package previews ship posters without eager video sources',()=>{
- const media=selectExample(6,'uk','local')!;const html=renderToStaticMarkup(createElement(FormatMedia,{media,card:true,labels:{play:'Play',unavailable:'Unavailable'}}));
+ const media=selectExample(6,'uk','local')!;const html=renderToStaticMarkup(createElement(FormatMedia,{media,card:true,labels:getMediaCopy('uk')}));
  const tag=html.match(/<video[^>]*>/)![0];assert.match(tag,/muted/);assert.match(tag,/playsInline/i);assert.match(tag,/preload="none"/);assert.doesNotMatch(tag,/\ssrc=/);assert.match(html,/image\/avif/);
 });

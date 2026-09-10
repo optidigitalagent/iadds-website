@@ -508,8 +508,8 @@ export const mediaCatalog: CatalogAsset[] = [
     "smallOnly": false,
     "disposition": "staging-only",
     "focalPoint": {
-      "desktop": "50% 50%",
-      "mobile": "50% 50%"
+      "desktop": "50% 30%",
+      "mobile": "50% 30%"
     },
     "derivatives": [
       {
@@ -903,8 +903,8 @@ export const mediaCatalog: CatalogAsset[] = [
     "smallOnly": false,
     "disposition": "staging-only",
     "focalPoint": {
-      "desktop": "50% 50%",
-      "mobile": "50% 50%"
+      "desktop": "50% 20%",
+      "mobile": "50% 20%"
     },
     "derivatives": [
       {

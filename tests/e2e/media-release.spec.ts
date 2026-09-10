@@ -78,10 +78,12 @@ test('detail playback is intentional, muted and uses native controls',async({pag
  await page.goto('/en/services/ai-video-ads');
  const featured=page.locator('[data-example-id="34"]').first();
  await expect(featured.locator('video')).toHaveCount(0);
+ const before=await featured.locator('img').evaluate(img=>({width:img.clientWidth,height:img.clientHeight,position:getComputedStyle(img).objectPosition}));
  await featured.getByRole('button',{name:/Play video/}).click();
  const video=featured.locator('video');await expect(video).toHaveAttribute('controls');await expect(video).toHaveAttribute('preload','none');
  expect(await video.evaluate((v:HTMLVideoElement)=>v.muted&&v.playsInline&&!v.autoplay)).toBe(true);
  await expect.poll(()=>video.evaluate((v:HTMLVideoElement)=>!v.paused&&v.currentTime>0)).toBe(true);
+ expect(await video.evaluate(v=>({width:v.clientWidth,height:v.clientHeight,position:getComputedStyle(v).objectPosition}))).toEqual(before);
  const gallery=page.locator('[data-service-examples]');
  await expect(gallery.locator('video[src]')).toHaveCount(0);await expect(gallery.locator('[data-example-id="34"]')).toHaveCount(0);
 });
