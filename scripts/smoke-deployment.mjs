@@ -89,7 +89,7 @@ try{
       await fs.mkdir(path.dirname(screenshot),{recursive:true});await page.screenshot({path:screenshot,fullPage:true,animations:'disabled'});
       const other=route.startsWith('/uk')?'en':'uk';
       await page.locator(`header nav a[hreflang="${other}"]`).first().click();
-      await page.waitForURL(base+route.replace(/^\/(uk|en)/,'/'+other));
+      await page.waitForURL(url=>url.origin===base&&url.pathname===route.replace(/^\/(uk|en)/,'/'+other));
       result.browser.push({path:route,width,status:'passed'});
     }
     await context.close();
