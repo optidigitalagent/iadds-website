@@ -78,6 +78,9 @@ test('detail playback is intentional, muted and uses native controls',async({pag
  await page.goto('/en/services/ai-video-ads');
  const featured=page.locator('[data-example-id="34"]').first();
  await expect(featured.locator('video')).toHaveCount(0);
+ await expect(featured.locator('img')).toBeVisible();
+ await featured.locator('img').evaluate(img=>img.decode());
+ await page.evaluate(()=>document.fonts.ready);
  const before=await featured.locator('img').evaluate(img=>({width:img.clientWidth,height:img.clientHeight,position:getComputedStyle(img).objectPosition}));
  await featured.getByRole('button',{name:/Play video/}).click();
  const video=featured.locator('video');await expect(video).toHaveAttribute('controls');await expect(video).toHaveAttribute('preload','none');
