@@ -13,7 +13,9 @@ export function publicWebsite(value: string): boolean {
   return hostname.includes('.') && !hostname.startsWith('.') && !hostname.endsWith('.') && !/[\s<>]/.test(value);
 }
 export function getSiteUrl(): string {
-  const url = safeExternalUrl(process.env.SITE_URL) || 'http://127.0.0.1:3100';
+  const url = safeExternalUrl(process.env.SITE_URL) || (process.env.NODE_ENV === 'production'
+    ? 'https://iadds-by-antonov-digital.funckj.chatgpt.site'
+    : 'http://127.0.0.1:3100');
   return new URL(url).origin;
 }
 export const locales = ['uk', 'en'] as const;

@@ -1,5 +1,5 @@
 {
-  "baseline": "C:\\Users\\Admin\\AppData\\Local\\Temp\\antonov-package-v1-baseline.json",
+  "baseline": "Historical private input: antonov-package-v1-baseline.json (not a runtime dependency)",
   "baselineFiles": 129,
   "method": "SHA-256 against pre-package snapshot; ignored runtime/QA binaries excluded",
   "added": [

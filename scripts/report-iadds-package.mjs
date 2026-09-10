@@ -8,7 +8,7 @@ const inventory=await read('docs/implementation/iadds-source-inventory.json');
 const derivatives=await read('docs/implementation/iadds-media-derivatives.json');
 const founders=await read('docs/founder-media-manifest.json');
 const brand=await read('docs/implementation/iadds-brand-manifest.json');
-const baseline=await read('.data/iadds-v3-baseline.json');
+const baseline=await read('docs/implementation/iadds-v3-baseline.json');
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const esc=s=>String(s??'—').replaceAll('|',' / ').replaceAll('\n',' ');
 const docRoles={
@@ -24,9 +24,10 @@ const docRoles={
  'source_index.tsv':'Все 41 позиции визуального индекса сопоставлены с ID и canonical-файлами; индекс не публикуется.'
 };
 const uses=id=>Object.entries(serviceMediaMap).flatMap(([slug,m])=>{const roles=[];if(m.card.includes(id))roles.push('card');if(m.featured===id)roles.push('featured');if(m.gallery.includes(id))roles.push(m.featured===id?'gallery mapping; duplicate omitted':'gallery');for(const s of m.variationSets??[])if(s.ids.includes(id))roles.push(`pair ${s.id}`);return roles.length?[`${slug}: ${roles.join(', ')}`]:[];}).join('; ')||'Резерв — финальная редакционная подборка не использует';
-const handoffRoot=(await fs.readFile(path.join(process.env.TEMP,'iadds-handoff-root.txt'),'utf8')).trim();
+const [sourceRoot,handoffRoot]=process.argv.slice(2);
+if(!sourceRoot||!handoffRoot)throw Error('Archival regeneration only: pass EXTRACTED_SOURCE_ROOT EXTRACTED_HANDOFF_ROOT. The tracked reports remain available without the private originals; see README.md.');
 const handoff=[];for(const name of ['iADDS_Site_Agent_Implementation_Prompt_v3_FINAL.txt','iADDS_Media_Package_Integration_Addendum_v1.txt']){const b=await fs.readFile(path.join(handoffRoot,name));handoff.push({name,bytes:b.length,sha256:hash(b),lines:b.toString('utf8').split(/\r?\n/).length});}
-const unchanged=[];for(const f of inventory.files){const actual=hash(await fs.readFile(path.join(inventory.sourceRoot,f.file)));if(actual!==f.sha256)throw Error(`Source changed: ${f.file}`);unchanged.push(f.file);}
+const unchanged=[];for(const f of inventory.files){const actual=hash(await fs.readFile(path.join(sourceRoot,f.file)));if(actual!==f.sha256)throw Error(`Source changed: ${f.file}`);unchanged.push(f.file);}
 await fs.writeFile('qa/iadds-v3/source-integrity.json',JSON.stringify({checkedAt:new Date().toISOString(),unchanged:unchanged.length,failures:[],handoff},null,2)+'\n');
 const folders=new Map();for(const f of inventory.files){let d=path.posix.dirname(f.file);while(d!=='.'){folders.set(d,(folders.get(d)??0)+1);d=path.posix.dirname(d);}}
 let coverage='# iADDS — полный реестр использования источников\n\nВсе 125 файлов двух source packages учтены; оба ZIP распакованы отдельно. SHA-256 каждого источника повторно проверен после генерации и не изменился. Два документа handoff прочитаны полностью; FINAL MANDATORY OVERRIDE имеет приоритет.\n\n## Handoff\n\n| Документ | Строк | SHA-256 | Использование |\n| --- | ---: | --- | --- |\n';

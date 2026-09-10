@@ -2,12 +2,12 @@
   "config": {
     "argv": [
       "C:\\Program Files\\nodejs\\node.exe",
-      "C:\\Users\\Admin\\OneDrive\\Documents\\ChatGPT\\siteagent\\apps\\antonov-digital\\node_modules\\@playwright\\test\\cli.js",
+      "<checkout>\\node_modules\\@playwright\\test\\cli.js",
       "test",
       "--reporter=list,json"
     ],
-    "configFile": "C:\\Users\\Admin\\OneDrive\\Documents\\ChatGPT\\siteagent\\apps\\antonov-digital\\playwright.config.ts",
-    "rootDir": "C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/tests/e2e",
+    "configFile": "<checkout>\\playwright.config.ts",
+    "rootDir": "<checkout>/tests/e2e",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -23,7 +23,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/test-results",
+        "outputDir": "<checkout>/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -31,7 +31,7 @@
         },
         "id": "chromium",
         "name": "chromium",
-        "testDir": "C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/tests/e2e",
+        "testDir": "<checkout>/tests/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"

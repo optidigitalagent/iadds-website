@@ -36,5 +36,6 @@ async function scan(dir){for(const e of await fs.readdir(dir,{withFileTypes:true
  files.push({file:p.replaceAll('\\','/'),bytes:data.length,sha256});
 }}}
 await scan('dist');
-await fs.writeFile('qa/iadds-v3/production-artifact.json',JSON.stringify({status:'passed',unverifiedBinaries:0,reviewUrlsInClient:0,sourceProvenanceInClient:0,files},null,2)+'\n');
+await fs.mkdir('.data/handoff',{recursive:true});
+await fs.writeFile('.data/handoff/production-artifact.json',JSON.stringify({status:'passed',unverifiedBinaries:0,reviewUrlsInClient:0,sourceProvenanceInClient:0,files},null,2)+'\n');
 console.log(`Sites Worker staged: ${files.length} regular files; no unverified media or review URLs in client assets.`);

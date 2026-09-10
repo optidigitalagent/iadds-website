@@ -1,6 +1,6 @@
 # iADDS v3 source audit — pre-implementation
 
-Created 2026-09-09T20:04:31.093Z. Source root: C:/Users/Admin/AppData/Local/Temp/iadds-v3-sources-4393855296b54fe6bf82fc1c461e3341. All 41 canonical files fully decoded; CSV, JSON and TSV agree. All curated copies match canonical SHA-256. Seven founder photos match prior sources byte-for-byte. No missing/corrupt files. Full per-file inventory: [JSON](./iadds-source-inventory.json).
+Created 2026-09-09T20:04:31.093Z. Source root: EXTRACTED_SOURCE_ROOT (explicit CLI input; optional private archive). All 41 canonical files fully decoded; CSV, JSON and TSV agree. All curated copies match canonical SHA-256. Seven founder photos match prior sources byte-for-byte. No missing/corrupt files. Full per-file inventory: [JSON](./iadds-source-inventory.json).
 
 ## Change matrix (recorded before UI edits)
 

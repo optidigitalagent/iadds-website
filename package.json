@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/start-review.mjs",
-    "build": "node scripts/build-production.mjs",
+    "build": "node scripts/ci.mjs",
     "start": "next start --hostname 127.0.0.1 --port 3100",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "next typegen && tsc --noEmit",
@@ -18,7 +18,9 @@
     "media:publish-approved": "tsx scripts/publish-approved-media.ts",
     "build:review": "node scripts/build-review.mjs",
     "preview:review": "node scripts/serve-review.mjs",
-    "build:sites": "node scripts/build-sites.mjs"
+    "build:sites": "node scripts/build-sites.mjs",
+    "build:next": "node scripts/build-production.mjs",
+    "audit:repository": "node scripts/audit-repository.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.2.8",
@@ -41,9 +43,10 @@
     "wrangler": "^4.125.0"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=24 <25"
   },
   "overrides": {
     "sharp": "$sharp"
-  }
+  },
+  "packageManager": "npm@11.9.0"
 }

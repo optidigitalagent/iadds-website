@@ -28,13 +28,13 @@
 
 | Founder source | Реальное размещение | Производные файлы (width × height) | Проверка / зависимость |
 | --- | --- | --- | --- |
-| 01_founder_portrait_sea_cap.png | About introduction; home founder preview | [portrait-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/portrait-desktop.avif>) (651 × 864)<br>[portrait-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/portrait-desktop.webp>) (651 × 864)<br>[portrait-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/portrait-mobile.avif>) (607 × 806)<br>[portrait-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/portrait-mobile.webp>) (607 × 806) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
-| 02_founder_hockey_team_action.png | About hockey — teamwork | [hockey-team-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-team-desktop.avif>) (1075 × 711)<br>[hockey-team-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-team-desktop.webp>) (1075 × 711)<br>[hockey-team-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-team-mobile.avif>) (602 × 762)<br>[hockey-team-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-team-mobile.webp>) (602 × 762) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
-| 03_founder_hockey_puck_action.png | About hockey — concentration | [hockey-puck-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-puck-desktop.avif>) (896 × 758)<br>[hockey-puck-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-puck-desktop.webp>) (896 × 758)<br>[hockey-puck-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-puck-mobile.avif>) (640 × 767)<br>[hockey-puck-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-puck-mobile.webp>) (640 × 767) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
-| 04_founder_urban_event_source.png | About small lifestyle transition | [urban-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/urban-desktop.avif>) (230 × 262)<br>[urban-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/urban-desktop.webp>) (230 × 262)<br>[urban-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/urban-mobile.avif>) (192 × 230)<br>[urban-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/urban-mobile.webp>) (192 × 230) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
-| 05_founder_gopro_water.png | About technology and filming | [gopro-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/gopro-desktop.avif>) (902 × 902)<br>[gopro-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/gopro-desktop.webp>) (902 × 902)<br>[gopro-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/gopro-mobile.avif>) (640 × 719)<br>[gopro-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/gopro-mobile.webp>) (640 × 719) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
-| 06_founder_boat.png | About cinematic water chapter | [boat-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/boat-desktop.avif>) (960 × 640)<br>[boat-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/boat-desktop.webp>) (960 × 640)<br>[boat-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/boat-mobile.avif>) (547 × 717)<br>[boat-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/boat-mobile.webp>) (547 × 717) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
-| 07_founder_jetski.jpg | About philosophy and final CTA | [jetski-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/jetski-desktop.avif>) (640 × 602)<br>[jetski-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/jetski-desktop.webp>) (640 × 602)<br>[jetski-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/jetski-mobile.avif>) (480 × 602)<br>[jetski-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/jetski-mobile.webp>) (480 × 602) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
+| 01_founder_portrait_sea_cap.png | About introduction; home founder preview | [portrait-desktop.avif](<../public/media/founder/portrait-desktop.avif>) (651 × 864)<br>[portrait-desktop.webp](<../public/media/founder/portrait-desktop.webp>) (651 × 864)<br>[portrait-mobile.avif](<../public/media/founder/portrait-mobile.avif>) (607 × 806)<br>[portrait-mobile.webp](<../public/media/founder/portrait-mobile.webp>) (607 × 806) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
+| 02_founder_hockey_team_action.png | About hockey — teamwork | [hockey-team-desktop.avif](<../public/media/founder/hockey-team-desktop.avif>) (1075 × 711)<br>[hockey-team-desktop.webp](<../public/media/founder/hockey-team-desktop.webp>) (1075 × 711)<br>[hockey-team-mobile.avif](<../public/media/founder/hockey-team-mobile.avif>) (602 × 762)<br>[hockey-team-mobile.webp](<../public/media/founder/hockey-team-mobile.webp>) (602 × 762) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
+| 03_founder_hockey_puck_action.png | About hockey — concentration | [hockey-puck-desktop.avif](<../public/media/founder/hockey-puck-desktop.avif>) (896 × 758)<br>[hockey-puck-desktop.webp](<../public/media/founder/hockey-puck-desktop.webp>) (896 × 758)<br>[hockey-puck-mobile.avif](<../public/media/founder/hockey-puck-mobile.avif>) (640 × 767)<br>[hockey-puck-mobile.webp](<../public/media/founder/hockey-puck-mobile.webp>) (640 × 767) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
+| 04_founder_urban_event_source.png | About small lifestyle transition | [urban-desktop.avif](<../public/media/founder/urban-desktop.avif>) (230 × 262)<br>[urban-desktop.webp](<../public/media/founder/urban-desktop.webp>) (230 × 262)<br>[urban-mobile.avif](<../public/media/founder/urban-mobile.avif>) (192 × 230)<br>[urban-mobile.webp](<../public/media/founder/urban-mobile.webp>) (192 × 230) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
+| 05_founder_gopro_water.png | About technology and filming | [gopro-desktop.avif](<../public/media/founder/gopro-desktop.avif>) (902 × 902)<br>[gopro-desktop.webp](<../public/media/founder/gopro-desktop.webp>) (902 × 902)<br>[gopro-mobile.avif](<../public/media/founder/gopro-mobile.avif>) (640 × 719)<br>[gopro-mobile.webp](<../public/media/founder/gopro-mobile.webp>) (640 × 719) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
+| 06_founder_boat.png | About cinematic water chapter | [boat-desktop.avif](<../public/media/founder/boat-desktop.avif>) (960 × 640)<br>[boat-desktop.webp](<../public/media/founder/boat-desktop.webp>) (960 × 640)<br>[boat-mobile.avif](<../public/media/founder/boat-mobile.avif>) (547 × 717)<br>[boat-mobile.webp](<../public/media/founder/boat-mobile.webp>) (547 × 717) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
+| 07_founder_jetski.jpg | About philosophy and final CTA | [jetski-desktop.avif](<../public/media/founder/jetski-desktop.avif>) (640 × 602)<br>[jetski-desktop.webp](<../public/media/founder/jetski-desktop.webp>) (640 × 602)<br>[jetski-mobile.avif](<../public/media/founder/jetski-mobile.avif>) (480 × 602)<br>[jetski-mobile.webp](<../public/media/founder/jetski-mobile.webp>) (480 × 602) | SHA-256 unchanged; metadata/crop/decode checked. Нет отсутствующего asset. |
 
 Все 28 производных файлов вместе занимают **855843 байт**. Оригинальные SHA-256 совпадают с начальным manifest. Метаданные EXIF/XMP/IPTC удалены. У каждой фотографии есть UK/EN alt, явные размеры, desktop/mobile crop и AVIF/WebP; ниже первого экрана применяется lazy loading. Полный городской кадр не публикуется: объект, похожий на оружие, и посторонние исключены из crop. Регистрация лодки исключена кадрированием, номер водного мотоцикла размыт. Логотипы команды и техники не выдаются за партнёрства.
 
@@ -77,44 +77,44 @@
 
 ## Артефакты
 
-- [docs/ai-content-v1-implementation-map.md](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/docs/ai-content-v1-implementation-map.md>)
-- [docs/founder-media-manifest.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/docs/founder-media-manifest.json>)
-- [qa/package-v1-source-audit.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-source-audit.json>)
-- [qa/package-v1-source-hashes.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-source-hashes.json>)
-- [qa/package-v1-rendered-copy.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-rendered-copy.json>)
-- [qa/package-v1-browser.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-browser.json>)
-- [qa/package-v1-followup.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-followup.json>)
-- [qa/package-v1-unit.log](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-unit.log>)
-- [qa/package-v1-lint.log](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-lint.log>)
-- [qa/package-v1-typecheck.log](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-typecheck.log>)
-- [qa/package-v1-build.log](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-build.log>)
-- [qa/package-v1-content.log](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-content.log>)
-- [qa/package-v1-lighthouse.log](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-lighthouse.log>)
-- [qa/screenshots/home-uk-1440.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/home-uk-1440.png>)
-- [qa/screenshots/home-uk-390.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/home-uk-390.png>)
-- [qa/screenshots/home-en-1440.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/home-en-1440.png>)
-- [qa/screenshots/service-uk-1440.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/service-uk-1440.png>)
-- [qa/screenshots/service-uk-375.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/service-uk-375.png>)
-- [qa/screenshots/package-v1/ai-systems-uk-1440.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/package-v1/ai-systems-uk-1440.png>)
-- [qa/screenshots/package-v1/ai-systems-uk-390.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/package-v1/ai-systems-uk-390.png>)
-- [qa/screenshots/package-v1/pricing-uk-1440.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/package-v1/pricing-uk-1440.png>)
-- [qa/screenshots/package-v1/pricing-uk-390.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/package-v1/pricing-uk-390.png>)
-- [qa/screenshots/package-v1/about-uk-1440.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/package-v1/about-uk-1440.png>)
-- [qa/screenshots/package-v1/about-uk-390.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/package-v1/about-uk-390.png>)
-- [qa/screenshots/consultation-uk-1440.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/consultation-uk-1440.png>)
-- [qa/screenshots/form-validation-uk-375.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/form-validation-uk-375.png>)
-- [qa/screenshots/form-success-uk-375.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/form-success-uk-375.png>)
-- [qa/screenshots/cases-empty-uk-1440.png](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/cases-empty-uk-1440.png>)
-- [qa/screenshots/package-v1/mobile-review-sheet.jpg](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/screenshots/package-v1/mobile-review-sheet.jpg>)
-- [qa/lighthouse-uk-home.report.html](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/lighthouse-uk-home.report.html>)
-- [qa/lighthouse-uk-home.report.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/lighthouse-uk-home.report.json>)
-- [qa/lighthouse-uk-service.report.html](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/lighthouse-uk-service.report.html>)
-- [qa/lighthouse-uk-service.report.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/lighthouse-uk-service.report.json>)
-- [qa/lighthouse-uk-consultation.report.html](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/lighthouse-uk-consultation.report.html>)
-- [qa/lighthouse-uk-consultation.report.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/lighthouse-uk-consultation.report.json>)
-- [qa/lighthouse-en-home.report.html](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/lighthouse-en-home.report.html>)
-- [qa/lighthouse-en-home.report.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/lighthouse-en-home.report.json>)
-- [qa/changed-files.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/changed-files.json>)
+- [docs/ai-content-v1-implementation-map.md](<../docs/ai-content-v1-implementation-map.md>)
+- [docs/founder-media-manifest.json](<../docs/founder-media-manifest.json>)
+- [qa/package-v1-source-audit.json](<../qa/package-v1-source-audit.json>)
+- [qa/package-v1-source-hashes.json](<../qa/package-v1-source-hashes.json>)
+- [qa/package-v1-rendered-copy.json](<../qa/package-v1-rendered-copy.json>)
+- [qa/package-v1-browser.json](<../qa/package-v1-browser.json>)
+- [qa/package-v1-followup.json](<../qa/package-v1-followup.json>)
+- [qa/package-v1-unit.log](<../qa/package-v1-unit.log>)
+- [qa/package-v1-lint.log](<../qa/package-v1-lint.log>)
+- [qa/package-v1-typecheck.log](<../qa/package-v1-typecheck.log>)
+- [qa/package-v1-build.log](<../qa/package-v1-build.log>)
+- [qa/package-v1-content.log](<../qa/package-v1-content.log>)
+- [qa/package-v1-lighthouse.log](<../qa/package-v1-lighthouse.log>)
+- [qa/screenshots/home-uk-1440.png](<../qa/screenshots/home-uk-1440.png>)
+- [qa/screenshots/home-uk-390.png](<../qa/screenshots/home-uk-390.png>)
+- [qa/screenshots/home-en-1440.png](<../qa/screenshots/home-en-1440.png>)
+- [qa/screenshots/service-uk-1440.png](<../qa/screenshots/service-uk-1440.png>)
+- [qa/screenshots/service-uk-375.png](<../qa/screenshots/service-uk-375.png>)
+- [qa/screenshots/package-v1/ai-systems-uk-1440.png](<../qa/screenshots/package-v1/ai-systems-uk-1440.png>)
+- [qa/screenshots/package-v1/ai-systems-uk-390.png](<../qa/screenshots/package-v1/ai-systems-uk-390.png>)
+- [qa/screenshots/package-v1/pricing-uk-1440.png](<../qa/screenshots/package-v1/pricing-uk-1440.png>)
+- [qa/screenshots/package-v1/pricing-uk-390.png](<../qa/screenshots/package-v1/pricing-uk-390.png>)
+- [qa/screenshots/package-v1/about-uk-1440.png](<../qa/screenshots/package-v1/about-uk-1440.png>)
+- [qa/screenshots/package-v1/about-uk-390.png](<../qa/screenshots/package-v1/about-uk-390.png>)
+- [qa/screenshots/consultation-uk-1440.png](<../qa/screenshots/consultation-uk-1440.png>)
+- [qa/screenshots/form-validation-uk-375.png](<../qa/screenshots/form-validation-uk-375.png>)
+- [qa/screenshots/form-success-uk-375.png](<../qa/screenshots/form-success-uk-375.png>)
+- [qa/screenshots/cases-empty-uk-1440.png](<../qa/screenshots/cases-empty-uk-1440.png>)
+- [qa/screenshots/package-v1/mobile-review-sheet.jpg](<../qa/screenshots/package-v1/mobile-review-sheet.jpg>)
+- [qa/lighthouse-uk-home.report.html](<../qa/lighthouse-uk-home.report.html>)
+- [qa/lighthouse-uk-home.report.json](<../qa/lighthouse-uk-home.report.json>)
+- [qa/lighthouse-uk-service.report.html](<../qa/lighthouse-uk-service.report.html>)
+- [qa/lighthouse-uk-service.report.json](<../qa/lighthouse-uk-service.report.json>)
+- [qa/lighthouse-uk-consultation.report.html](<../qa/lighthouse-uk-consultation.report.html>)
+- [qa/lighthouse-uk-consultation.report.json](<../qa/lighthouse-uk-consultation.report.json>)
+- [qa/lighthouse-en-home.report.html](<../qa/lighthouse-en-home.report.html>)
+- [qa/lighthouse-en-home.report.json](<../qa/lighthouse-en-home.report.json>)
+- [qa/changed-files.json](<../qa/changed-files.json>)
 
 Скриншоты включают UK home 1440/390, EN home 1440, UK service 1440/375, обе локали AI Systems/Pricing/About 1440/390, форму по умолчанию, validation, honest error и реальный local success, мобильное меню и truthful empty cases. Полные страницы About и мобильный обзор просмотрены визуально. Артефакты скриншотов и Lighthouse игнорируются Git, но сохранены в рабочей папке.
 
@@ -130,20 +130,20 @@
 
 | Изменение | Точное место |
 | --- | --- |
-| Название проекта/компании, founder role, команда, факты | [src/content/site/settings.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/site/settings.ts>) |
-| Контакты | [src/content/site/settings.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/site/settings.ts>) |
-| Навигация, metadata, consultation, form labels, модели | [src/content/en/site.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/en/site.ts>)<br>[src/content/uk/site.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/uk/site.ts>) |
-| 9 услуг | [src/content/en/services.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/en/services.ts>)<br>[src/content/uk/services.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/uk/services.ts>) |
-| Паспорта услуг: test/price/result/formats/inputs | [src/content/site/service-commercial.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/site/service-commercial.ts>) |
-| Pricing, AI Systems, founder story/timeline, competencies, principles, ecosystem | [src/content/en/experience.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/en/experience.ts>)<br>[src/content/uk/experience.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/uk/experience.ts>) |
-| FAQ, 7 шагов, commitments/revisions/privacy | [src/content/en/process.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/en/process.ts>)<br>[src/content/uk/process.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/uk/process.ts>) |
-| Founder media paths и локализованные alts | [src/content/site/founder-media.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/site/founder-media.ts>) |
-| Генерация desktop/mobile AVIF/WebP | [scripts/generate-founder-media.mjs](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/scripts/generate-founder-media.mjs>) |
-| Source audit: node --import tsx scripts/audit-package-source.mjs ABSOLUTE_MASTER_PATH | [scripts/audit-package-source.mjs](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/scripts/audit-package-source.mjs>) |
-| Draft кейс / publication guards | [src/content/cases/index.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/cases/index.ts>)<br>[src/lib/content/index.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/lib/content/index.ts>) |
-| Internal policy | [src/content/internal/policy.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/internal/policy.ts>) |
-| Реальный POST / production provider | [src/app/api/consultation/route.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/app/api/consultation/route.ts>)<br>[src/lib/consultation/provider.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/lib/consultation/provider.ts>) |
-| Инструкции для следующей итерации | [README.md](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/README.md>) |
+| Название проекта/компании, founder role, команда, факты | [src/content/site/settings.ts](<../src/content/site/settings.ts>) |
+| Контакты | [src/content/site/settings.ts](<../src/content/site/settings.ts>) |
+| Навигация, metadata, consultation, form labels, модели | [src/content/en/site.ts](<../src/content/en/site.ts>)<br>[src/content/uk/site.ts](<../src/content/uk/site.ts>) |
+| 9 услуг | [src/content/en/services.ts](<../src/content/en/services.ts>)<br>[src/content/uk/services.ts](<../src/content/uk/services.ts>) |
+| Паспорта услуг: test/price/result/formats/inputs | [src/content/site/service-commercial.ts](<../src/content/site/service-commercial.ts>) |
+| Pricing, AI Systems, founder story/timeline, competencies, principles, ecosystem | [src/content/en/experience.ts](<../src/content/en/experience.ts>)<br>[src/content/uk/experience.ts](<../src/content/uk/experience.ts>) |
+| FAQ, 7 шагов, commitments/revisions/privacy | [src/content/en/process.ts](<../src/content/en/process.ts>)<br>[src/content/uk/process.ts](<../src/content/uk/process.ts>) |
+| Founder media paths и локализованные alts | [src/content/site/founder-media.ts](<../src/content/site/founder-media.ts>) |
+| Генерация desktop/mobile AVIF/WebP | [scripts/generate-founder-media.mjs](<../scripts/generate-founder-media.mjs>) |
+| Source audit: node --import tsx scripts/audit-package-source.mjs ABSOLUTE_MASTER_PATH | [scripts/audit-package-source.mjs](<../scripts/audit-package-source.mjs>) |
+| Draft кейс / publication guards | [src/content/cases/index.ts](<../src/content/cases/index.ts>)<br>[src/lib/content/index.ts](<../src/lib/content/index.ts>) |
+| Internal policy | [src/content/internal/policy.ts](<../src/content/internal/policy.ts>) |
+| Реальный POST / production provider | [src/app/api/consultation/route.ts](<../src/app/api/consultation/route.ts>)<br>[src/lib/consultation/provider.ts](<../src/lib/consultation/provider.ts>) |
+| Инструкции для следующей итерации | [README.md](<../README.md>) |
 
 ## Реальные внешние зависимости
 
@@ -162,99 +162,99 @@ Added: 50; modified: 43; removed files: 0.
 
 ### Added
 
-- [docs/ai-content-v1-implementation-map.md](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/docs/ai-content-v1-implementation-map.md>)
-- [docs/founder-media-manifest.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/docs/founder-media-manifest.json>)
-- [public/media/founder/boat-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/boat-desktop.avif>)
-- [public/media/founder/boat-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/boat-desktop.webp>)
-- [public/media/founder/boat-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/boat-mobile.avif>)
-- [public/media/founder/boat-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/boat-mobile.webp>)
-- [public/media/founder/gopro-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/gopro-desktop.avif>)
-- [public/media/founder/gopro-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/gopro-desktop.webp>)
-- [public/media/founder/gopro-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/gopro-mobile.avif>)
-- [public/media/founder/gopro-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/gopro-mobile.webp>)
-- [public/media/founder/hockey-puck-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-puck-desktop.avif>)
-- [public/media/founder/hockey-puck-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-puck-desktop.webp>)
-- [public/media/founder/hockey-puck-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-puck-mobile.avif>)
-- [public/media/founder/hockey-puck-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-puck-mobile.webp>)
-- [public/media/founder/hockey-team-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-team-desktop.avif>)
-- [public/media/founder/hockey-team-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-team-desktop.webp>)
-- [public/media/founder/hockey-team-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-team-mobile.avif>)
-- [public/media/founder/hockey-team-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/hockey-team-mobile.webp>)
-- [public/media/founder/jetski-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/jetski-desktop.avif>)
-- [public/media/founder/jetski-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/jetski-desktop.webp>)
-- [public/media/founder/jetski-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/jetski-mobile.avif>)
-- [public/media/founder/jetski-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/jetski-mobile.webp>)
-- [public/media/founder/portrait-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/portrait-desktop.avif>)
-- [public/media/founder/portrait-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/portrait-desktop.webp>)
-- [public/media/founder/portrait-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/portrait-mobile.avif>)
-- [public/media/founder/portrait-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/portrait-mobile.webp>)
-- [public/media/founder/urban-desktop.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/urban-desktop.avif>)
-- [public/media/founder/urban-desktop.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/urban-desktop.webp>)
-- [public/media/founder/urban-mobile.avif](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/urban-mobile.avif>)
-- [public/media/founder/urban-mobile.webp](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/public/media/founder/urban-mobile.webp>)
-- [qa/PACKAGE-V1-REPORT.md](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/PACKAGE-V1-REPORT.md>)
-- [qa/package-v1-browser.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-browser.json>)
-- [qa/package-v1-followup.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-followup.json>)
-- [qa/package-v1-rendered-copy.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-rendered-copy.json>)
-- [qa/package-v1-source-audit.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-source-audit.json>)
-- [qa/package-v1-source-hashes.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/package-v1-source-hashes.json>)
-- [scripts/audit-package-source.mjs](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/scripts/audit-package-source.mjs>)
-- [scripts/generate-founder-media.mjs](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/scripts/generate-founder-media.mjs>)
-- [src/app/[locale]/ai-systems/page.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/app/[locale]/ai-systems/page.tsx>)
-- [src/app/[locale]/pricing/page.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/app/[locale]/pricing/page.tsx>)
-- [src/components/sections/experience-sections.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/sections/experience-sections.tsx>)
-- [src/components/sections/experience.module.css](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/sections/experience.module.css>)
-- [src/content/en/experience.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/en/experience.ts>)
-- [src/content/internal/policy.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/internal/policy.ts>)
-- [src/content/site/founder-media.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/site/founder-media.ts>)
-- [src/content/site/service-commercial.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/site/service-commercial.ts>)
-- [src/content/uk/experience.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/uk/experience.ts>)
-- [tests/e2e/package.spec.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/tests/e2e/package.spec.ts>)
-- [tests/package.test.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/tests/package.test.ts>)
-- [tests/support/local-submission-server.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/tests/support/local-submission-server.ts>)
+- [docs/ai-content-v1-implementation-map.md](<../docs/ai-content-v1-implementation-map.md>)
+- [docs/founder-media-manifest.json](<../docs/founder-media-manifest.json>)
+- [public/media/founder/boat-desktop.avif](<../public/media/founder/boat-desktop.avif>)
+- [public/media/founder/boat-desktop.webp](<../public/media/founder/boat-desktop.webp>)
+- [public/media/founder/boat-mobile.avif](<../public/media/founder/boat-mobile.avif>)
+- [public/media/founder/boat-mobile.webp](<../public/media/founder/boat-mobile.webp>)
+- [public/media/founder/gopro-desktop.avif](<../public/media/founder/gopro-desktop.avif>)
+- [public/media/founder/gopro-desktop.webp](<../public/media/founder/gopro-desktop.webp>)
+- [public/media/founder/gopro-mobile.avif](<../public/media/founder/gopro-mobile.avif>)
+- [public/media/founder/gopro-mobile.webp](<../public/media/founder/gopro-mobile.webp>)
+- [public/media/founder/hockey-puck-desktop.avif](<../public/media/founder/hockey-puck-desktop.avif>)
+- [public/media/founder/hockey-puck-desktop.webp](<../public/media/founder/hockey-puck-desktop.webp>)
+- [public/media/founder/hockey-puck-mobile.avif](<../public/media/founder/hockey-puck-mobile.avif>)
+- [public/media/founder/hockey-puck-mobile.webp](<../public/media/founder/hockey-puck-mobile.webp>)
+- [public/media/founder/hockey-team-desktop.avif](<../public/media/founder/hockey-team-desktop.avif>)
+- [public/media/founder/hockey-team-desktop.webp](<../public/media/founder/hockey-team-desktop.webp>)
+- [public/media/founder/hockey-team-mobile.avif](<../public/media/founder/hockey-team-mobile.avif>)
+- [public/media/founder/hockey-team-mobile.webp](<../public/media/founder/hockey-team-mobile.webp>)
+- [public/media/founder/jetski-desktop.avif](<../public/media/founder/jetski-desktop.avif>)
+- [public/media/founder/jetski-desktop.webp](<../public/media/founder/jetski-desktop.webp>)
+- [public/media/founder/jetski-mobile.avif](<../public/media/founder/jetski-mobile.avif>)
+- [public/media/founder/jetski-mobile.webp](<../public/media/founder/jetski-mobile.webp>)
+- [public/media/founder/portrait-desktop.avif](<../public/media/founder/portrait-desktop.avif>)
+- [public/media/founder/portrait-desktop.webp](<../public/media/founder/portrait-desktop.webp>)
+- [public/media/founder/portrait-mobile.avif](<../public/media/founder/portrait-mobile.avif>)
+- [public/media/founder/portrait-mobile.webp](<../public/media/founder/portrait-mobile.webp>)
+- [public/media/founder/urban-desktop.avif](<../public/media/founder/urban-desktop.avif>)
+- [public/media/founder/urban-desktop.webp](<../public/media/founder/urban-desktop.webp>)
+- [public/media/founder/urban-mobile.avif](<../public/media/founder/urban-mobile.avif>)
+- [public/media/founder/urban-mobile.webp](<../public/media/founder/urban-mobile.webp>)
+- [qa/PACKAGE-V1-REPORT.md](<../qa/PACKAGE-V1-REPORT.md>)
+- [qa/package-v1-browser.json](<../qa/package-v1-browser.json>)
+- [qa/package-v1-followup.json](<../qa/package-v1-followup.json>)
+- [qa/package-v1-rendered-copy.json](<../qa/package-v1-rendered-copy.json>)
+- [qa/package-v1-source-audit.json](<../qa/package-v1-source-audit.json>)
+- [qa/package-v1-source-hashes.json](<../qa/package-v1-source-hashes.json>)
+- [scripts/audit-package-source.mjs](<../scripts/audit-package-source.mjs>)
+- [scripts/generate-founder-media.mjs](<../scripts/generate-founder-media.mjs>)
+- [src/app/[locale]/ai-systems/page.tsx](<../src/app/[locale]/ai-systems/page.tsx>)
+- [src/app/[locale]/pricing/page.tsx](<../src/app/[locale]/pricing/page.tsx>)
+- [src/components/sections/experience-sections.tsx](<../src/components/sections/experience-sections.tsx>)
+- [src/components/sections/experience.module.css](<../src/components/sections/experience.module.css>)
+- [src/content/en/experience.ts](<../src/content/en/experience.ts>)
+- [src/content/internal/policy.ts](<../src/content/internal/policy.ts>)
+- [src/content/site/founder-media.ts](<../src/content/site/founder-media.ts>)
+- [src/content/site/service-commercial.ts](<../src/content/site/service-commercial.ts>)
+- [src/content/uk/experience.ts](<../src/content/uk/experience.ts>)
+- [tests/e2e/package.spec.ts](<../tests/e2e/package.spec.ts>)
+- [tests/package.test.ts](<../tests/package.test.ts>)
+- [tests/support/local-submission-server.ts](<../tests/support/local-submission-server.ts>)
 
 ### Modified
 
-- [README.md](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/README.md>)
-- [next-env.d.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/next-env.d.ts>)
-- [next.config.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/next.config.ts>)
-- [playwright.config.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/playwright.config.ts>)
-- [qa/IMPLEMENTATION-UPDATE.md](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/IMPLEMENTATION-UPDATE.md>)
-- [qa/REPORT.md](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/REPORT.md>)
-- [qa/changed-files.json](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/qa/changed-files.json>)
-- [scripts/validate-content.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/scripts/validate-content.ts>)
-- [src/app/[locale]/about/page.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/app/[locale]/about/page.tsx>)
-- [src/app/[locale]/layout.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/app/[locale]/layout.tsx>)
-- [src/app/[locale]/page.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/app/[locale]/page.tsx>)
-- [src/app/[locale]/services/page.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/app/[locale]/services/page.tsx>)
-- [src/app/sitemap.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/app/sitemap.ts>)
-- [src/components/cases/cases.module.css](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/cases/cases.module.css>)
-- [src/components/cases/cases.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/cases/cases.tsx>)
-- [src/components/consultation/form.module.css](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/consultation/form.module.css>)
-- [src/components/layout/consultation-dock.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/layout/consultation-dock.tsx>)
-- [src/components/layout/language-switcher.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/layout/language-switcher.tsx>)
-- [src/components/layout/layout.module.css](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/layout/layout.module.css>)
-- [src/components/layout/site-layout.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/layout/site-layout.tsx>)
-- [src/components/sections/sections.module.css](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/sections/sections.module.css>)
-- [src/components/sections/sections.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/sections/sections.tsx>)
-- [src/components/services/service-grid.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/services/service-grid.tsx>)
-- [src/components/services/service-template.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/services/service-template.tsx>)
-- [src/components/services/services.module.css](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/services/services.module.css>)
-- [src/components/ui/primitives.tsx](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/ui/primitives.tsx>)
-- [src/components/ui/ui.module.css](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/components/ui/ui.module.css>)
-- [src/content/cases/index.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/cases/index.ts>)
-- [src/content/en/process.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/en/process.ts>)
-- [src/content/en/site.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/en/site.ts>)
-- [src/content/site/brand-text.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/site/brand-text.ts>)
-- [src/content/site/settings.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/site/settings.ts>)
-- [src/content/uk/process.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/uk/process.ts>)
-- [src/content/uk/services.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/uk/services.ts>)
-- [src/content/uk/site.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/content/uk/site.ts>)
-- [src/lib/content/index.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/lib/content/index.ts>)
-- [src/lib/content/validate.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/lib/content/validate.ts>)
-- [src/lib/urls.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/lib/urls.ts>)
-- [src/proxy.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/proxy.ts>)
-- [src/styles/globals.css](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/styles/globals.css>)
-- [src/types/content.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/src/types/content.ts>)
-- [tests/content.test.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/tests/content.test.ts>)
-- [tests/e2e/site.spec.ts](<C:/Users/Admin/OneDrive/Documents/ChatGPT/siteagent/apps/antonov-digital/tests/e2e/site.spec.ts>)
+- [README.md](<../README.md>)
+- [next-env.d.ts](<../next-env.d.ts>)
+- [next.config.ts](<../next.config.ts>)
+- [playwright.config.ts](<../playwright.config.ts>)
+- [qa/IMPLEMENTATION-UPDATE.md](<../qa/IMPLEMENTATION-UPDATE.md>)
+- [qa/REPORT.md](<../qa/REPORT.md>)
+- [qa/changed-files.json](<../qa/changed-files.json>)
+- [scripts/validate-content.ts](<../scripts/validate-content.ts>)
+- [src/app/[locale]/about/page.tsx](<../src/app/[locale]/about/page.tsx>)
+- [src/app/[locale]/layout.tsx](<../src/app/[locale]/layout.tsx>)
+- [src/app/[locale]/page.tsx](<../src/app/[locale]/page.tsx>)
+- [src/app/[locale]/services/page.tsx](<../src/app/[locale]/services/page.tsx>)
+- [src/app/sitemap.ts](<../src/app/sitemap.ts>)
+- [src/components/cases/cases.module.css](<../src/components/cases/cases.module.css>)
+- [src/components/cases/cases.tsx](<../src/components/cases/cases.tsx>)
+- [src/components/consultation/form.module.css](<../src/components/consultation/form.module.css>)
+- [src/components/layout/consultation-dock.tsx](<../src/components/layout/consultation-dock.tsx>)
+- [src/components/layout/language-switcher.tsx](<../src/components/layout/language-switcher.tsx>)
+- [src/components/layout/layout.module.css](<../src/components/layout/layout.module.css>)
+- [src/components/layout/site-layout.tsx](<../src/components/layout/site-layout.tsx>)
+- [src/components/sections/sections.module.css](<../src/components/sections/sections.module.css>)
+- [src/components/sections/sections.tsx](<../src/components/sections/sections.tsx>)
+- [src/components/services/service-grid.tsx](<../src/components/services/service-grid.tsx>)
+- [src/components/services/service-template.tsx](<../src/components/services/service-template.tsx>)
+- [src/components/services/services.module.css](<../src/components/services/services.module.css>)
+- [src/components/ui/primitives.tsx](<../src/components/ui/primitives.tsx>)
+- [src/components/ui/ui.module.css](<../src/components/ui/ui.module.css>)
+- [src/content/cases/index.ts](<../src/content/cases/index.ts>)
+- [src/content/en/process.ts](<../src/content/en/process.ts>)
+- [src/content/en/site.ts](<../src/content/en/site.ts>)
+- [src/content/site/brand-text.ts](<../src/content/site/brand-text.ts>)
+- [src/content/site/settings.ts](<../src/content/site/settings.ts>)
+- [src/content/uk/process.ts](<../src/content/uk/process.ts>)
+- [src/content/uk/services.ts](<../src/content/uk/services.ts>)
+- [src/content/uk/site.ts](<../src/content/uk/site.ts>)
+- [src/lib/content/index.ts](<../src/lib/content/index.ts>)
+- [src/lib/content/validate.ts](<../src/lib/content/validate.ts>)
+- [src/lib/urls.ts](<../src/lib/urls.ts>)
+- [src/proxy.ts](<../src/proxy.ts>)
+- [src/styles/globals.css](<../src/styles/globals.css>)
+- [src/types/content.ts](<../src/types/content.ts>)
+- [tests/content.test.ts](<../tests/content.test.ts>)
+- [tests/e2e/site.spec.ts](<../tests/e2e/site.spec.ts>)
