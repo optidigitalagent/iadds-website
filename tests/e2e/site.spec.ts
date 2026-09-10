@@ -70,7 +70,10 @@ for(const locale of ['uk','en'] as const) {
  test(locale+' accessibility, contact links, empty cases and rendered routes',async({page,request})=>{
   test.setTimeout(120_000);await page.emulateMedia({reducedMotion:'reduce'});const consoleErrors:string[]=[];page.on('pageerror',e=>consoleErrors.push(e.message));page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});const internal=new Set<string>();
   for(const route of ['','/services','/services/ai-video-ads','/process','/about','/ai-systems','/pricing','/contact','/consultation','/cases']){
-   expect((await page.goto('/'+locale+route))?.status()).toBe(200);await expect(page.locator('html')).toHaveAttribute('lang',locale);await expect(page.locator('h1')).toHaveCount(1);expect((await new AxeBuilder({page}).options({rules:{'label-content-name-mismatch':{enabled:true}}}).analyze()).violations,route).toEqual([]);await noOverflow(page);
+   expect((await page.goto('/'+locale+route))?.status()).toBe(200);await expect(page.locator('html')).toHaveAttribute('lang',locale);await expect(page.locator('h1')).toHaveCount(1);
+   // Analyze the rendered heading after streamed content and web fonts are ready.
+   await expect(page.getByRole('heading',{level:1})).toBeVisible();await page.evaluate(()=>document.fonts.ready);
+   expect((await new AxeBuilder({page}).options({rules:{'label-content-name-mismatch':{enabled:true}}}).analyze()).violations,route).toEqual([]);await noOverflow(page);
    if(route===''){for(const item of await page.locator('#faq details').all()){await item.locator('summary').click();await expect(item.locator('p')).toBeVisible();await noOverflow(page);}}
    (await page.locator('a[href]').evaluateAll(items=>items.map(a=>a.getAttribute('href')!))).filter(href=>href.startsWith('/')&&!href.startsWith('//')).forEach(href=>internal.add(href));
   }
