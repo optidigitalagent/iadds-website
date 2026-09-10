@@ -81,7 +81,11 @@ test('quality notes accompany each detail example and exclude decorative media',
    await page.goto('/'+locale+'/services/'+slug);
    const examples=page.locator('main [data-example-id]:not([data-card-surface] [data-example-id])');
    const notes=page.locator('[data-preview-quality="example"]');
-   await expect(notes).toHaveCount(await examples.count());
+   const mapping=serviceMediaMap[slug];
+   const expected=(mapping.featured?1:0)+mapping.gallery.filter(id=>id!==mapping.featured).length+(mapping.variationSets??[]).reduce((sum,set)=>sum+set.ids.length,0);
+   await expect(page.locator('[data-service-examples]')).toBeVisible();
+   await expect(examples).toHaveCount(expected);
+   await expect(notes).toHaveCount(expected);
    for(const example of await examples.all()){
     const note=example.locator('xpath=following-sibling::*[1]');
     await expect(note).toHaveAttribute('data-preview-quality','example');
@@ -89,6 +93,7 @@ test('quality notes accompany each detail example and exclude decorative media',
    }
   }
   await page.goto('/'+locale+'/about');
+  await expect(page.locator('main h1')).toBeVisible();
   await expect(page.locator('[data-preview-quality]')).toHaveCount(0);
  }
 });
