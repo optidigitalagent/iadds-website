@@ -8,6 +8,8 @@ import {chromium,request} from '@playwright/test';
 const siteOrigin='https://iadds-by-antonov-digital.funckj.chatgpt.site';
 const base=new URL(process.argv[2]||'http://127.0.0.1:3100').origin;
 const out=process.argv[3]||'.data/handoff/smoke.json';
+const approvals=JSON.parse(await fs.readFile('src/content/internal/media-approvals.json','utf8'));
+const stagingIds=Object.entries(approvals).filter(([,a])=>a.publicationScope!=='production').map(([id])=>Number(id));
 let headers={};
 if(process.argv.includes('--sites-auth-stdin')){
   assert.equal(base,siteOrigin,'Authentication is restricted to the existing Site origin');
@@ -15,7 +17,7 @@ if(process.argv.includes('--sites-auth-stdin')){
   const token=JSON.parse(input).token;assert.ok(typeof token==='string'&&token.length>20);
   headers={'OAI-Sites-Authorization':`Bearer ${token}`};
 }
-const result={base,status:'pending',routes:[],assets:[],errors:[],browser:[]};
+const result={base,anonymous:Object.keys(headers).length===0,status:'pending',routes:[],assets:[],errors:[],browser:[]};
 async function batch(items,check){
   let cursor=0;
   await Promise.all(Array.from({length:Math.min(4,items.length)},async()=>{
@@ -32,12 +34,12 @@ try{
     const url='/'+locale+route,response=await client.get(base+url,{maxRedirects:0});
     assert.equal(response.status(),200,url);const html=await response.text();
     assert.ok(html.includes('iADDS'),url);assert.ok(!html.includes('/api/format-media/'),url);
-    assert.ok(!html.includes('/media/examples/example-'),url);
+    for(const id of stagingIds)assert.ok(!html.includes(`/media/examples/example-${String(id).padStart(2,'0')}-`),url);
     assert.ok(html.includes(`lang="${locale}"`),url);
     if(route==='/cases')assert.match(html,/noindex/);
     result.routes.push({path:url,status:response.status()});
   });
-  for(const route of ['/uk/services/missing','/en/services/missing','/uk/cases/moda-castle','/api/format-media/example-06-preview.mp4','/media/examples/example-06-preview.mp4']){
+  for(const route of ['/uk/services/missing','/en/services/missing','/uk/cases/moda-castle','/api/format-media/example-06-preview.mp4','/.data/iadds-media/example-06-preview.mp4','/iADDS_Media_Package_v1.zip','/src/content/internal/media-approvals.json','/docs/approvals/iadds-service-media-owner-approval-2026-09-10.md',...stagingIds.map(id=>`/media/examples/example-${String(id).padStart(2,'0')}-desktop.webp`)]){
     const response=await client.get(base+route,{maxRedirects:0});assert.equal(response.status(),404,route);result.routes.push({path:route,status:404});
   }
   const sitemap=await client.get(base+'/sitemap.xml',{maxRedirects:0});assert.equal(sitemap.status(),200);
@@ -76,9 +78,18 @@ try{
       await page.goto(base+route,{waitUntil:'networkidle'});
       await page.evaluate(()=>document.fonts.ready);
       assert.ok(await page.locator('h1').count());
+      assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'),siteOrigin+route);
+      for(const locale of ['uk','en'])assert.equal(await page.locator(`link[rel="alternate"][hreflang="${locale}"]`).getAttribute('href'),siteOrigin+route.replace(/^\/(uk|en)/,'/'+locale));
+      assert.ok((await page.locator('meta[property="og:image"]').getAttribute('content')).startsWith(siteOrigin+'/'));
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
       assert.equal(await page.locator('video[src]').count(),0);
       if(route.endsWith('consultation'))assert.equal(await page.locator('form').count(),1);
+      await page.evaluate(async()=>{for(const img of document.images)img.loading='eager';await Promise.all(Array.from(document.images).map(img=>img.decode().catch(()=>undefined)));});
+      const screenshot=path.join(path.dirname(out),'public-screenshots',route.slice(1).replaceAll('/','-')+'-'+width+'.png');
+      await fs.mkdir(path.dirname(screenshot),{recursive:true});await page.screenshot({path:screenshot,fullPage:true,animations:'disabled'});
+      const other=route.startsWith('/uk')?'en':'uk';
+      await page.locator(`header nav a[hreflang="${other}"]`).first().click();
+      await page.waitForURL(base+route.replace(/^\/(uk|en)/,'/'+other));
       result.browser.push({path:route,width,status:'passed'});
     }
     await context.close();

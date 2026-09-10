@@ -10,7 +10,7 @@ export class PlaybackCoordinator {
   }
   stop(player: PreviewPlayer) { player.pause(); if (this.active === player) this.active = null; }
 }
-export function allowPreview({ reducedMotion, saveData, finePointer, inViewport }: { reducedMotion: boolean; saveData: boolean; finePointer: boolean; inViewport: boolean }) {
-  return !reducedMotion && !saveData && finePointer && inViewport;
+export function allowPreview({ reducedMotion, saveData, finePointer, inViewport, intentionalTap=false }: { reducedMotion: boolean; saveData: boolean; finePointer: boolean; inViewport: boolean; intentionalTap?: boolean }) {
+  return !reducedMotion && !saveData && (finePointer||intentionalTap) && inViewport;
 }
 export const playback = new PlaybackCoordinator();

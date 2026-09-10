@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {getExperience,getAllServices,getDictionary,getContactDetails} from '../../src/lib/content';
+import {getMediaCopy} from '../../src/content/site/media-copy';
 import type {Locale} from '../../src/types/content';
 const screenshotDir=path.join(process.cwd(),'qa','screenshots');
 async function screenshot(page:Page,name:string) {
@@ -86,7 +87,7 @@ for(const locale of ['uk','en'] as const) {
  test(locale+' 404s, reduced motion and missing images remain localized',async({page,request})=>{
   expect((await request.get('/'+locale+'/services/unknown-service')).status()).toBe(404);expect((await request.get('/'+locale+'/cases/moda-castle')).status()).toBe(404);expect((await page.goto('/'+locale+'/unknown'))?.status()).toBe(404);await expect(page.getByRole('heading',{name:c.ui.notFoundTitle})).toBeVisible();await expect(page.locator('html')).toHaveAttribute('lang',locale);await languageLink(page,locale==='uk'?'en':'uk').click();await expect(page).toHaveURL(new RegExp('/'+(locale==='uk'?'en':'uk')+'/unknown$'));
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/'+locale);await expect(page.locator('[data-motion-pending="true"]')).toHaveCount(0);expect(await page.locator('video[src]').count()).toBe(0);
-  await page.route('**/media/product-visuals.webp',route=>route.abort());await page.goto('/'+locale+'/services/product-visuals');await expect(page.getByRole('img',{name:c.ui.mediaUnavailable}).first()).toBeVisible();
+  await page.route('**/media/examples/example-11-*',route=>route.abort());await page.goto('/'+locale+'/services/product-visuals');await expect(page.getByRole('img',{name:getMediaCopy(locale).unavailable}).first()).toBeVisible();
  });
  test(locale+' no-JavaScript form is visible and cannot send personal data through GET',async({browser})=>{
   const context=await browser.newContext({javaScriptEnabled:false});try{const page=await context.newPage();await page.goto('http://127.0.0.1:3100/'+locale+'/consultation');await expect(page.locator('form')).toBeVisible();await expect(page.locator('form')).toHaveAttribute('method','post');await expect(page.getByRole('button',{name:c.consultation.submit,exact:true})).toBeDisabled();await expect(page.locator('noscript p')).toHaveText(c.consultation.javascript);}finally{await context.close();}

@@ -71,3 +71,6 @@
 .card[data-format-card] .splitPreview > div:first-child { right:50%; }
 .card[data-format-card] .splitPreview > div:last-child { left:50%; }
 .card[data-format-card] .splitPreview > div { width:50%; }
+.cardLink { position:absolute; inset:0; z-index:3; border-radius:inherit; }
+.card:focus-within { border-color:var(--color-acid); box-shadow:0 0 24px #b7ff3c20; }
+.card[data-format-card] .cardMedia { z-index:auto; }

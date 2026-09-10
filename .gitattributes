@@ -6,3 +6,6 @@
 *.jpeg binary
 *.mp4 binary
 *.woff2 binary
+# Preserve the supplied evidence's intentional Markdown hard line breaks.
+docs/approvals/iadds-service-media-owner-approval-2026-09-10.md -text whitespace=-blank-at-eol
+src/content/internal/media-approvals.json -text

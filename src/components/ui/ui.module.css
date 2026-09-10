@@ -54,3 +54,6 @@
 .videoPreview { position:relative; width:100%; height:100%; }
 .videoPreview video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; pointer-events:none; }
 .videoPreview[data-playing='true'] video { opacity:1; }
+.previewToggle { display:none; position:absolute; z-index:4; bottom:12px; left:50%; transform:translateX(-50%); min-height:44px; max-width:calc(100% - 20px); padding:10px 14px; border:1px solid #ffffff80; border-radius:24px; background:#08090bef; color:#fff; font:inherit; font-size:.875rem; cursor:pointer; }
+@media (hover:none), (pointer:coarse) { .previewToggle { display:block; } }
+[data-preview-blocked='true'] .previewToggle { display:none; }

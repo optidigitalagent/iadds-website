@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {mediaCatalog} from '../src/content/internal/media-catalog';
 import approvals from '../src/content/internal/media-approvals.json';
 import {serviceMediaMap} from '../src/content/site/service-media-map';
-import {publicationApproved} from '../src/lib/media/policy';
+import {approvalEvidenceComplete,publicationApproved} from '../src/lib/media/policy';
 import type {MediaApproval} from '../src/types/service-media';
 import {getServiceMedia} from '../src/lib/media/service-media';
 import {siteConfig} from '../src/content/site/settings';
@@ -16,11 +16,29 @@ export async function validateMedia(){
   if(a.width<=0||a.height<=0||!a.sourceFilename.endsWith(a.kind==='video'?'.mp4':'.avif'))fail(`Invalid source ${a.id}`);
   const approval=approvals[String(a.id) as keyof typeof approvals] as MediaApproval;if(!approval)fail(`Missing rights record ${a.id}`);
   if(approval.rightsStatus==='unverified'&&approval.publicationScope==='production')fail(`Unverified ${a.id} cannot use production scope.`);
-  if(approval.reviewStatus==='approved'&&!publicationApproved(approval))fail(`Approval ${a.id} requires scope, reviewer, date and evidence.`);
+  if(approval.reviewStatus==='approved'){
+   if(!approvalEvidenceComplete(approval))fail(`Approval ${a.id} requires rights, reviewer, date and evidence.`);
+   const evidence=path.resolve(approval.evidence!);
+   if(!evidence.startsWith(path.resolve('docs/approvals')+path.sep))fail(`Evidence ${a.id} must remain in docs/approvals.`);
+   await fs.access(evidence).catch(()=>fail(`Approval evidence missing: ${a.id}`));
+  }
   if(a.disposition==='staging-only'&&(a.derivatives.length!==(a.kind==='video'?6:4)||a.kind==='video'&&!a.duration))fail(`Missing derivatives/poster/duration ${a.id}`);
   if(a.derivatives.some(d=>d.role==='preview'&&d.hasAudio))fail(`Preview audio ${a.id}`);
   if(publicationApproved(approval))for(const d of a.derivatives)await fs.access('public/media/examples/'+d.file).catch(()=>fail(`Approved file missing: ${d.file}. Run media:publish-approved.`));
  }
+ const selectedIds=new Set(Object.values(serviceMediaMap).flatMap(m=>[...m.card,...m.gallery,...(m.featured?[m.featured]:[]),...(m.variationSets??[]).flatMap(s=>s.ids)]));
+ const published=mediaCatalog.filter(a=>publicationApproved(approvals[String(a.id) as keyof typeof approvals] as MediaApproval));
+ if(selectedIds.size!==30||published.length!==30||published.some(a=>!selectedIds.has(a.id)))fail('Production approvals must match the 30 selected source IDs.');
+ const publicManifest=JSON.parse(await fs.readFile('docs/implementation/iadds-public-media.json','utf8')) as {files:{id:number;file:string;sha256:string;bytes:number}[]};
+ const expectedFiles=new Set(published.flatMap(a=>a.derivatives.map(d=>d.file)));
+ if(publicManifest.files.length!==expectedFiles.size||new Set(publicManifest.files.map(d=>d.file)).size!==expectedFiles.size)fail('Public derivative manifest does not match the approved selection.');
+ for(const item of publicManifest.files){
+  if(!expectedFiles.has(item.file)||!published.some(a=>a.id===item.id&&a.derivatives.some(d=>d.file===item.file)))fail(`Unexpected public manifest entry: ${item.file}`);
+  const data=await fs.readFile('public/media/examples/'+item.file);
+  if(data.length!==item.bytes||createHash('sha256').update(data).digest('hex')!==item.sha256)fail(`Public derivative checksum mismatch: ${item.file}`);
+ }
+ const actualFiles=await fs.readdir('public/media/examples');
+ if(actualFiles.length!==expectedFiles.size||actualFiles.some(file=>!expectedFiles.has(file)))fail('Stale or unmanaged files in production examples.');
  for(const locale of ['uk','en'] as const){
   for(const service of getAllServices(locale)){const map=serviceMediaMap[service.slug];if(!map)fail(`No mapping ${service.slug}`);if(map.gallery.length>5)fail(`Gallery exceeds five: ${service.slug}`);getServiceMedia(service.slug,locale,'local');getServiceMedia(service.slug,locale,'production');}
   if(/AI Content|AI CONTENT/.test(JSON.stringify([getDictionary(locale),getExperience(locale)])))fail('Old project label remains in active dictionaries.');

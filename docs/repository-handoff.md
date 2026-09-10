@@ -1,6 +1,6 @@
 # Repository handoff contract
 
-The approved iADDS product is preserved. This handoff changes reproducibility, configuration, validation and documentation only. It does not change layouts, styles, route structure, bilingual content, brand, rights, draft case status or consultation behavior.
+The approved iADDS product, route structure, bilingual copy, brand, draft case status and consultation behavior are preserved. The final public-release override supplies publication approval and promotes the existing selected service media. The limited UI changes provide the required format-example labels and intentional, accessible preview playback; there is no redesign or architecture migration.
 
 ## Dependencies retained in Git
 
@@ -17,7 +17,7 @@ The approved iADDS product is preserved. This handoff changes reproducibility, c
 
 ## Intentionally excluded
 
-The provider confirms an owner-only Site audience but does not expose a reliable public/private classification for the source Git repository. Accordingly, no new raw/private/unverified media, source ZIPs, internal prompt documents or contact sheets are added. The already-public derivatives are preserved without recompression. All 41 service source rights remain unverified; their optional 162 review files stay private in `.data/iadds-media`. The original packages and sole raw founder originals remain in their existing private local locations. Do not delete them merely because production builds without them.
+The public release uses the supplied owner approval dated 2026-09-10: 30 selected service IDs have 162 tracked web derivatives; 11 approved reserve IDs remain staging. Raw source ZIPs, originals, private review files, prompt packages and contact sheets remain excluded. Previously approved founder/brand assets are preserved without recompression. See `docs/public-release.md` and `docs/approvals/` for the current scope. Keep sole originals privately so future derivatives remain reproducible.
 
 No `.env`, credentials, receiver secrets, browser cookies, actual consultation submissions, logs, `node_modules`, build artifacts, screenshots, coverage or caches belong in Git. `.env.example` documents server-only variables. Production intentionally returns 503 for consultation submissions until a real persistent HTTPS receiver is configured. No real enquiries are sent by handoff tests.
 
@@ -29,8 +29,8 @@ Original-package audits require explicit CLI arguments, with no hidden TEMP poin
 
 ## Remote validation and cleanup
 
-The owner subsequently requested a dedicated GitHub repository. Use private `optidigitalagent/iadds-website` (`github` remote in the original checkout, default branch `main`) for source handoff and GitHub Actions CI. The workflow installs the lockfile in a fresh Linux checkout, runs the complete production build gate and Chromium browser tests, and verifies that checks did not modify tracked source. It does not need deployment secrets or private source packages. Check the actual run conclusion for the pushed SHA before declaring remote CI passed.
+The owner subsequently requested a dedicated GitHub repository. Use public `optidigitalagent/iadds-website` (`github` remote in the original checkout, default branch `main`) for source handoff and GitHub Actions CI. The workflow installs the lockfile in a fresh Linux checkout, runs the complete production build gate and Chromium browser tests, and verifies that checks did not modify tracked source. It does not need deployment secrets or private source packages. Check the actual run conclusion for the pushed SHA before declaring remote CI passed.
 
-Keep the existing Sites source remote (`origin` in the original checkout) and owner-only audience. Push the same validated commit to both remotes, verify `HEAD` equals both `refs/heads/main`, save/publish the validated archive and inspect the deployed source SHA, then run authenticated smoke checks against the live origin. Sites currently rejects private publish-on-push because that feature is not enabled for this account. GitHub CI is real remote verification; Sites publication still uses the existing explicit artifact flow. Provider run IDs and unavailable capabilities must be reported honestly.
+Keep the existing Sites source remote (`origin` in the original checkout) and the explicitly authorized public audience. Push the same validated commit to both remotes, verify `HEAD` equals both `refs/heads/main`, save/publish the validated archive and inspect the deployed source SHA, then run anonymous smoke checks against the live origin. Sites currently rejects private publish-on-push because that feature is not enabled for this account. GitHub CI is real remote verification; Sites publication still uses the existing explicit artifact flow. Provider run IDs and unavailable capabilities must be reported honestly.
 
 Only after clean-clone verification, confirmed push/SHA/assets and deployment verification may an explicit cleanup allowlist remove generated/temp files inside the authorized workspace. Never remove the current repository, `.git`, tracked sources/assets, other projects or sole originals. Save exact deleted paths and reasons with final run evidence; final Git status must be clean and the local branch must track the existing remote branch.
