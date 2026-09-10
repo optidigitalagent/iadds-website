@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element -- Next ImageResponse embeds a pre-sized PNG; next/image cannot render inside an OG composition. */
 import { ImageResponse } from 'next/og';
 import ogAssets from '@/content/internal/og-assets.json';
 import { siteConfig } from '@/content/site/settings';
