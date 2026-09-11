@@ -13,11 +13,15 @@ export function ConsultationDock({ label }: { label: string }) {
     function update() {
       const heroGone = Boolean(hero && hero.getBoundingClientRect().bottom < 64);
       const footerNear = Boolean(footer && footer.getBoundingClientRect().top < window.innerHeight + 30);
+      // Resolve on each update too: a streamed route may mount its closing section after this effect.
+      const closing = document.querySelector('[data-page-closing]')?.getBoundingClientRect();
+      const closingNear = Boolean(closing && closing.bottom > -30 && closing.top < window.innerHeight + 30);
       const formActive = Boolean(document.activeElement?.closest('form'));
-      if (dock.current) dock.current.hidden = !(heroGone && !footerNear && !formActive && !document.querySelector('dialog[open]'));
+      if (dock.current) dock.current.hidden = !(heroGone && !footerNear && !closingNear && !formActive && !document.querySelector('dialog[open]'));
     }
     const observer = new IntersectionObserver(update, { rootMargin: '30px' });
     if (hero) observer.observe(hero); if (footer) observer.observe(footer);
+    const closing = document.querySelector('[data-page-closing]'); if (closing) observer.observe(closing);
     update();
     window.addEventListener('navigation:change', update); document.addEventListener('focusin', update); document.addEventListener('focusout', update); window.addEventListener('scroll', update, { passive: true });
     return () => { observer.disconnect(); window.removeEventListener('navigation:change', update); document.removeEventListener('focusin', update); document.removeEventListener('focusout', update); window.removeEventListener('scroll', update); };

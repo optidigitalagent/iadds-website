@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getDictionary, getExperience, getServiceBySlug, isVerifiedMetric, isVerifiedTestimonial } from '@/lib/content';
+import { getDictionary, getServiceBySlug, isVerifiedMetric, isVerifiedTestimonial } from '@/lib/content';
 import { safeExternalUrl, consultationHref, localizedPath } from '@/lib/urls';
 import type { CaseStudy, Locale } from '@/types/content';
 import { Breadcrumbs, BulletList, Container, MediaFrame, Section, SectionHeading, Tag, TextLink } from '@/components/ui/primitives';
@@ -24,7 +24,7 @@ export function CaseTemplate({ item, locale }: { item: CaseStudy; locale: Locale
     <Section><SectionHeading title={c.cases.deliverables} /><BulletList items={item.deliverables} /><div className={styles.gallery}>{item.media.map(media => <MediaFrame labels={c.ui} key={media.src} media={media} />)}</div>{publicUrl && <a href={publicUrl} target="_blank" rel="noopener noreferrer" className={styles.publicLink}>{c.ui.projectLink} ↗</a>}</Section>
     {metrics.length > 0 && <Section><SectionHeading title={c.cases.results} /><dl className={styles.metrics}>{metrics.map(metric => <div key={metric.label}><dt>{metric.label}</dt><dd>{metric.value}</dd></div>)}</dl></Section>}
     {isVerifiedTestimonial(item.testimonial) && item.testimonial && <Section><SectionHeading title={c.cases.testimonial} /><blockquote className={styles.quote}>{item.testimonial.avatar && <MediaFrame labels={c.ui} media={item.testimonial.avatar} />}<p>{item.testimonial.quote}</p><footer>{item.testimonial.author} · {item.testimonial.role} · {item.testimonial.company}</footer>{item.testimonial.rating && <p>{item.testimonial.rating.value} / {item.testimonial.rating.max}</p>}{item.testimonial.sourceUrl && <a href={safeExternalUrl(item.testimonial.sourceUrl)} target="_blank" rel="noopener noreferrer">{c.ui.projectLink} ↗</a>}</blockquote></Section>}
-    <ConsultationCTA locale={locale} model={item.collaborationModel} service={item.collaborationModel === 'system' ? undefined : item.services[0]} sourcePage={localizedPath(locale, '/cases')} label={item.collaborationModel === 'system' ? c.cases.systemCta : getExperience(locale).serviceCta.final} />
     {related.length > 0 && <Section><SectionHeading title={c.service.related} eyebrow={c.service.relatedEyebrow} /><ServiceGrid locale={locale} services={related} uniform /></Section>}
+    <ConsultationCTA locale={locale} model={item.collaborationModel} service={item.collaborationModel === 'system' ? undefined : item.services[0]} sourcePage={localizedPath(locale, '/cases/' + item.slug)} />
   </>;
 }

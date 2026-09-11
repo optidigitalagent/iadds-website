@@ -133,7 +133,7 @@ const dictionary = {
   },
   "cta": {
     "eyebrow": "FREE CONSULTATION",
-    "title": "We come to the call with an idea",
+    "title": "Ready to discuss your project?",
     "body": "Before the consultation, {{firstName}} reviews your brand, product, website, social channels and current content.",
     "discussion": "During a 20–30 minute Google Meet call, you discuss the initial idea, develop it together and select the format worth testing.",
     "note": "After the call, you receive a written summary covering the objective, proposed direction, materials required for the test and recommended next step."

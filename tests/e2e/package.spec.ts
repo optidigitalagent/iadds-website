@@ -32,13 +32,14 @@ for(const locale of ['uk','en'] as const) {
     expect((await request.get('/'+locale+'/cases/moda-castle')).status()).toBe(404);
   });
   test(locale+' approved home order and four service CTA positions',async({page})=>{
-    await page.goto('/'+locale);const ids=['custom-task','test-stage','collaboration','why-now','pricing','who-behind','faq','consultation-idea','contacts'];
+    await page.goto('/'+locale);await expect(page.locator('[data-page-closing]')).toBeVisible();const ids=['custom-task','test-stage','collaboration','why-now','pricing','who-behind','faq','consultation-idea','contacts'];
     const positions=await Promise.all(ids.map(id=>page.locator('#'+id).evaluate(el=>el.getBoundingClientRect().top+scrollY)));
     expect(positions).toEqual([...positions].sort((a,b)=>a-b));
     await page.goto('/'+locale+'/services/ai-video-ads');
+    await expect(page.locator('[data-page-closing]')).toBeVisible();
     const ctas=page.locator('main a[data-service="ai-video-ads"][data-cta]');expect(await ctas.count()).toBeGreaterThanOrEqual(4);
     const final=await page.locator('#consultation-idea').evaluate(el=>el.getBoundingClientRect().top);
-    const related=await page.locator('[data-service-card]').first().evaluate(el=>el.getBoundingClientRect().top);expect(final).toBeLessThan(related);
+    const related=await page.locator('[data-service-card]').first().evaluate(el=>el.getBoundingClientRect().top);expect(final).toBeGreaterThan(related);
     for(const href of await ctas.evaluateAll(nodes=>nodes.map(n=>(n as HTMLAnchorElement).href))) {
       const url=new URL(href);expect(url.searchParams.get('service')).toBe('ai-video-ads');expect(url.searchParams.get('from')).toBe('/'+locale+'/services/ai-video-ads');
     }

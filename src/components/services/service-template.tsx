@@ -28,6 +28,6 @@ export function ServiceTemplate({ service, locale }: { service: Service; locale:
   <Section className={styles.mutedSection}><SectionHeading title={c.service.framework} /><DetailGrid items={service.commercialNotes} />{service.ethicalNote && <aside className={styles.ethics}><h3>{c.service.ethics}</h3><p>{service.ethicalNote}</p></aside>}</Section>
   <ServiceExamples slug={service.slug} locale={locale} />
   <Section className={styles.mutedSection}><div className={styles.faqGrid}><SectionHeading title={c.ui.faq} eyebrow={c.ui.faqEyebrow} /><FAQAccordion items={service.faq} /></div></Section>
-  <ConsultationCTA locale={locale} sourcePage={sourcePage} service={service.slug} label={e.serviceCta.final} />
-  <Section><SectionHeading eyebrow={c.service.relatedEyebrow} title={c.service.related} /><ServiceGrid locale={locale} services={getRelatedServices(locale, service.slug)} uniform /></Section></>;
+  <Section><SectionHeading eyebrow={c.service.relatedEyebrow} title={c.service.related} /><ServiceGrid locale={locale} services={getRelatedServices(locale, service.slug)} uniform /></Section>
+  <ConsultationCTA locale={locale} sourcePage={sourcePage} service={service.slug} /></>;
 }

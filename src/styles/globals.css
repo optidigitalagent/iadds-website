@@ -47,8 +47,6 @@ section, [id] { scroll-margin-top: 100px; }
   :root { --gutter: 20px; --section-space: 80px; --header-height: 64px; }
   h1 { font-size: clamp(2.7rem, 10.5vw, 4rem); }
   h2 { font-size: clamp(2.1rem, 8.5vw, 3.4rem); }
-  body { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
-  body:has([data-consultation-page]) { padding-bottom: 0; }
 }
 @media (max-width: 359px) { :root { --gutter: 16px; } h1 { font-size: 2.65rem; } }
 @media (prefers-reduced-motion: reduce) {
