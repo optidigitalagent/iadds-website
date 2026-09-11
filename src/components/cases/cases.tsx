@@ -25,6 +25,6 @@ export function CaseTemplate({ item, locale }: { item: CaseStudy; locale: Locale
     {metrics.length > 0 && <Section><SectionHeading title={c.cases.results} /><dl className={styles.metrics}>{metrics.map(metric => <div key={metric.label}><dt>{metric.label}</dt><dd>{metric.value}</dd></div>)}</dl></Section>}
     {isVerifiedTestimonial(item.testimonial) && item.testimonial && <Section><SectionHeading title={c.cases.testimonial} /><blockquote className={styles.quote}>{item.testimonial.avatar && <MediaFrame labels={c.ui} media={item.testimonial.avatar} />}<p>{item.testimonial.quote}</p><footer>{item.testimonial.author} · {item.testimonial.role} · {item.testimonial.company}</footer>{item.testimonial.rating && <p>{item.testimonial.rating.value} / {item.testimonial.rating.max}</p>}{item.testimonial.sourceUrl && <a href={safeExternalUrl(item.testimonial.sourceUrl)} target="_blank" rel="noopener noreferrer">{c.ui.projectLink} ↗</a>}</blockquote></Section>}
     {related.length > 0 && <Section><SectionHeading title={c.service.related} eyebrow={c.service.relatedEyebrow} /><ServiceGrid locale={locale} services={related} uniform /></Section>}
-    <ConsultationCTA locale={locale} model={item.collaborationModel} service={item.collaborationModel === 'system' ? undefined : item.services[0]} sourcePage={localizedPath(locale, '/cases/' + item.slug)} />
+    <ConsultationCTA locale={locale} model={item.collaborationModel} service={item.collaborationModel === 'system' ? undefined : item.services[0]} sourcePage={localizedPath(locale, '/cases')} />
   </>;
 }
