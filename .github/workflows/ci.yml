@@ -2,7 +2,7 @@ name: iADDS CI
 
 on:
   push:
-    branches: [main, 'codex/**', 'backend/nfc-card-intake']
+    branches: [main, 'codex/**', 'backend/nfc-card-*']
   pull_request:
     branches: [main]
   workflow_dispatch:

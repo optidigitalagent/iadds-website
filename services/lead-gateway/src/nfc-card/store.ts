@@ -2,6 +2,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { Pool, type PoolClient } from 'pg';
 import { NfcError, type NfcLead } from './contract.ts';
+import { quote, type Quote } from './commerce.ts';
 import { nfcLog } from './logger.ts';
 
 export function database(url: string): Pool {
@@ -14,8 +15,11 @@ export function database(url: string): Pool {
   return pool;
 }
 export async function migrate(pool: Pool, preflight = false): Promise<{ version: string; checksum: string; applied: boolean }> {
-  const sql = await readFile(new URL('../../migrations/nfc-card/001_nfc_card.sql', import.meta.url), 'utf8');
-  const checksum = createHash('sha256').update(sql).digest('hex'), version = '001_nfc_card';
+  const versions = ['001_nfc_card', '002_public_commerce'];
+  const migrations = await Promise.all(versions.map(async version => {
+    const sql = await readFile(new URL('../../migrations/nfc-card/' + version + '.sql', import.meta.url), 'utf8');
+    return { version, sql, checksum: createHash('sha256').update(sql).digest('hex') };
+  }));
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -24,19 +28,24 @@ export async function migrate(pool: Pool, preflight = false): Promise<{ version:
     if (Number(server.rows[0].server_version_num) < 170000 || Number(server.rows[0].server_version_num) >= 180000) throw new Error('postgres_17_required');
     await client.query('CREATE SCHEMA IF NOT EXISTS nfc_card');
     await client.query('CREATE TABLE IF NOT EXISTS nfc_card.schema_migrations (version text PRIMARY KEY, checksum char(64) NOT NULL, applied_at timestamptz NOT NULL DEFAULT now())');
-    const existing = await client.query('SELECT checksum FROM nfc_card.schema_migrations WHERE version=$1', [version]);
-    if (existing.rowCount && existing.rows[0].checksum !== checksum) throw new Error('migration_checksum_mismatch');
-    if (!existing.rowCount) {
-      await client.query(sql);
-      await client.query('INSERT INTO nfc_card.schema_migrations(version,checksum) VALUES ($1,$2)', [version, checksum]);
+    let applied = false;
+    for (const { version, checksum, sql } of migrations) {
+      const existing = await client.query('SELECT checksum FROM nfc_card.schema_migrations WHERE version=$1', [version]);
+      if (existing.rowCount && existing.rows[0].checksum !== checksum) throw new Error('migration_checksum_mismatch');
+      if (!existing.rowCount) {
+        await client.query(sql);
+        await client.query('INSERT INTO nfc_card.schema_migrations(version,checksum) VALUES ($1,$2)', [version, checksum]);
+        applied = true;
+      }
     }
     await client.query(preflight ? 'ROLLBACK' : 'COMMIT');
-    return { version, checksum, applied: !preflight && !existing.rowCount };
+    const { version, checksum } = migrations.at(-1)!;
+    return { version, checksum, applied: !preflight && applied };
   } catch { await client.query('ROLLBACK').catch(() => {}); throw new Error('migration_failed'); }
   finally { client.release(); }
 }
-export type Receipt = { ok: true; source: 'NFC_CARD'; leadId: string; durableSaved: true; notificationStatus: 'queued' | 'disabled' };
-export type PersistOptions = { deliveryEnabled?: boolean; isTest?: boolean; leadId?: string; beforeOutbox?: (client: PoolClient) => Promise<void> };
+export type Receipt = { ok: true; source: 'NFC_CARD'; leadId: string; durableSaved: true; notificationStatus: 'queued' | 'disabled'; quote?: Quote };
+export type PersistOptions = { deliveryEnabled?: boolean; isTest?: boolean; isFinalTest?: boolean; leadId?: string; beforeOutbox?: (client: PoolClient) => Promise<void> };
 export async function persist(pool: Pool, lead: NfcLead, key: string, options: PersistOptions = {}): Promise<Receipt> {
   // Canonical parser constructs stable field/key order. Challenge/timestamp never enter this digest.
   const digest = createHash('sha256').update(JSON.stringify(lead)).digest('hex');
@@ -44,26 +53,26 @@ export async function persist(pool: Pool, lead: NfcLead, key: string, options: P
   try {
     await client.query('BEGIN');
     const inserted = await client.query(`INSERT INTO nfc_card.leads
-      (id,lead_id,language,product,quantity,customer_name,phone,email,telegram,preferred_contact,source_page,utm,idempotency_key,request_digest,is_test)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) ON CONFLICT (idempotency_key) DO NOTHING RETURNING lead_id`,
+      (id,lead_id,language,product,quantity,customer_name,phone,email,telegram,preferred_contact,source_page,utm,idempotency_key,request_digest,is_test,selection,price_quote,is_final_test)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18) ON CONFLICT (idempotency_key) DO NOTHING RETURNING lead_id`,
     [randomUUID(), leadId, lead.language, lead.product, lead.quantity, lead.customerName, lead.contact.phone, lead.contact.email,
-      lead.contact.telegram, lead.contact.preferredMethod, lead.sourcePage, lead.utm, key, digest, options.isTest === true]);
+      lead.contact.telegram, lead.contact.preferredMethod, lead.sourcePage, lead.utm, key, digest, options.isTest === true, lead.selection || null, quote(lead), options.isFinalTest === true]);
     if (!inserted.rowCount) {
-      const saved = await client.query(`SELECT l.lead_id, l.request_digest, o.delivery_enabled FROM nfc_card.leads l
+      const saved = await client.query(`SELECT l.lead_id, l.request_digest, l.price_quote, o.delivery_enabled FROM nfc_card.leads l
         JOIN nfc_card.notification_outbox o USING(lead_id) WHERE l.idempotency_key=$1`, [key]);
       if (saved.rowCount !== 1) throw new Error('database');
-      if (saved.rows[0].request_digest !== digest) throw new NfcError(409, 'idempotency_conflict');
+      if (saved.rows[0].request_digest !== digest) throw new NfcError(409, 'idempotency_conflict', saved.rows[0].lead_id);
       await client.query('COMMIT');
-      return receipt(saved.rows[0].lead_id, saved.rows[0].delivery_enabled);
+      return receipt(saved.rows[0].lead_id, saved.rows[0].delivery_enabled, saved.rows[0].price_quote || quote(lead));
     }
     await options.beforeOutbox?.(client);
     await client.query('INSERT INTO nfc_card.notification_outbox(id,lead_id,delivery_enabled) VALUES ($1,$2,$3)', [randomUUID(), leadId, options.deliveryEnabled === true]);
     await client.query('COMMIT');
-    return receipt(leadId, options.deliveryEnabled === true);
+    return receipt(leadId, options.deliveryEnabled === true, quote(lead));
   } catch (error) { await client.query('ROLLBACK').catch(() => {}); if (error instanceof NfcError) throw error; throw new NfcError(503, 'storage_unavailable'); }
   finally { client.release(); }
 }
-function receipt(leadId: string, enabled: boolean): Receipt { return { ok: true, source: 'NFC_CARD', leadId, durableSaved: true, notificationStatus: enabled ? 'queued' : 'disabled' }; }
+function receipt(leadId: string, enabled: boolean, priceQuote: Quote): Receipt { return { ok: true, source: 'NFC_CARD', leadId, durableSaved: true, notificationStatus: enabled ? 'queued' : 'disabled', quote: priceQuote }; }
 export async function inspect(pool: Pool) {
   const result = await pool.query(`SELECT (SELECT count(*)::int FROM nfc_card.leads) AS leads,
     (SELECT count(*)::int FROM nfc_card.notification_outbox) AS outbox,

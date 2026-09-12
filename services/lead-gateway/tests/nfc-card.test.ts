@@ -128,3 +128,26 @@ test('NFC Telegram transport retries only confirmed rejection and never ambiguou
   const success = nfcTelegram(cfg, async (_, options) => { assert.ok(JSON.parse(String(options?.body)).text); return Response.json({ ok: true, result: { message_id: 1, chat: { id: 'synthetic' } } }); });
   assert.deepEqual(await success('test'), { status: 'sent' });
 });
+
+test('NFC commerce intent preserves 3+ and consultation without trusting a price', async () => {
+  const { quote } = await import('../src/nfc-card/commerce.ts');
+  for (const [product, expected] of [['review-card',[1500,2600]],['branded-review-card',[2000,3600]]] as const) {
+    for (const quantity of [1,2]) assert.equal(quote(parseNfcLead({...payload(),product,quantity})).amount,expected[quantity-1]);
+  }
+  for (const variant of ['standard','branded','bulk','consultation']) {
+    const input = {...payload(),product:variant==='branded'?'branded-review-card':'review-card',quantity:3,selection:{variant,quantity:'more'}};
+    const lead = parseNfcLead(input); assert.equal(quote(lead).status,'custom');
+    const message = formatNfc(lead,randomUUID(),new Date().toISOString());assert.ok(message.includes('quantity: 3+'));
+    if(['bulk','consultation'].includes(variant))assert.ok(message.includes('product: '+variant));
+    for (const patch of [{quantity:2},{selection:{variant:'branded',quantity:'1'}},{price:1},{isFinalTest:true}])
+      assert.throws(()=>parseNfcLead({...input,...patch}));
+  }
+  assert.equal(quote(parseNfcLead({...payload(),selection:{variant:'consultation',quantity:'1'}})).amount,null);
+});
+test('NFC PUBLIC operational flags validate without touching the legacy source', () => {
+  const env={LEAD_SOURCE_NFC_CARD_SECRET:secret,LEAD_SOURCE_NFC_CARD_LABEL:'NFC CARD',NFC_DATABASE_URL:'postgres://local/test',NFC_TELEGRAM_MODE:'live',NFC_TELEGRAM_ENABLED:'true',NFC_PUBLIC_INTAKE_ENABLED:'true',NFC_FINAL_TEST_KEY:randomUUID()};
+  assert.equal(readNfcConfig(env)?.finalTestKey,env.NFC_FINAL_TEST_KEY);
+  assert.throws(()=>readNfcConfig({...env,NFC_FINAL_TEST_KEY:'invalid'}));
+  assert.ok(formatNfc(parseNfcLead(payload()),randomUUID(),new Date().toISOString(),true,true).startsWith('🧪 FINAL TEST — NFC CARD'));
+  assert.ok(formatNfc(parseNfcLead(payload()),randomUUID(),new Date().toISOString(),false,true).startsWith('🆕 Нова заявка'));
+});

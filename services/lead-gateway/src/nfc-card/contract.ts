@@ -1,4 +1,5 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { parseSelection, type Selection } from './commerce.ts';
 import { normalizePhone } from '../contact.ts';
 
 export const ORIGIN = 'https://optidigitalagent.github.io';
@@ -7,10 +8,11 @@ export const ENDPOINT = '/v1/public/leads/nfc-card';
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 export const PRODUCTS = ['review-card', 'branded-review-card'] as const;
 export type Contact = { preferredMethod: 'phone' | 'sms' | 'email' | 'telegram' | 'whatsapp' | 'viber'; phone?: string; email?: string; telegram?: string };
-export interface NfcLead { language: 'uk' | 'en'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string> }
+export interface NfcLead { language: 'uk' | 'en'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection }
 export class NfcError extends Error {
   readonly status: number;
-  constructor(status: number, code: string) { super(code); this.status = status; }
+  readonly leadId?: string;
+  constructor(status: number, code: string, leadId?: string) { super(code); this.status = status; this.leadId = leadId; }
 }
 function invalid(): never { throw new NfcError(422, 'invalid_payload'); }
 export function object(value: unknown, keys: string[]): Record<string, unknown> {
@@ -32,7 +34,7 @@ export function sourcePath(value: unknown): string {
   return path === BASE_PATH ? path + '/' : path;
 }
 export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
-  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', ...(publicRequest ? ['website', 'challenge'] : [])]);
+  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', ...(publicRequest ? ['website', 'challenge'] : [])]);
   if (!['uk', 'en'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
   if (typeof input.quantity !== 'number' || !Number.isSafeInteger(input.quantity) || input.quantity < 1 || input.quantity > 10000) invalid();
   const c = object(input.contact, ['preferredMethod', 'phone', 'email', 'telegram']);
@@ -51,8 +53,9 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const utmInput = object(input.utm ?? {}, ['source', 'medium', 'campaign', 'term', 'content']);
   const utm: Record<string, string> = {};
   for (const key of ['source', 'medium', 'campaign', 'term', 'content']) { const val = text(utmInput[key], 100, true); if (val) utm[key] = val; }
+  const selection = parseSelection(input.selection, String(input.product), input.quantity);
   return { language: input.language as NfcLead['language'], product: input.product as NfcLead['product'], quantity: input.quantity,
-    customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm };
+    customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}) };
 }
 export function challenge(secret: string, path: string, now: number): string {
   const payload = Buffer.from(JSON.stringify({ at: now, path, nonce: randomUUID() })).toString('base64url');

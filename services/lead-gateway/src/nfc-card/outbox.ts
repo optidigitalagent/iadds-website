@@ -19,10 +19,10 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
     try {
       await client.query('BEGIN');
       const result = await client.query(`SELECT o.id,o.lead_id,o.attempt_count,l.language,l.product,l.quantity,l.customer_name,
-        l.phone,l.email,l.telegram,l.preferred_contact,l.source_page,l.utm,l.created_at,l.is_test
+        l.phone,l.email,l.telegram,l.preferred_contact,l.source_page,l.utm,l.created_at,l.is_test,l.is_final_test,l.selection,l.price_quote
         FROM nfc_card.notification_outbox o JOIN nfc_card.leads l USING(lead_id)
         WHERE o.delivery_enabled AND o.status IN ('pending','retry') AND o.next_attempt_at <= now()
-        AND o.attempt_count < $1 AND ($2::uuid IS NULL OR (o.lead_id=$2 AND l.is_test))
+        AND o.attempt_count < $1 AND (NOT l.is_final_test OR o.attempt_count < 1) AND ($2::uuid IS NULL OR (o.lead_id=$2 AND l.is_test))
         ORDER BY o.next_attempt_at,o.id LIMIT 1 FOR UPDATE OF o SKIP LOCKED`, [config.testOnly ? 1 : 6, config.testOnly ? config.testLeadId : null]);
       row = result.rows[0];
       if (row) await client.query("UPDATE nfc_card.notification_outbox SET status='sending',attempt_count=attempt_count+1,claimed_at=now(),updated_at=now() WHERE id=$1", [row.id]);
@@ -31,12 +31,12 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
     finally { client.release(); }
     if (!row) break;
     const lead: NfcLead = { language: row.language, product: row.product, quantity: row.quantity, customerName: row.customer_name,
-      contact: { preferredMethod: row.preferred_contact, ...(row.phone ? { phone: row.phone } : {}), ...(row.email ? { email: row.email } : {}), ...(row.telegram ? { telegram: row.telegram } : {}) }, sourcePage: row.source_page, utm: row.utm };
+      contact: { preferredMethod: row.preferred_contact, ...(row.phone ? { phone: row.phone } : {}), ...(row.email ? { email: row.email } : {}), ...(row.telegram ? { telegram: row.telegram } : {}) }, sourcePage: row.source_page, utm: row.utm, ...(row.selection ? { selection: row.selection } : {}) };
     let outcome: Delivery;
-    try { outcome = await send(formatNfc(lead, row.lead_id, row.created_at.toISOString(), row.is_test)); }
+    try { outcome = await send(formatNfc(lead, row.lead_id, row.created_at.toISOString(), row.is_test, row.is_final_test, row.price_quote || undefined)); }
     catch { outcome = { status: 'failed', category: 'outcome_unknown' }; }
     const attempt = row.attempt_count + 1;
-    const status = outcome.status === 'retry' && (config.testOnly || attempt >= 6) ? 'failed' : outcome.status;
+    const status = outcome.status === 'retry' && (config.testOnly || row.is_final_test || attempt >= 6) ? 'failed' : outcome.status;
     const category = outcome.status === 'sent' ? null : status === 'failed' && outcome.status === 'retry' ? 'exhausted' : outcome.category;
     const delay = outcome.status === 'sent' ? 0 : Math.max(5 * 2 ** (attempt - 1), outcome.retryAfter ?? 0);
     await pool.query(`UPDATE nfc_card.notification_outbox SET status=$2,safe_error_category=$3,

@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { database, migrate, persist } from '../src/nfc-card/store.ts';
-import { parseNfcLead } from '../src/nfc-card/contract.ts';
+import { createNfcHandler } from '../src/nfc-card/handler.ts';
+import { ORIGIN, ENDPOINT, challenge, parseNfcLead } from '../src/nfc-card/contract.ts';
 import { drain } from '../src/nfc-card/outbox.ts';
 import type { NfcConfig } from '../src/nfc-card/config.ts';
 
@@ -89,6 +90,29 @@ test('PostgreSQL 17 NFC integration — no external transports', { skip: !proces
       await drain(pool, only, async () => { sends++; return { status: 'sent' }; }, quiet);
       assert.equal(sends, 1); assert.equal((await row(selected.leadId)).status, 'failed'); assert.equal((await row(other.leadId)).attempt_count, 0);
       await pool.query('UPDATE nfc_card.notification_outbox SET delivery_enabled=false WHERE lead_id=$1', [other.leadId]);
+    });
+    await t.test('public final test commits canonical quote and single outbox before one-shot delivery', async () => {
+      const key=randomUUID(), now=Date.now(), input={...lead(),selection:{variant:'standard',quantity:'2'}};
+      const handler=createNfcHandler(pool,{...config,publicIntake:true,finalTestKey:key},{now:()=>now,log:quiet});
+      const send=()=>handler(new Request('http://local'+ENDPOINT,{method:'POST',headers:{Origin:ORIGIN,'Content-Type':'application/json','Idempotency-Key':key},
+        body:JSON.stringify({...input,website:'',challenge:challenge(config.secret,input.sourcePage,now-3000)})}));
+      const result=await send();assert.equal(result!.status,202);const receipt=await result!.json();ids.push(receipt.leadId);
+      assert.equal(receipt.quote.amount,2600);assert.equal(receipt.durableSaved,true);
+      const stored=(await pool.query('SELECT is_test,is_final_test,selection,price_quote FROM nfc_card.leads WHERE lead_id=$1',[receipt.leadId])).rows[0];
+      assert.equal(stored.is_test,true);assert.equal(stored.is_final_test,true);assert.deepEqual(stored.selection,input.selection);assert.equal(stored.price_quote.amount,2600);
+      let attempts=0;
+      await drain(pool,config,async text=>{attempts++;assert.ok(text.startsWith('🧪 FINAL TEST — NFC CARD'));assert.equal((await row(receipt.leadId)).status,'sending');return {status:'sent'};},quiet);
+      assert.equal((await (await send())!.json()).leadId,receipt.leadId);
+      await drain(pool,config,async()=>{attempts++;return {status:'sent'};},quiet);
+      assert.equal(attempts,1);assert.equal((await row(receipt.leadId)).status,'sent');
+      assert.equal((await pool.query('SELECT count(*)::int AS n FROM nfc_card.notification_outbox WHERE lead_id=$1',[receipt.leadId])).rows[0].n,1);
+    });
+    await t.test('final test confirmed rejection is terminal even in live mode', async () => {
+      const receipt=await persist(pool,lead(),randomUUID(),{isTest:true,isFinalTest:true,deliveryEnabled:true});ids.push(receipt.leadId);let sends=0;
+      await drain(pool,config,async()=>{sends++;return {status:'retry',category:'upstream'};},quiet);
+      await pool.query("UPDATE nfc_card.notification_outbox SET next_attempt_at=now()-interval '1 second' WHERE lead_id=$1",[receipt.leadId]);
+      await drain(pool,config,async()=>{sends++;return {status:'sent'};},quiet);
+      assert.equal(sends,1);assert.equal((await row(receipt.leadId)).status,'failed');
     });
     await t.test('sixth explicit failure is terminal and FK/status constraints hold', async () => {
       const receipt = await save(); await pool.query('UPDATE nfc_card.notification_outbox SET attempt_count=5 WHERE lead_id=$1', [receipt.leadId]);

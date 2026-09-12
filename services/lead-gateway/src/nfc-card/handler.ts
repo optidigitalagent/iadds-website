@@ -4,6 +4,7 @@ import { verifyLeadSignature } from '../contract.ts';
 import type { NfcConfig } from './config.ts';
 import { ENDPOINT, ORIGIN, UUID, NfcError, challenge, parseNfcLead, sourcePath, verifyChallenge } from './contract.ts';
 import { persist, type Receipt } from './store.ts';
+import { quote } from './commerce.ts';
 import { nfcLog } from './logger.ts';
 
 async function body(request: Request): Promise<Uint8Array> {
@@ -81,15 +82,16 @@ export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?:
         verifyChallenge(config.secret, input.challenge, lead.sourcePage, now());
       }
       const enabled = config.telegramEnabled && !config.testOnly;
-      const result = await (options.save ? options.save(lead, key, enabled) : persist(pool, lead, key, { deliveryEnabled: enabled }));
+      const finalTest = browser && key === config.finalTestKey;
+      const result = await (options.save ? options.save(lead, key, enabled) : persist(pool, lead, key, { deliveryEnabled: enabled, isTest: finalTest, isFinalTest: finalTest }));
       nfcLog({ leadId: result.leadId, category: 'accepted', status: 202 }, options.log);
-      return respond(202, result);
+      return respond(202, { ...result, quote: result.quote ?? quote(lead) });
     } catch (error) {
       const known = error instanceof NfcError ? error : new NfcError(503, 'storage_unavailable');
       if (known.status === 429) headers.set('Retry-After', '60');
       if (known.status === 503) headers.set('Retry-After', '30');
       nfcLog({ category: known.status === 429 ? 'rate_limit' : known.status === 503 ? 'database' : 'invalid_payload', status: known.status }, options.log);
-      return respond(known.status, { ok: false, code: known.message });
+      return respond(known.status, { ok: false, code: known.message, ...(known.status === 409 && UUID.test(known.leadId || '') ? { existingLeadId: known.leadId } : {}) });
     }
   };
 }
