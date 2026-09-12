@@ -1,0 +1,34 @@
+import { test, expect } from '@playwright/test';
+import { getDictionary } from '../../src/lib/content';
+
+for (const locale of ['uk', 'en'] as const) for (const failure of [500, 401]) test(`${locale} gateway delivery ${failure} preserves form, retry confirms existing success`, async ({ page }) => {
+  const copy = getDictionary(locale).consultation;
+  await page.setViewportSize({ width: 390, height: 844 });
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto(`http://127.0.0.1:3102/${locale}/consultation?service=ai-video-ads&model=production&from=%2F${locale}%2Fservices%2Fai-video-ads`);
+  await expect(page.locator('#field-selectedService')).toHaveValue('ai-video-ads');
+  await page.locator('#field-fullName').fill('Test Lead'); await page.locator('#field-company').fill('iADDS QA');
+  await page.locator('#field-email').fill('test@example.com'); await page.locator('#field-companyUrl').fill('https://example.com');
+  await page.locator('#field-message').fill('Backend delivery test — no response required'); await page.locator('#field-consent').check();
+  await page.route('**/api/consultation', route => route.continue({ headers: { ...route.request().headers(), 'x-qa-gateway-failure': String(failure) } }));
+  const failedResponse = page.waitForResponse(response => response.url().endsWith('/api/consultation'));
+  await page.getByRole('button', { name: copy.submit, exact: true }).click();
+  const failed = await failedResponse; expect(failed.status()).toBe(failure === 401 ? 503 : 502);
+  await expect(page.getByText(copy.unavailable, { exact: true })).toBeVisible();
+  await expect(page.locator('#field-fullName')).toHaveValue('Test Lead'); await expect(page.locator('#field-company')).toHaveValue('iADDS QA');
+  await expect(page.locator('#field-email')).toHaveValue('test@example.com'); await expect(page.locator('#field-selectedService')).toHaveValue('ai-video-ads');
+  await expect(page.locator('#field-message')).toHaveValue('Backend delivery test — no response required');
+  await expect(page.getByRole('heading', { name: copy.successTitle, exact: true })).toHaveCount(0);
+  const beforeKey = failed.request().headers()['idempotency-key'];
+  await page.unroute('**/api/consultation');
+  const confirmedResponse = page.waitForResponse(response => response.url().endsWith('/api/consultation'));
+  await page.getByRole('button', { name: copy.submit, exact: true }).click();
+  const confirmed = await confirmedResponse; expect(confirmed.status()).toBe(201);
+  expect(confirmed.request().headers()['idempotency-key']).toBe(beforeKey);
+  const sent = confirmed.request().postDataJSON(); expect(sent.currentLocale).toBe(locale); expect(sent.sourcePage).toBe(`/${locale}/services/ai-video-ads`); expect(sent.collaborationModel).toBe('production');
+  const result = await confirmed.json(); expect(result.mode).toBe('webhook');
+  await expect(page.getByRole('heading', { name: copy.successTitle, exact: true })).toBeFocused();
+  await expect(page.getByText(copy.successBody, { exact: true })).toBeVisible();
+  await expect(page.locator('[data-reference]')).toHaveText(result.referenceId);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); expect(errors).toEqual([]);
+});

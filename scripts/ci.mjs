@@ -7,6 +7,7 @@ const steps = [
   ['lint', ['node_modules/eslint/bin/eslint.js', '.', '--max-warnings=0']],
   ['route types', ['node_modules/next/dist/bin/next', 'typegen']],
   ['typecheck', ['node_modules/typescript/bin/tsc', '--noEmit']],
+  ['gateway build', ['node_modules/typescript/bin/tsc', '-p', 'services/lead-gateway/tsconfig.json']],
   ['unit and integration tests', ['--import', 'tsx', '--import', './tests/register-css.mjs', '--test', ...fs.readdirSync('tests').filter(f=>f.endsWith('.test.ts')).map(f=>'tests/'+f)]],
   ['content, media and production Next build', ['scripts/build-production.mjs']],
   ['Sites Worker build and publication guard', ['scripts/build-sites.mjs', '--skip-next']],

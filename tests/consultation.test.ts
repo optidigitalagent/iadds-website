@@ -8,6 +8,9 @@ import { getAllServices, getDictionary } from '../src/lib/content';
 import { validateConsultation, type ConsultationInput } from '../src/lib/validation/consultation';
 import { createSubmissionProvider, isPublicAddress, LocalSubmissionProvider, SubmissionError, WebhookSubmissionProvider, type ConsultationSubmissionProvider } from '../src/lib/consultation/provider';
 import { handleConsultation } from '../src/lib/consultation/handler';
+import { createGateway } from '../services/lead-gateway/src/gateway';
+import { readConfig } from '../services/lead-gateway/src/config';
+import { verifyLeadSignature } from '../services/lead-gateway/src/contract';
 
 const valid: ConsultationInput = { fullName:'QA Test',company:'Test Company',role:'',email:'qa@example.com',contactMethod:'',companyUrl:'https://example.com',selectedService:'ai-video-ads',message:'This is a local test enquiry for a product launch.',consent:true,communicationLanguage:'uk',currentLocale:'uk',sourcePage:'/uk/services/ai-video-ads',collaborationModel:'production' };
 const validate = (input:unknown) => validateConsultation(input,getAllServices().map(s=>s.slug),getDictionary().consultation.validation);
@@ -63,17 +66,40 @@ test('webhook address guard rejects local, private and metadata destinations',()
 });
 test('webhook sends the normalized payload with authentication, idempotency and bounded transport',async()=> {
   let sent:RequestInit|undefined;
-  const transport:typeof fetch=async(_url,init)=>{sent=init;return new Response(null,{status:204});};
-  const provider=new WebhookSubmissionProvider('https://receiver.example/consultation','test-secret',transport,async()=>[{address:'8.8.8.8'}]);
+  const secret='unit-test-source-secret-with-32-bytes';
   const payload={...valid,referenceId:randomUUID(),submittedAt:new Date().toISOString()};
+  const transport:typeof fetch=async(_url,init)=>{sent=init;return Response.json({ok:true,referenceId:payload.referenceId});};
+  const provider=new WebhookSubmissionProvider('https://receiver.example/consultation',secret,transport,async()=>[{address:'8.8.8.8'}]);
   assert.deepEqual(await provider.submit(payload),{referenceId:payload.referenceId,mode:'webhook'});
-  assert.equal(new Headers(sent?.headers).get('Authorization'),'Bearer test-secret');
-  assert.equal(new Headers(sent?.headers).get('Idempotency-Key'),payload.referenceId);
+  const headers=new Headers(sent?.headers);
+  assert.equal(headers.get('Authorization'),null);
+  assert.equal(headers.get('x-idempotency-key'),payload.referenceId);
+  assert.equal(headers.get('x-lead-source'),'iadds');
+  assert.ok(verifyLeadSignature(secret,headers.get('x-lead-timestamp')!,Buffer.from(String(sent?.body)),headers.get('x-lead-signature')!));
   assert.equal(sent?.redirect,'error');assert.ok(sent?.signal);assert.equal(JSON.parse(String(sent?.body)).company,valid.company);
-  const failed=new WebhookSubmissionProvider('https://receiver.example','',async()=>new Response(null,{status:500}),async()=>[{address:'8.8.8.8'}]);
+  const failed=new WebhookSubmissionProvider('https://receiver.example',secret,async()=>new Response(null,{status:500}),async()=>[{address:'8.8.8.8'}]);
   await assert.rejects(()=>failed.submit(payload),/provider_error/);
-  const blocked=new WebhookSubmissionProvider('https://receiver.example','',transport,async()=>[{address:'127.0.0.1'}]);
+  const blocked=new WebhookSubmissionProvider('https://receiver.example',secret,transport,async()=>[{address:'127.0.0.1'}]);
   await assert.rejects(()=>blocked.submit(payload),/unavailable/);
+});
+
+test('website provider and gateway share one signing contract and preserve every form context field',async()=>{
+ const secret='unit-test-source-secret-with-32-bytes';const messages:string[]=[];
+ const gateway=createGateway(readConfig({LEAD_SOURCE_IADDS_SECRET:secret,LEAD_SOURCE_IADDS_LABEL:'iADDS'}),{send:async text=>{messages.push(text);return 0;},log:()=>{}});
+ const transport:typeof fetch=async(url,init)=>gateway(new Request(String(url),init));
+ const provider=new WebhookSubmissionProvider('https://receiver.example/v1/leads',secret,transport,async()=>[{address:'8.8.8.8'}]);
+ for(const locale of ['uk','en'] as const){
+  const payload={...valid,currentLocale:locale,referenceId:randomUUID(),submittedAt:new Date().toISOString()};
+  assert.equal((await provider.submit(payload)).referenceId,payload.referenceId);
+  assert.ok(messages.at(-1)!.includes('Мова сайту: '+locale));assert.ok(messages.at(-1)!.includes(payload.selectedService));assert.ok(messages.at(-1)!.includes(payload.sourcePage));
+ }
+});
+test('website never accepts an empty, mismatched or asynchronous gateway success',async()=>{
+ const payload={...valid,referenceId:randomUUID(),submittedAt:new Date().toISOString()};
+ for(const response of [new Response(null,{status:204}),Response.json({ok:true,referenceId:'wrong'}),Response.json({referenceId:payload.referenceId}),Response.json({ok:true,referenceId:payload.referenceId},{status:202}),Response.json({code:'unavailable'},{status:503}),Response.json({code:'delivery_failed'},{status:502})]){
+  const provider=new WebhookSubmissionProvider('https://receiver.example','unit-test-source-secret-with-32-bytes',async()=>response,async()=>[{address:'8.8.8.8'}]);
+  await assert.rejects(()=>provider.submit(payload),SubmissionError);
+ }
 });
 
 test('optional role and contact remain empty; short message and custom system are accepted',()=>{

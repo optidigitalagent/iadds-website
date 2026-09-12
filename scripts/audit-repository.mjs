@@ -21,7 +21,7 @@ const lower=new Map();
 let imports=0, publicAssets=0, largest={file:'',bytes:0};
 const generatedNextTypes=[];
 const forbiddenPath=/(?:[A-Za-z]:[\\/]Users[\\/]|\/mnt\/data\b|\/Users\/[^/\s]+|\/home\/[^/\s]+|file:\/\/)/;
-const secretPatterns=[/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,/\bgh[pousr]_[A-Za-z0-9]{30,}\b/,/\bgithub_pat_[A-Za-z0-9_]{50,}\b/,/\bAKIA[0-9A-Z]{16}\b/,/\bsk-(?:proj-)?[A-Za-z0-9_-]{40,}\b/];
+const secretPatterns=[/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,/\bgh[pousr]_[A-Za-z0-9]{30,}\b/,/\bgithub_pat_[A-Za-z0-9_]{50,}\b/,/\bAKIA[0-9A-Z]{16}\b/,/\bsk-(?:proj-)?[A-Za-z0-9_-]{40,}\b/,/\b\d{6,}:[A-Za-z0-9_-]{30,}\b/];
 function exactCase(file) {
   const relative=path.relative(root,file);
   if(relative.startsWith('..')||path.isAbsolute(relative)){failures.push(`Import escapes repository: ${relative}`);return;}

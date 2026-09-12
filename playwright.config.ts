@@ -7,5 +7,6 @@ export default defineConfig({
   webServer: [
     { command:'npm run start',url:'http://127.0.0.1:3100',reuseExistingServer:process.env.E2E_REUSE_PREVIEW==='1',timeout:120_000,env:{CONSULTATION_WEBHOOK_URL:'',SITE_URL:'http://127.0.0.1:3100',NEXT_TELEMETRY_DISABLED:'1'} },
     { command:'node --import tsx tests/support/local-submission-server.ts',url:'http://127.0.0.1:3101/uk',reuseExistingServer:false,timeout:120_000,env:{NODE_ENV:'test',CONSULTATION_WEBHOOK_URL:'',CONSULTATION_LOCAL_DIR:'e2e',SITE_URL:'http://127.0.0.1:3101',NEXT_TELEMETRY_DISABLED:'1'} },
+    { command:'node --import tsx tests/support/gateway-submission-server.ts',url:'http://127.0.0.1:3102/uk',reuseExistingServer:false,timeout:120_000,env:{NODE_ENV:'test',CONSULTATION_WEBHOOK_URL:'',SITE_URL:'http://127.0.0.1:3102',NEXT_TELEMETRY_DISABLED:'1'} },
   ],
 });

@@ -76,7 +76,7 @@ Set `approvals.clientNameVerified`, `approvals.clientPublication`, `approvals.ap
 
 The shared schema validates the client and server payload. The real handler enforces size, origin, honeypot, rate limits and idempotency, then creates a server timestamp. Payload includes selected service, model, locale, preferred language, safe source path and reference ID. Unknown query values are normalized. PII never enters analytics or production console logs.
 
-Production fails with 503 until a persistent receiver is configured. Configure public HTTPS `CONSULTATION_WEBHOOK_URL` and optional `CONSULTATION_WEBHOOK_SECRET` in the deployment environment. The provider rejects private/local destinations, URL credentials and redirects. No booking, meeting confirmation or live analytics integration is fabricated.
+Production fails with 503 until the delivery receiver is configured. Configure public HTTPS `CONSULTATION_WEBHOOK_URL`, required `CONSULTATION_WEBHOOK_SECRET` and `CONSULTATION_WEBHOOK_SOURCE=iadds` in the server deployment environment. The provider rejects private/local destinations, URL credentials and redirects, and accepts only a matching gateway delivery confirmation. See [the Telegram gateway runbook](docs/lead-gateway.md). No booking, meeting confirmation or live analytics integration is fabricated.
 
 Test usage rights are confirmed in writing for the specific task. Revisions remain within the agreed concept; changed scope is agreed separately. Commitments concern scope, deliverables, timeline, price and quality, without guaranteed sales. Client materials/results are never published, reused or shared without separate permission.
 
@@ -87,3 +87,7 @@ E2E starts production on 3100 and a test-only server on 3101; both ports must be
 Screenshots are under `qa/screenshots`, including `package-v1`. Lighthouse uses default simulated mobile throttling and produces `qa/lighthouse-*.report.json/html`; run `npm run audit:performance` with production on 3100. Generated evidence is ignored by Git. Exact outcomes and resource limits are recorded in `qa/PACKAGE-V1-REPORT.md`.
 
 `docs/ai-content-v1-implementation-map.md` maps every Master section to implementation and verification. Remaining external inputs include case media/reviews/permissions, final naming/domain/email, legal terms, production receiver, real booking/CRM/analytics integrations, service videos and final written test usage permissions. None are invented.
+# Telegram consultation backend
+
+The existing form can deliver through the signed Railway gateway. See [setup, signing contract,
+deployment, delivery verification and operational runbook](docs/lead-gateway.md).

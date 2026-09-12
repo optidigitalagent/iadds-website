@@ -1,9 +1,10 @@
 import { siteConfig } from '@/content/site/settings';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { lookup } from 'node:dns/promises';
+import { resolve4, resolve6 } from 'node:dns/promises';
 import path from 'node:path';
 import { emptyInput, type ConsultationInput } from '@/lib/validation/consultation';
+import { leadHeaders, sourcePattern } from '../../../services/lead-gateway/src/contract';
 
 export class SubmissionError extends Error {
   constructor(public readonly status: number, public readonly code: string) { super(code); }
@@ -36,25 +37,45 @@ export function isPublicAddress(address: string): boolean {
   const [a, b] = address.split('.').map(Number);
   return !(a === 0 || a === 10 || a === 127 || a >= 224 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127) || (a === 198 && (b === 18 || b === 19)));
 }
+export async function resolveWebhookAddresses(hostname: string): Promise<{ address: string }[]> {
+  // Workers supports resolve4/resolve6 but not dns.lookup. Missing one address family is normal.
+  const records = await Promise.allSettled([resolve4(hostname), resolve6(hostname)]);
+  return records.flatMap(result => result.status === 'fulfilled' ? result.value.map(address => ({ address })) : []);
+}
 export class WebhookSubmissionProvider implements ConsultationSubmissionProvider {
-  constructor(private url: string, private secret?: string, private transport: typeof fetch = fetch, private resolveAddresses: (hostname: string) => Promise<{ address: string }[]> = hostname => lookup(hostname, { all: true })) {}
+  constructor(private url: string, private secret?: string, private transport: typeof fetch = fetch, private resolveAddresses: (hostname: string) => Promise<{ address: string }[]> = resolveWebhookAddresses, private source = 'iadds') {}
   async submit(payload: SubmissionPayload): Promise<SubmissionResult> {
     try {
       const url = new URL(this.url);
       if (url.protocol !== 'https:' || url.username || url.password || (url.port && url.port !== '443')) throw new SubmissionError(503, 'unavailable');
-      const signal = AbortSignal.timeout(8000);
+      if (!this.secret || Buffer.byteLength(this.secret) < 32 || !sourcePattern.test(this.source) || this.source.length > 64) throw new SubmissionError(503, 'unavailable');
+      // Fits inside the existing browser's 15s timeout, including the gateway's bounded retry budget.
+      const signal = AbortSignal.timeout(13000);
       const addresses = await Promise.race([
         this.resolveAddresses(url.hostname),
         new Promise<never>((_, reject) => signal.addEventListener('abort', () => reject(new SubmissionError(503, 'unavailable')), { once: true })),
       ]);
       if (!addresses.length || addresses.some(item => !isPublicAddress(item.address))) throw new SubmissionError(503, 'unavailable');
+      const body = JSON.stringify({ ...payload, projectName: siteConfig.brand.productName, projectLabel: siteConfig.brand.productLabel });
       const response = await this.transport(url, {
         method: 'POST', redirect: 'error', signal,
-        headers: { 'Content-Type': 'application/json', 'Idempotency-Key': payload.referenceId, 'X-Enquiry-Reference': payload.referenceId, ...(this.secret ? { Authorization: `Bearer ${this.secret}` } : {}) },
-        body: JSON.stringify({ ...payload, projectName: siteConfig.brand.productName, projectLabel: siteConfig.brand.productLabel }), cache: 'no-store',
+        headers: leadHeaders(this.secret, this.source, payload.referenceId, body), body, cache: 'no-store',
       });
-      await response.body?.cancel();
-      if (!response.ok) throw new SubmissionError(502, 'provider_error');
+      if (response.status !== 200) { await response.body?.cancel(); throw new SubmissionError(response.status === 503 ? 503 : 502, 'provider_error'); }
+      const reader = response.body?.getReader();
+      if (!reader) throw new SubmissionError(502, 'provider_error');
+      let text = ''; let bytes = 0; const decoder = new TextDecoder();
+      try {
+        while (true) {
+          const part = await reader.read(); if (part.done) break;
+          bytes += part.value.length;
+          if (bytes > 2048) { await reader.cancel(); throw new SubmissionError(502, 'provider_error'); }
+          text += decoder.decode(part.value, { stream: true });
+        }
+        text += decoder.decode();
+      } finally { reader.releaseLock(); }
+      const result = JSON.parse(text);
+      if (result?.ok !== true || result.referenceId !== payload.referenceId) throw new SubmissionError(502, 'provider_error');
       return { referenceId: payload.referenceId, mode: 'webhook' };
     } catch (error) {
       if (error instanceof SubmissionError) throw error;
@@ -63,7 +84,7 @@ export class WebhookSubmissionProvider implements ConsultationSubmissionProvider
   }
 }
 export function createSubmissionProvider(env: NodeJS.ProcessEnv = process.env): ConsultationSubmissionProvider {
-  if (env.CONSULTATION_WEBHOOK_URL) return new WebhookSubmissionProvider(env.CONSULTATION_WEBHOOK_URL, env.CONSULTATION_WEBHOOK_SECRET);
+  if (env.CONSULTATION_WEBHOOK_URL) return new WebhookSubmissionProvider(env.CONSULTATION_WEBHOOK_URL, env.CONSULTATION_WEBHOOK_SECRET, undefined, undefined, env.CONSULTATION_WEBHOOK_SOURCE || 'iadds');
   if (env.NODE_ENV === 'production') throw new SubmissionError(503, 'unavailable');
   return new LocalSubmissionProvider(path.join(process.cwd(), '.data', path.basename(env.CONSULTATION_LOCAL_DIR || 'consultations')));
 }
