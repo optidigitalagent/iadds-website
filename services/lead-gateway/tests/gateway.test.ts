@@ -4,15 +4,15 @@ import { randomUUID, randomBytes } from 'node:crypto';
 import { createGateway } from '../src/gateway.ts';
 import { readConfig } from '../src/config.ts';
 import { leadHeaders, signLead, verifyLeadSignature } from '../src/contract.ts';
-import { parseLead, type Lead } from '../src/schema.ts';
+import { parseLead, type Lead, type LegacyLead } from '../src/schema.ts';
 import { escapeHtml, formatLead } from '../src/format.ts';
 import { safeLog } from '../src/logger.ts';
 import { telegramSender, DeliveryError } from '../src/telegram.ts';
 
 const secret = randomBytes(32).toString('hex');
 const config = () => readConfig({ LEAD_SOURCE_IADDS_SECRET: secret, LEAD_SOURCE_IADDS_LABEL: 'iADDS' });
-const valid = (): Lead => ({ referenceId: randomUUID(), submittedAt: new Date().toISOString(), fullName: 'Test Lead', company: 'iADDS QA',
-  role: '', email: 'test@example.com', contactMethod: '', companyUrl: 'https://example.com', selectedService: 'ai-video-ads',
+const valid = (): LegacyLead => ({ referenceId: randomUUID(), submittedAt: new Date().toISOString(), fullName: 'Test Lead', company: 'iADDS QA',
+  email: 'test@example.com', contactMethod: '', companyUrl: 'https://example.com', selectedService: 'ai-video-ads',
   message: 'Backend delivery test — no response required', communicationLanguage: 'uk', currentLocale: 'uk',
   sourcePage: '/uk/services/ai-video-ads', collaborationModel: 'production', consent: true });
 const request = (lead: unknown = valid(), headers: Record<string, string> = {}, time = Date.now()) => {
@@ -42,7 +42,7 @@ for (const [name, changes] of Object.entries({
 });
 test('optional fields may be omitted and strings are trimmed', () => {
   const lead = valid(); const parsed = parseLead({ ...lead, fullName: '  Test Lead ', role: undefined, contactMethod: undefined, collaborationModel: undefined }, config().sources.get('iadds')!);
-  assert.ok(parsed); assert.equal(parsed.fullName, 'Test Lead'); assert.equal(parsed.role, ''); assert.equal(parsed.contactMethod, '');
+  assert.ok(parsed); assert.equal(parsed.fullName, 'Test Lead'); assert.equal('role' in parsed, false); assert.equal(parsed.formSchemaVersion, undefined); assert.equal('contactMethod' in parsed && parsed.contactMethod, '');
   const formatted = formatLead(parsed, 'iADDS').join('\n'); assert.ok(!formatted.includes('Роль:')); assert.ok(!formatted.includes('Telegram / телефон:'));
 });
 for (const [name, headers] of Object.entries<Record<string, string>>({ unknownSource: { 'x-lead-source': 'unknown' }, malformedSource: { 'x-lead-source': '../iadds' },

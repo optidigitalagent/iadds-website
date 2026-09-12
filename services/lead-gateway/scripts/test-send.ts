@@ -6,10 +6,9 @@ const target = process.env.CONSULTATION_WEBHOOK_URL;
 if (!secret || !target || !target.startsWith('https://')) { console.error('Configure the HTTPS gateway URL and source secret in the environment.'); process.exitCode = 1; }
 else {
   const referenceId = randomUUID();
-  const body = JSON.stringify({ referenceId, submittedAt: new Date().toISOString(), fullName: 'Test Lead', company: 'iADDS QA',
-    role: '', email: 'test@example.com', contactMethod: '', companyUrl: 'https://example.com', selectedService: 'ai-video-ads',
-    message: 'Backend delivery test — no response required', communicationLanguage: 'uk', currentLocale: 'uk',
-    sourcePage: '/uk/consultation', collaborationModel: 'production', consent: true });
+  const body = JSON.stringify({ formSchemaVersion: 2, source: 'iadds', referenceId, submittedAt: new Date().toISOString(), fullName: 'Test Lead',
+    phone: '+1 (202) 555-0123', phoneNormalized: '+12025550123', preferredContact: 'phone', selectedService: 'ai-video-ads',
+    communicationLanguage: 'uk', currentLocale: 'uk', sourcePage: '/uk/consultation', collaborationModel: 'production', consent: true });
   try {
     const response = await fetch(target, { method: 'POST', headers: leadHeaders(secret, 'iadds', referenceId, body), body, redirect: 'error', signal: AbortSignal.timeout(13000) });
     const result = await response.json();

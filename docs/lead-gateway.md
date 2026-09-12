@@ -10,8 +10,8 @@ Existing UK/EN browser form
   -> existing localized form success
 ```
 
-Source: `services/lead-gateway/`. The only product change is the existing server-side provider;
-form fields, labels, CSS, routes, media and success/error components remain unchanged.
+Source: `services/lead-gateway/`. The v2 update changes only consultation fields, validation, payload and Telegram formatting.
+CSS, routes, media and success/error components remain unchanged.
 The gateway has no runtime npm dependencies. Node 24, TypeScript, native HTTP; `0.0.0.0:$PORT`.
 `npm ci && npm run build`, then `npm start`. SIGTERM drains requests for up to 12 seconds.
 
@@ -60,12 +60,38 @@ Requests older or newer than 300 seconds are rejected. Sources are canonical low
 with hyphens mapped to underscores in environment variable names. Unknown sources are denied.
 Payload fields cannot override the trusted source or configured label.
 
-The gateway revalidates the actual ConsultationInput fields plus `referenceId`, `submittedAt`,
-and existing optional `projectName`/`projectLabel`. It rejects unknown keys, non-JSON, >32 KiB,
-invalid email/URL, credentials in URLs, invalid enums, non-relative source paths, missing consent,
-and out-of-range lengths. Optional empty role/contact/model fields are accepted. iADDS services
-are allowlisted; other sources can use `LEAD_SOURCE_<SUFFIX>_SERVICES` (comma-separated slugs).
-No company URL is fetched. Link previews are disabled.
+## Form schema v2
+
+Required user input: name, phone, preferred contact method (`phone`, `telegram`, `email`), service and existing consent.
+Company/project, URL and comment are optional. Email is optional unless the contact method is `email`.
+An empty comment is valid; its maximum is 1500 characters. Company is 0–120 characters.
+The existing communication-language selector stays available and defaults to the page locale.
+All nine services plus `not-sure`, `several`, `custom-ai-system` and service-page preselection are preserved.
+No UTM collection existed in this form; none was added.
+
+New forms send `formSchemaVersion: 2` and `source: "iadds"`. The server creates `submittedAt` and uses the validated
+Idempotency-Key as `referenceId`; user-supplied timestamp/reference cannot override them. The typed payload contains
+`fullName`, `phone`, `phoneNormalized`, `preferredContact`, `selectedService`, optional `email`, `company`,
+`companyUrl`, `message`, `currentLocale`, `communicationLanguage`, safe `sourcePage`, and the existing consent/model context.
+Empty optional values are omitted from browser and gateway requests. The deprecated role key is never forwarded.
+
+`services/lead-gateway/src/contact.ts` contains the shared contact enum and phone normalization. A phone may have
+one leading +, spaces, hyphens and parentheses. Normalization retains a leading + and 7–15 digits; no default country
+or business phone is injected. The site server recomputes phoneNormalized, and the gateway independently checks it
+against phone. Client-side validation leaves the original input untouched when invalid.
+
+The gateway accepts new v2 and the previous unversioned payload during rollout. The website endpoint also accepts
+unversioned requests from already-open pages, so upgrading Sites does not break cached forms. This isolated legacy
+adapter retains the previous required contact rules and discards role without using it. V2 rejects unexpected keys,
+including role. Never interpret a malformed or unknown version as legacy. Old enquiries with no phone honestly display
+“не вказано у старій формі”; existing legacy contact text is retained. Remove this adapter only in a separately approved
+migration after old pages no longer need it. Deploy the compatible gateway first, then publish the new Sites form.
+
+The gateway rejects non-JSON, >32 KiB, malformed references/timestamps, invalid nonempty email/URL,
+credentials in URLs, invalid enums, non-relative source paths, missing consent and out-of-range lengths.
+iADDS services are allowlisted; other sources can use LEAD_SOURCE_<SUFFIX>_SERVICES.
+For v2, payload source must match the authenticated signing source. Labels always come from gateway configuration.
+No company URL is fetched; link previews remain disabled.
 
 ## Deduplication, retries and delivery semantics
 
@@ -103,13 +129,12 @@ a short display name. It neither stores updates nor modifies/deletes an existing
 If a webhook exists, obtain the ID from the existing integration instead. The owner must
 confirm the intended personal chat before setting TELEGRAM_CHAT_ID. No public setup/debug route.
 
-Run `node --experimental-strip-types scripts/test-send.ts` in a protected gateway environment
-with `CONSULTATION_WEBHOOK_URL` and the source secret. It sends synthetic Test Lead / iADDS QA /
-test@example.com data with objective “Backend delivery test — no response required”. Telegram
-starts these messages with “🧪 TEST — iADDS lead delivery”. Normal submissions start with a source
-label, reference, UTC timestamp, locale, communication language, page and contact fields; optional
-empty fields are omitted. All values are HTML-escaped. Long objectives split safely into linked
-messages, keeping contact details first. No IP, user agent, honeypot or anti-spam metadata is sent.
+Run `node --experimental-strip-types scripts/test-send.ts` only when explicitly testing delivery in a protected environment
+with the source secret. Its synthetic schema-v2 enquiry uses Test Lead and the fictional +1 202 555 0123 number,
+with no email, company, URL or comment. These messages start with “🧪 TEST — iADDS lead delivery”.
+Normal enquiries start with “🆕 Нова заявка — iADDS”. Phone and reference always appear; optional empty lines and
+the Коментар heading are omitted. All values are HTML-escaped; long text splits into bounded messages with the same ID.
+No role, IP, user agent, honeypot or anti-spam metadata is sent to Telegram.
 
 Then submit both live UK/EN forms, check preselection, existing localized success/error states,
 and ask the owner to confirm the matching references arrived. Telegram API confirmation alone
@@ -159,7 +184,7 @@ the old unsigned provider must never be paired with the signed receiver.
 `npm run build` at repository root includes repository/secret audit, lint, typecheck, gateway
 build, unit/integration tests, content checks and production Worker build. `npm run test:e2e`
 retains all existing UI tests. `npm test` within the gateway runs its isolated mock suite.
-No UI snapshots should be updated for this backend task.
+Form E2E assertions cover both locales, minimal v2, conditional email, phone errors and preserved preselection. The unrelated UI tests remain unchanged.
 
 After owner-confirmed live delivery, inspect all Railway projects read-only: IDs, environments,
 services, deployments, last traffic, 7/30-day costs, repos, domains/DNS, crons, databases, volumes,

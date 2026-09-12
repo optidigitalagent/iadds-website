@@ -12,12 +12,12 @@ import { createGateway } from '../services/lead-gateway/src/gateway';
 import { readConfig } from '../services/lead-gateway/src/config';
 import { verifyLeadSignature } from '../services/lead-gateway/src/contract';
 
-const valid: ConsultationInput = { fullName:'QA Test',company:'Test Company',role:'',email:'qa@example.com',contactMethod:'',companyUrl:'https://example.com',selectedService:'ai-video-ads',message:'This is a local test enquiry for a product launch.',consent:true,communicationLanguage:'uk',currentLocale:'uk',sourcePage:'/uk/services/ai-video-ads',collaborationModel:'production' };
+const valid: ConsultationInput = { formSchemaVersion:2,source:'iadds',fullName:'QA Test',phone:'+1 (202) 555-0123',phoneNormalized:'+12025550123',preferredContact:'phone',company:'Test Company',email:'qa@example.com',companyUrl:'https://example.com',selectedService:'ai-video-ads',message:'This is a local test enquiry for a product launch.',consent:true,communicationLanguage:'uk',currentLocale:'uk',sourcePage:'/uk/services/ai-video-ads',collaborationModel:'production' };
 const validate = (input:unknown) => validateConsultation(input,getAllServices().map(s=>s.slug),getDictionary().consultation.validation);
 const request = (body:unknown = valid, key: string = randomUUID(), extra:Record<string,string> = {}) => new Request('http://localhost:3100/api/consultation', {method:'POST',headers:{'content-type':'application/json','idempotency-key':key,...extra},body:JSON.stringify(body)});
 test('shared schema accepts all required fields and optional empty values',()=> { assert.equal(validate(valid).valid,true); assert.equal(validate({...valid,selectedService:'not-sure'}).valid,true); });
 test('schema rejects invalid email, URL, selectedService, consent and message lengths',()=> {
-  const result = validate({...valid,email:'bad',companyUrl:'javascript:alert(1)',selectedService:'missing',consent:'true',message:'short'});
+  const result = validate({...valid,email:'bad',companyUrl:'javascript:alert(1)',selectedService:'missing',consent:'true',message:'a'.repeat(1501)});
   assert.deepEqual(Object.keys(result.errors).sort(),['companyUrl','consent','email','message','selectedService']);
   assert.equal(validate({...valid,message:'a'.repeat(1501)}).valid,false);
   assert.equal(validate({...valid,companyUrl:'https://user:secret@example.com'}).valid,false);
@@ -40,7 +40,7 @@ test('production without a persistent provider fails closed',async()=> {
   assert.equal(response.status,503); assert.equal((await response.json()).code,'unavailable');
 });
 test('endpoint enforces validation, honeypot, origin and payload size',async()=> {
-  assert.equal((await handleConsultation(request({...valid,message:'no'}))).status,422);
+  assert.equal((await handleConsultation(request({...valid,phone:''}))).status,422);
   assert.equal((await handleConsultation(request({...valid,companyFax:'spam'}))).status,422);
   assert.equal((await handleConsultation(request(valid,randomUUID(),{origin:'https://untrusted.example'}))).status,403);
   assert.equal((await handleConsultation(request({...valid,message:'a'.repeat(17000)}))).status,413);
@@ -115,9 +115,9 @@ test('website never accepts an empty, mismatched or asynchronous gateway success
  }
 });
 
-test('optional role and contact remain empty; short message and custom system are accepted',()=>{
- const result=validate({...valid,role:'',contactMethod:'',message:'New ad idea',selectedService:'custom-ai-system'});assert.ok(result.valid);
- assert.equal(result.data.role,'');assert.equal(result.data.contactMethod,'');
+test('optional fields and role-free data accept an empty comment',()=>{
+ const result=validate({...valid,role:'Ignored old field',email:'',company:'',companyUrl:'',message:'',selectedService:'custom-ai-system'});assert.ok(result.valid);
+ assert.equal('role' in result.data,false);assert.equal('contactMethod' in result.data,false);assert.equal(result.data.message,'');
 });
 test('locale, communication language, service, model and safe source are independently preserved',()=>{
  const result=validate({...valid,currentLocale:'en',communicationLanguage:'uk',collaborationModel:'system',sourcePage:'/uk/services/ai-video-ads'});
@@ -127,7 +127,7 @@ test('locale, communication language, service, model and safe source are indepen
  assert.equal(validate({...valid,communicationLanguage:'fr'}).valid,false);
 });
 test('required field errors use the submitted locale dictionary',()=>{
- for(const locale of ['uk','en'] as const){const result=validateConsultation({...valid,email:'bad',message:''},getAllServices(locale).map(s=>s.slug),getDictionary(locale).consultation.validation);assert.equal(result.errors.email,getDictionary(locale).consultation.validation.email);assert.equal(result.errors.message,getDictionary(locale).consultation.validation.message);}
+ for(const locale of ['uk','en'] as const){const result=validateConsultation({...valid,email:'bad',phone:''},getAllServices(locale).map(s=>s.slug),getDictionary(locale).consultation.validation);assert.equal(result.errors.email,getDictionary(locale).consultation.validation.email);assert.equal(result.errors.phone,getDictionary(locale).consultation.validation.phone);}
 });
 test('repeated requests eventually receive a rate limit response',async()=> {
   let response:Response|undefined;

@@ -3,16 +3,17 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve4, resolve6 } from 'node:dns/promises';
 import path from 'node:path';
-import { emptyInput, type ConsultationInput } from '@/lib/validation/consultation';
+import { omitEmptyOptionalFields, type ConsultationInput } from '@/lib/validation/consultation';
 import { leadHeaders, sourcePattern } from '../../../services/lead-gateway/src/contract';
+import type { LegacyLead } from '../../../services/lead-gateway/src/schema';
 
 export class SubmissionError extends Error {
   constructor(public readonly status: number, public readonly code: string) { super(code); }
 }
-export interface SubmissionPayload extends ConsultationInput { referenceId: string; submittedAt: string }
+export type SubmissionPayload = (ReturnType<typeof omitEmptyOptionalFields> & { referenceId:string; submittedAt:string }) | LegacyLead;
 export interface SubmissionResult { referenceId: string; mode: 'local' | 'webhook' }
 export interface ConsultationSubmissionProvider { submit(payload: SubmissionPayload): Promise<SubmissionResult> }
-export function payloadDigest(data: ConsultationInput) { return createHash('sha256').update(JSON.stringify(Object.fromEntries(Object.keys(emptyInput).map(key => [key, data[key as keyof ConsultationInput]])))).digest('hex'); }
+export function payloadDigest(data: ConsultationInput | SubmissionPayload) { return createHash('sha256').update(JSON.stringify(Object.fromEntries(Object.entries(data).filter(([key])=>!['referenceId','submittedAt','projectName','projectLabel'].includes(key)).sort(([a],[b])=>a.localeCompare(b))))).digest('hex'); }
 
 export class LocalSubmissionProvider implements ConsultationSubmissionProvider {
   constructor(private directory: string) {}

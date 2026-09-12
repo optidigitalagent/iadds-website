@@ -7,7 +7,7 @@ for (const locale of ['uk', 'en'] as const) for (const failure of [500, 401]) te
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(`http://127.0.0.1:3102/${locale}/consultation?service=ai-video-ads&model=production&from=%2F${locale}%2Fservices%2Fai-video-ads`);
   await expect(page.locator('#field-selectedService')).toHaveValue('ai-video-ads');
-  await page.locator('#field-fullName').fill('Test Lead'); await page.locator('#field-company').fill('iADDS QA');
+  await page.locator('#field-fullName').fill('Test Lead'); await page.locator('#field-phone').fill('+1 (202) 555-0123'); await page.locator('#field-preferredContact').selectOption('phone'); await page.locator('#field-company').fill('iADDS QA');
   await page.locator('#field-email').fill('test@example.com'); await page.locator('#field-companyUrl').fill('https://example.com');
   await page.locator('#field-message').fill('Backend delivery test — no response required'); await page.locator('#field-consent').check();
   await page.route('**/api/consultation', route => route.continue({ headers: { ...route.request().headers(), 'x-qa-gateway-failure': String(failure) } }));

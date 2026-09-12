@@ -1,8 +1,9 @@
 import { createHash } from 'node:crypto';
 import { getAllServices, getDictionary } from '@/lib/content';
-import { validateConsultation } from '@/lib/validation/consultation';
+import { omitEmptyOptionalFields, validateConsultation } from '@/lib/validation/consultation';
+import { parseLead } from '../../../services/lead-gateway/src/schema';
 import { getSiteUrl, isLocale } from '@/lib/urls';
-import { createSubmissionProvider, payloadDigest, SubmissionError, type ConsultationSubmissionProvider, type SubmissionResult } from './provider';
+import { createSubmissionProvider, payloadDigest, SubmissionError, type ConsultationSubmissionProvider, type SubmissionPayload, type SubmissionResult } from './provider';
 
 const MAX_BYTES = 16_384;
 const RATE_WINDOW = 10 * 60 * 1000;
@@ -50,15 +51,28 @@ export async function handleConsultation(request: Request, providerFactory: () =
     if (raw && typeof raw === 'object' && 'companyFax' in raw && raw.companyFax) return json({ code: 'invalid' }, 422);
     const locale = raw && typeof raw === 'object' && 'currentLocale' in raw ? raw.currentLocale : undefined;
     if (!isLocale(locale)) return json({ code: 'invalid_context' }, 422);
-    const result = validateConsultation(raw, getAllServices(locale).map(s => s.slug), getDictionary(locale).consultation.validation);
-    if (!result.valid) return json({ code: 'validation', errors: result.errors }, 422);
-    const digest = payloadDigest(result.data);
+    const input=raw as Record<string,unknown>;
+    let payload:SubmissionPayload;
+    const context={referenceId:idempotency,submittedAt:new Date().toISOString()};
+    if(input.formSchemaVersion===undefined) {
+      // Keep already-open pre-v2 pages working across the staged gateway/site rollout.
+      const legacyInput={...input}; delete legacyInput.companyFax;
+      const legacy=parseLead({...legacyInput,...context},{slug:'iadds',label:'iADDS',secret:''});
+      if(!legacy||legacy.formSchemaVersion===2) return json({code:'invalid'},422);
+      payload=legacy;
+    } else {
+      if(input.formSchemaVersion!==2) return json({code:'invalid_context'},422);
+      const result = validateConsultation(raw, getAllServices(locale).map(s => s.slug), getDictionary(locale).consultation.validation);
+      if (!result.valid) return json({ code: 'validation', errors: result.errors }, 422);
+      payload={...omitEmptyOptionalFields(result.data),...context};
+    }
+    const digest = payloadDigest(payload);
     const existing = submissions.get(idempotency);
     if (existing && existing.digest !== digest) return json({ code: 'idempotency_conflict' }, 409);
     if (existing) return json(await existing.result, 200);
     if (submissions.size > 10000) throw new SubmissionError(503, 'unavailable');
     const provider = providerFactory();
-    const pending = provider.submit({ ...result.data, referenceId: idempotency, submittedAt: new Date().toISOString() });
+    const pending = provider.submit(payload);
     submissions.set(idempotency, { digest, until: Date.now() + 60 * 60 * 1000, result: pending });
     try { return json(await pending, 201); }
     catch (error) { submissions.delete(idempotency); throw error; }

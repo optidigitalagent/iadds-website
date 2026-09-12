@@ -165,18 +165,18 @@ const dictionary = {
     "formNote": "Fields marked * are required.",
     "fields": {
       "fullName": "Full name",
-      "company": "Company / project",
-      "role": "Role or position",
-      "email": "Email",
-      "contactMethod": "Telegram or phone",
-      "companyUrl": "Website or social link",
+      "phone": "Phone number",
+      "preferredContact": "Preferred contact method",
       "selectedService": "Interested service",
-      "message": "Short project description",
+      "email": "Email — optional",
+      "company": "Company or project — optional",
+      "companyUrl": "Website or social link — optional",
+      "message": "Comment — optional",
       "communicationLanguage": "Communication language"
     },
     "hints": {
       "companyUrl": "Use a full https:// URL to your website or social page.",
-      "message": "A few words about your product and the outcome you need. 10–1500 characters."
+      "message": "A few words about your product and the outcome you need. Up to 1500 characters."
     },
     "optional": "optional",
     "select": "Select a direction",
@@ -215,17 +215,33 @@ const dictionary = {
     "honeypot": "Leave this field empty",
     "validation": {
       "fullName": "Enter your name (2–100 characters).",
-      "company": "Enter your company (2–120 characters).",
-      "role": "Keep your role within 100 characters.",
+      "company": "Keep the company or project within 120 characters.",
       "email": "Enter a valid email (up to 254 characters).",
-      "contactMethod": "Use up to 80 characters for Telegram or phone.",
       "companyUrl": "Enter a valid public http:// or https:// URL (up to 300 characters).",
       "selectedService": "Choose a direction or select Not sure yet.",
-      "message": "Describe your objective in 10–1500 characters.",
+      "message": "Keep the comment within 1500 characters.",
       "communicationLanguage": "Choose Ukrainian or English.",
-      "consent": "Please agree to be contacted about your enquiry."
+      "consent": "Please agree to be contacted about your enquiry.",
+      "phone": "Enter a phone number with 7–15 digits. You may use +, spaces, hyphens and parentheses.",
+      "preferredContact": "Choose your preferred contact method."
     },
-    "discussion": "During a 20–30 minute Google Meet call, you discuss the initial idea, develop it together and select the format worth testing."
+    "discussion": "During a 20–30 minute Google Meet call, you discuss the initial idea, develop it together and select the format worth testing.",
+    "emailRequiredLabel": "Email",
+    "contactSelect": "Select a contact method",
+    "contactOptions": [
+      {
+        "value": "phone",
+        "label": "Phone call"
+      },
+      {
+        "value": "telegram",
+        "label": "Telegram"
+      },
+      {
+        "value": "email",
+        "label": "Email"
+      }
+    ]
   },
   "contact": {
     "eyebrow": "LET’S CONNECT",

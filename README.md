@@ -74,7 +74,7 @@ Set `approvals.clientNameVerified`, `approvals.clientPublication`, `approvals.ap
 
 ## Consultation and delivery
 
-The shared schema validates the client and server payload. The real handler enforces size, origin, honeypot, rate limits and idempotency, then creates a server timestamp. Payload includes selected service, model, locale, preferred language, safe source path and reference ID. Unknown query values are normalized. PII never enters analytics or production console logs.
+Schema v2 requires name, phone, contact method, service and consent. Company/project, URL and comment are optional; email is required only for email contact. Role has been removed. The existing language selector defaults to the page locale. A shared phone normalizer accepts international numbers with 7–15 digits. The shared schema validates the client and server payload. The real handler enforces size, origin, honeypot, rate limits and idempotency, then creates a server timestamp. Payload includes selected service, model, locale, preferred language, safe source path and reference ID. Unknown query values are normalized. PII never enters analytics or production console logs.
 
 Production fails with 503 until the delivery receiver is configured. Configure public HTTPS `CONSULTATION_WEBHOOK_URL`, required `CONSULTATION_WEBHOOK_SECRET` and `CONSULTATION_WEBHOOK_SOURCE=iadds` in the server deployment environment. The provider rejects private/local destinations, URL credentials and redirects, and accepts only a matching gateway delivery confirmation. See [the Telegram gateway runbook](docs/lead-gateway.md). No booking, meeting confirmation or live analytics integration is fabricated.
 
