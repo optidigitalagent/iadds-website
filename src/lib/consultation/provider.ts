@@ -58,7 +58,8 @@ export class WebhookSubmissionProvider implements ConsultationSubmissionProvider
       if (!addresses.length || addresses.some(item => !isPublicAddress(item.address))) throw new SubmissionError(503, 'unavailable');
       const body = JSON.stringify({ ...payload, projectName: siteConfig.brand.productName, projectLabel: siteConfig.brand.productLabel });
       const response = await this.transport(url, {
-        method: 'POST', redirect: 'error', signal,
+        // Workers requires manual redirects; the strict 200 check below rejects every 3xx.
+        method: 'POST', redirect: 'manual', signal,
         headers: leadHeaders(this.secret, this.source, payload.referenceId, body), body, cache: 'no-store',
       });
       if (response.status !== 200) { await response.body?.cancel(); throw new SubmissionError(response.status === 503 ? 503 : 502, 'provider_error'); }

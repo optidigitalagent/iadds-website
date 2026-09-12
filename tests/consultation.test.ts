@@ -76,11 +76,24 @@ test('webhook sends the normalized payload with authentication, idempotency and 
   assert.equal(headers.get('x-idempotency-key'),payload.referenceId);
   assert.equal(headers.get('x-lead-source'),'iadds');
   assert.ok(verifyLeadSignature(secret,headers.get('x-lead-timestamp')!,Buffer.from(String(sent?.body)),headers.get('x-lead-signature')!));
-  assert.equal(sent?.redirect,'error');assert.ok(sent?.signal);assert.equal(JSON.parse(String(sent?.body)).company,valid.company);
+  assert.equal(sent?.redirect,'manual');assert.ok(sent?.signal);assert.equal(JSON.parse(String(sent?.body)).company,valid.company);
   const failed=new WebhookSubmissionProvider('https://receiver.example',secret,async()=>new Response(null,{status:500}),async()=>[{address:'8.8.8.8'}]);
   await assert.rejects(()=>failed.submit(payload),/provider_error/);
   const blocked=new WebhookSubmissionProvider('https://receiver.example',secret,transport,async()=>[{address:'127.0.0.1'}]);
   await assert.rejects(()=>blocked.submit(payload),/unavailable/);
+});
+
+test('webhook rejects every redirect without forwarding the signed lead to its location',async()=>{
+ const payload={...valid,referenceId:randomUUID(),submittedAt:new Date().toISOString()};
+ for(const status of [301,302,303,307,308]){
+  let calls=0;
+  const provider=new WebhookSubmissionProvider('https://receiver.example/v1/leads','unit-test-source-secret-with-32-bytes',async(url,init)=>{
+   calls++;assert.equal(String(url),'https://receiver.example/v1/leads');assert.equal(init?.redirect,'manual');
+   return new Response(null,{status,headers:{Location:'https://untrusted.example/collect'}});
+  },async()=>[{address:'8.8.8.8'}]);
+  await assert.rejects(()=>provider.submit(payload),error=>error instanceof SubmissionError&&error.status===502);
+  assert.equal(calls,1);
+ }
 });
 
 test('website provider and gateway share one signing contract and preserve every form context field',async()=>{
