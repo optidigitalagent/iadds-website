@@ -2,7 +2,7 @@ name: iADDS CI
 
 on:
   push:
-    branches: [main, 'codex/**']
+    branches: [main, 'codex/**', 'backend/nfc-card-intake']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -34,6 +34,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Install isolated gateway dependencies
+        run: npm ci --prefix services/lead-gateway
       - name: Audit, lint, types, tests and production Worker build
         run: npm run build
       - name: Install browser
@@ -52,3 +54,35 @@ jobs:
             test-results/
           if-no-files-found: ignore
           retention-days: 7
+  nfc-backend:
+    name: NFC isolated PostgreSQL and gateway tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: nfc_gateway_test
+          POSTGRES_USER: nfc_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U nfc_test -d nfc_gateway_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      NFC_TEST_DATABASE_URL: postgres://nfc_test@127.0.0.1:5432/nfc_gateway_test
+      NFC_TELEGRAM_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: services/lead-gateway/package-lock.json
+      - run: npm ci
+        working-directory: services/lead-gateway
+      - run: npm run typecheck && npm test && npm run build
+        working-directory: services/lead-gateway
+      - run: git diff --exit-code

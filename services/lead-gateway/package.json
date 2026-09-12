@@ -3,12 +3,25 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24 <25" },
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "migrate:nfc": "node --experimental-strip-types scripts/nfc-ops.ts migrate",
+    "preflight:nfc": "node --experimental-strip-types scripts/nfc-ops.ts preflight",
+    "inspect:nfc": "node --experimental-strip-types scripts/nfc-ops.ts inspect",
     "setup:telegram": "node --experimental-strip-types scripts/telegram-setup.ts"
   },
-  "devDependencies": { "@types/node": "24.13.4", "typescript": "5.9.3" }
+  "devDependencies": {
+    "@types/node": "24.13.4",
+    "@types/pg": "8.23.1",
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "pg": "8.23.0"
+  }
 }

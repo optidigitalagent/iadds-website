@@ -14,7 +14,7 @@ export function readConfig(env: Record<string, string | undefined> = process.env
   const sources = new Map<string, LeadSource>();
   for (const [key, secret] of Object.entries(env)) {
     const match = /^LEAD_SOURCE_([A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*)_SECRET$/.exec(key);
-    if (!match || !secret) continue;
+    if (!match || !secret || match[1] === 'NFC_CARD') continue;
     const slug = match[1].toLowerCase().replaceAll('_', '-');
     if (!sourcePattern.test(slug) || slug.length > 64 || Buffer.byteLength(secret) < 32) throw new Error('invalid_gateway_configuration');
     const label = (env[`LEAD_SOURCE_${match[1]}_LABEL`] || slug).trim();

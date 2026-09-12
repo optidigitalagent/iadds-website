@@ -26,7 +26,7 @@ async function boundedBody(request: Request): Promise<Uint8Array> {
   } finally { reader.releaseLock(); }
   return Buffer.concat(chunks, size);
 }
-export function createGateway(config: GatewayConfig, options: { send?: (text: string, deadline: number) => Promise<number>; now?: () => number; log?: (line: string) => void } = {}) {
+export function createGateway(config: GatewayConfig, options: { send?: (text: string, deadline: number) => Promise<number>; now?: () => number; log?: (line: string) => void; nfc?: (request: Request) => Promise<Response | undefined> } = {}) {
   const entries = new Map<string, Entry>();
   const rates = new Map<string, { count: number; until: number }>();
   const now = options.now ?? Date.now, send = options.send ?? telegramSender(config);
@@ -35,6 +35,8 @@ export function createGateway(config: GatewayConfig, options: { send?: (text: st
     try {
       const url = new URL(request.url);
       if (url.pathname === '/healthz' && request.method === 'GET') return Response.json({ ok: true, service: 'antonov-lead-gateway' }, { headers: { 'Cache-Control': 'no-store' } });
+      const nfcResponse = await options.nfc?.(request);
+      if (nfcResponse) return nfcResponse;
       if (url.pathname !== '/v1/leads') return json({ status: 404, body: { code: 'not_found' } });
       if (request.method !== 'POST') return json({ status: 405, body: { code: 'method_not_allowed' } });
       if (!/^application\/json(?:\s*;\s*charset=utf-8)?$/i.test(request.headers.get('content-type') || '')) return json({ status: 415, body: { code: 'unsupported_media' } });
