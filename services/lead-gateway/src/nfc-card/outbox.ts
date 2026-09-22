@@ -19,7 +19,8 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
     try {
       await client.query('BEGIN');
       const result = await client.query(`SELECT o.id,o.lead_id,o.attempt_count,l.language,l.product,l.quantity,l.customer_name,
-        l.phone,l.email,l.telegram,l.preferred_contact,l.source_page,l.utm,l.created_at,l.is_test,l.is_final_test,l.selection,l.price_quote
+        l.phone,l.email,l.telegram,l.preferred_contact,l.source_page,l.utm,l.created_at,l.is_test,l.is_final_test,l.selection,l.price_quote,
+        l.product_schema_version,l.product_id,l.sku,l.offer,l.instagram_url,l.comment,l.consent
         FROM nfc_card.notification_outbox o JOIN nfc_card.leads l USING(lead_id)
         WHERE o.delivery_enabled AND o.status IN ('pending','retry') AND o.next_attempt_at <= now()
         AND o.attempt_count < $1 AND (NOT l.is_final_test OR o.attempt_count < 1) AND ($2::uuid IS NULL OR (o.lead_id=$2 AND l.is_test))
@@ -31,7 +32,9 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
     finally { client.release(); }
     if (!row) break;
     const lead: NfcLead = { language: row.language, product: row.product, quantity: row.quantity, customerName: row.customer_name,
-      contact: { preferredMethod: row.preferred_contact, ...(row.phone ? { phone: row.phone } : {}), ...(row.email ? { email: row.email } : {}), ...(row.telegram ? { telegram: row.telegram } : {}) }, sourcePage: row.source_page, utm: row.utm, ...(row.selection ? { selection: row.selection } : {}) };
+      contact: { preferredMethod: row.preferred_contact, ...(row.phone ? { phone: row.phone } : {}), ...(row.email ? { email: row.email } : {}), ...(row.telegram ? { telegram: row.telegram } : {}) }, sourcePage: row.source_page, utm: row.utm, ...(row.selection ? { selection: row.selection } : {}),
+      ...(row.product === 'nfc-instagram-card' ? { instagram: { productSchemaVersion: row.product_schema_version, product_id: row.product_id,
+        sku: row.sku, offer: row.offer, instagramUrl: row.instagram_url, ...(row.comment ? { comment: row.comment } : {}), consent: row.consent } } : {}) };
     let outcome: Delivery;
     try { outcome = await send(formatNfc(lead, row.lead_id, row.created_at.toISOString(), row.is_test, row.is_final_test, row.price_quote || undefined)); }
     catch { outcome = { status: 'failed', category: 'outcome_unknown' }; }

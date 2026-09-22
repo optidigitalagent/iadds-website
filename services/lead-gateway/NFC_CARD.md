@@ -41,13 +41,48 @@ The static frontend sends camelCase data, obtains a fresh signed challenge, and 
 
 The challenge is an HMAC-authenticated public token, not the signing secret. It binds an allowed NFC path and server timestamp; submit age must be 2 seconds–30 minutes. Fetch a new challenge for an expired retry without changing the lead/idempotency key. `website` is an empty honeypot. Neither field is persisted. Origin/path checks and timing are abuse controls, not proof that a visitor is human: non-browser clients can forge Origin. Global caps (120 public requests/minute, 60 signed NFC requests/minute) remain effective even with forged proxy headers; a bounded secondary per-peer cap limits public requests to 20/minute. State is process-local; do not scale replicas without a shared rate-limit design. No separate paid rate-limit service is provisioned.
 
-Language uk/en; product `review-card` or `branded-review-card`; integer quantity 1–10,000; trimmed name 1–100 characters. Phone normalizes to 7–15 digits with an optional leading plus. Email validates and lowercases; Telegram validates username only. Preferred phone/SMS/WhatsApp/Viber requires phone, email requires email, Telegram requires username or phone. Unknown fields, caller-supplied source/lead ID/timestamp/price and control characters are rejected. UTM permits source/medium/campaign/term/content, each at most 100 characters. Allowed source paths cover NFC home/order/contact/About/product pages in both locales; query/fragment is stripped and encoded/traversal paths rejected.
+For existing Review callers: language uk/en; product `review-card` or `branded-review-card`; integer quantity 1–10,000; trimmed name 1–100 characters. Phone normalizes to 7–15 digits with an optional leading plus. Email validates and lowercases; Telegram validates username only. Preferred phone/SMS/WhatsApp/Viber requires phone, email requires email, Telegram requires username or phone. Unknown fields, caller-supplied source/lead ID/timestamp/price and control characters are rejected. UTM permits source/medium/campaign/term/content, each at most 100 characters. Allowed source paths cover NFC home/order/contact/About/product pages in both locales; query/fragment is stripped and encoded/traversal paths rejected. Instagram-specific requirements follow below.
 
 After PostgreSQL COMMIT: HTTP 202 `{ok:true,source:"NFC_CARD",leadId,durableSaved:true,notificationStatus:"queued"|"disabled"}`. This means accepted into durable storage; it never claims Telegram delivery. Retrying the same key/canonical body returns the same lead ID; changed content returns 409. Validation returns 422, abuse limits 429, unavailable storage 503. A 503 can include an uncertain commit outcome: retain the same key/body and retry, never show success. The frontend preserves fields in memory on failure and distinguishes definitive validation rejection from ambiguous transport/storage errors. No payload belongs in analytics or logs.
 
 `POST /v1/leads` also accepts trusted server-to-server `x-lead-source: NFC_CARD`, `x-lead-timestamp`, `x-lead-signature` and `x-idempotency-key`. The new NFC signature is lowercase hex HMAC-SHA256 over `timestamp + ".NFC_CARD." + idempotencyKey + "." + rawBody`, binding the key against replay substitution. It uses the same durable NFC parser and store; omit public challenge/honeypot. The NFC secret is never accepted as a legacy lowercase source alias. The existing iADDS signature protocol and signed lane remain unchanged.
 
 Optional `selection` contains only `variant` (standard/branded/bulk/consultation) and `quantity` (1/2/more as strings). The browser sends `quantity:3` with `selection.quantity:more` to mean **3 or more**, not an exact order of three; the formatter retains `3+`. Bulk/consultation use the review-card product family plus their explicit enquiry intent and always get a custom quote. Selection/product/quantity combinations are cross-validated. Older callers without selection retain their contract. Canonical prices are computed server-side: standard 1/2 = 1500/2600 UAH, branded 1/2 = 2000/3600 UAH; 3+ or general enquiries = custom. The 200 UAH deposit is included. Client price fields are rejected. The server snapshot is persisted in the lead transaction and returned as `quote` in the receipt.
+
+### NFC Instagram Card (additive product schema 1)
+
+The Instagram product uses the same NFC browser endpoint, challenge, CORS policy, idempotency key and durable receipt. Its Pages payload is:
+
+```json
+{
+  "language": "uk",
+  "product": "nfc-instagram-card",
+  "productSchemaVersion": 1,
+  "product_id": "nfc-instagram-card",
+  "sku": "NFC-IG-READY",
+  "offer": "ready",
+  "quantity": 2,
+  "selection": { "variant": "instagram", "quantity": "2" },
+  "customerName": "Synthetic Instagram QA",
+  "contact": { "preferredMethod": "telegram", "phone": "+12025550123" },
+  "instagramUrl": "https://www.instagram.com/synthetic_business/",
+  "comment": "Optional order details",
+  "consent": true,
+  "sourcePage": "/nfc-card-website/solutions/instagram-card",
+  "website": "",
+  "challenge": "server-issued-public-challenge"
+}
+```
+
+Only the ready offer and quantities 1/2 are accepted, with server totals 1500/2600 UAH and the existing included 200 UAH deposit. Product identifiers, schema version, explicit selection and consent must agree exactly. Instagram requires a phone and Telegram/WhatsApp/Viber preference. Client prices, branded/QR fields, missing consent and cross-product selections are rejected. Review callers retain their prior optional-selection/contact/quantity contract; Instagram-only fields are not accepted on Review requests.
+
+Profile URLs follow the Pages grammar: HTTPS Instagram host (with optional `www`), one 1–30-character username using letters/digits/underscores/dots, no leading/trailing/consecutive dots, no reserved content/account paths, credentials, port, query, fragment or encoding. Stored URLs use `https://www.instagram.com/lowercase_username/`. No network lookup or account verification occurs. Comments are optional, at most 2000 UTF-16 code units; empty comments are omitted, Unicode is NFC-normalized and line endings become LF. Other control/direction-override characters are rejected. Comments and profile URLs are included in the canonical idempotency digest and escaped in the NFC Telegram formatter.
+
+Additional allowed source paths are `/nfc-card-website/solutions/instagram-card`, `/nfc-card-website/instagram-card` and their `/en/` equivalents. Existing generic order/contact routes remain valid. The trusted signed NFC lane uses the same Instagram validation without the browser-only challenge/honeypot.
+
+Migration `003_instagram_card.sql` replaces only the NFC product check and adds nullable `product_schema_version`, `product_id`, `sku`, `offer`, `instagram_url`, `comment` and `consent` columns. Its conditional constraint requires complete Instagram metadata/selection and 1/2 quantities while leaving old Review rows valid with null additions. The migration runner retains the immutable 001/002 checksums. Apply 003 before running the updated gateway; runtime does not migrate implicitly. The lead and outbox still commit together before receipt or delivery. A restarted worker loads the profile/comment/identity/consent and saved price from PostgreSQL; no browser memory is needed for Telegram.
+
+Local verification adds Instagram parser/pricing/format/CORS tests and PostgreSQL upgrade, concurrent idempotency, rollback, durable retry and legacy-row delivery tests. The integration suite creates and drops its own randomly named upgrade database on the isolated local PostgreSQL fixture, so the test role needs `CREATEDB`. No live transport is used. Deployment still uses the existing Railway service, operational flags and secrets; this change creates no additional resource.
 
 ## Database and outbox
 

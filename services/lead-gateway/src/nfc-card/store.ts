@@ -15,7 +15,7 @@ export function database(url: string): Pool {
   return pool;
 }
 export async function migrate(pool: Pool, preflight = false): Promise<{ version: string; checksum: string; applied: boolean }> {
-  const versions = ['001_nfc_card', '002_public_commerce'];
+  const versions = ['001_nfc_card', '002_public_commerce', '003_instagram_card'];
   const migrations = await Promise.all(versions.map(async version => {
     const sql = await readFile(new URL('../../migrations/nfc-card/' + version + '.sql', import.meta.url), 'utf8');
     return { version, sql, checksum: createHash('sha256').update(sql).digest('hex') };
@@ -53,10 +53,12 @@ export async function persist(pool: Pool, lead: NfcLead, key: string, options: P
   try {
     await client.query('BEGIN');
     const inserted = await client.query(`INSERT INTO nfc_card.leads
-      (id,lead_id,language,product,quantity,customer_name,phone,email,telegram,preferred_contact,source_page,utm,idempotency_key,request_digest,is_test,selection,price_quote,is_final_test)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18) ON CONFLICT (idempotency_key) DO NOTHING RETURNING lead_id`,
+      (id,lead_id,language,product,quantity,customer_name,phone,email,telegram,preferred_contact,source_page,utm,idempotency_key,request_digest,is_test,selection,price_quote,is_final_test,
+       product_schema_version,product_id,sku,offer,instagram_url,comment,consent)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25) ON CONFLICT (idempotency_key) DO NOTHING RETURNING lead_id`,
     [randomUUID(), leadId, lead.language, lead.product, lead.quantity, lead.customerName, lead.contact.phone, lead.contact.email,
-      lead.contact.telegram, lead.contact.preferredMethod, lead.sourcePage, lead.utm, key, digest, options.isTest === true, lead.selection || null, quote(lead), options.isFinalTest === true]);
+      lead.contact.telegram, lead.contact.preferredMethod, lead.sourcePage, lead.utm, key, digest, options.isTest === true, lead.selection || null, quote(lead), options.isFinalTest === true,
+      lead.instagram?.productSchemaVersion, lead.instagram?.product_id, lead.instagram?.sku, lead.instagram?.offer, lead.instagram?.instagramUrl, lead.instagram?.comment, lead.instagram?.consent]);
     if (!inserted.rowCount) {
       const saved = await client.query(`SELECT l.lead_id, l.request_digest, l.price_quote, o.delivery_enabled FROM nfc_card.leads l
         JOIN nfc_card.notification_outbox o USING(lead_id) WHERE l.idempotency_key=$1`, [key]);

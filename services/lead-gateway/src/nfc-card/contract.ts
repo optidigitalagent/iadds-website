@@ -6,9 +6,10 @@ export const ORIGIN = 'https://optidigitalagent.github.io';
 export const BASE_PATH = '/nfc-card-website';
 export const ENDPOINT = '/v1/public/leads/nfc-card';
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
-export const PRODUCTS = ['review-card', 'branded-review-card'] as const;
+export const PRODUCTS = ['review-card', 'branded-review-card', 'nfc-instagram-card'] as const;
 export type Contact = { preferredMethod: 'phone' | 'sms' | 'email' | 'telegram' | 'whatsapp' | 'viber'; phone?: string; email?: string; telegram?: string };
-export interface NfcLead { language: 'uk' | 'en'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection }
+export interface InstagramDetails { productSchemaVersion: 1; product_id: 'nfc-instagram-card'; sku: 'NFC-IG-READY'; offer: 'ready'; instagramUrl: string; comment?: string; consent: true }
+export interface NfcLead { language: 'uk' | 'en'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; instagram?: InstagramDetails }
 export class NfcError extends Error {
   readonly status: number;
   readonly leadId?: string;
@@ -30,13 +31,25 @@ export function sourcePath(value: unknown): string {
   const raw = text(value, 300)!;
   if (!raw.startsWith(BASE_PATH + '/') || /[%\\]/.test(raw)) invalid();
   const path = raw.split(/[?#]/, 1)[0].replace(/\/$/, '');
-  if (!new RegExp('^' + BASE_PATH + '(?:/en)?(?:/(?:order|contact|about|solutions/(?:review-card|branded-review-card)))?$').test(path)) invalid();
+  if (!new RegExp('^' + BASE_PATH + '(?:/en)?(?:/(?:order|contact|about|instagram-card|solutions/(?:review-card|branded-review-card|instagram-card)))?$').test(path)) invalid();
   return path === BASE_PATH ? path + '/' : path;
 }
 export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
-  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', ...(publicRequest ? ['website', 'challenge'] : [])]);
+  const instagramFields = ['productSchemaVersion', 'product_id', 'sku', 'offer', 'instagramUrl', 'comment', 'consent'];
+  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', ...instagramFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
   if (!['uk', 'en'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
   if (typeof input.quantity !== 'number' || !Number.isSafeInteger(input.quantity) || input.quantity < 1 || input.quantity > 10000) invalid();
+  const isInstagram = input.product === 'nfc-instagram-card';
+  if (!isInstagram && instagramFields.some(key => key in input)) invalid();
+  let instagram: InstagramDetails | undefined;
+  if (isInstagram) {
+    if (input.productSchemaVersion !== 1 || input.product_id !== 'nfc-instagram-card' || input.sku !== 'NFC-IG-READY' ||
+        input.offer !== 'ready' || input.consent !== true || ![1, 2].includes(input.quantity)) invalid();
+    const instagramUrl = instagramProfileURL(input.instagramUrl);
+    const comment = instagramComment(input.comment);
+    instagram = { productSchemaVersion: 1, product_id: 'nfc-instagram-card', sku: 'NFC-IG-READY', offer: 'ready', instagramUrl,
+      ...(comment ? { comment } : {}), consent: true };
+  }
   const c = object(input.contact, ['preferredMethod', 'phone', 'email', 'telegram']);
   if (!['phone', 'sms', 'email', 'telegram', 'whatsapp', 'viber'].includes(String(c.preferredMethod))) invalid();
   const phoneInput = text(c.phone, 50, true), emailInput = text(c.email, 254, true), telegramInput = text(c.telegram, 33, true);
@@ -48,6 +61,7 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   if (c.preferredMethod === 'email' && !emailInput) invalid();
   if (['phone', 'sms', 'whatsapp', 'viber'].includes(String(c.preferredMethod)) && !phone) invalid();
   if (c.preferredMethod === 'telegram' && !telegramInput && !phone) invalid();
+  if (isInstagram && (!phone || !['telegram', 'whatsapp', 'viber'].includes(String(c.preferredMethod)))) invalid();
   const contact: Contact = { preferredMethod: c.preferredMethod as Contact['preferredMethod'], ...(phone ? { phone } : {}),
     ...(emailInput ? { email: emailInput.toLowerCase() } : {}), ...(telegramInput ? { telegram: '@' + telegramInput.replace(/^@/, '') } : {}) };
   const utmInput = object(input.utm ?? {}, ['source', 'medium', 'campaign', 'term', 'content']);
@@ -55,7 +69,22 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   for (const key of ['source', 'medium', 'campaign', 'term', 'content']) { const val = text(utmInput[key], 100, true); if (val) utm[key] = val; }
   const selection = parseSelection(input.selection, String(input.product), input.quantity);
   return { language: input.language as NfcLead['language'], product: input.product as NfcLead['product'], quantity: input.quantity,
-    customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}) };
+    customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}), ...(instagram ? { instagram } : {}) };
+}
+// Match the Pages profile grammar; never fetch or claim to verify an account.
+export function instagramProfileURL(value: unknown): string {
+  if (typeof value !== 'string' || value.length > 250 || !/^https:\/\/(?:www\.)?instagram\.com\/[A-Za-z0-9._]{1,30}\/?$/i.test(value)) invalid();
+  const name = value.split('/')[3].toLowerCase();
+  if (name.startsWith('.') || name.endsWith('.') || name.includes('..') ||
+      ['p','reel','reels','stories','explore','accounts','direct','about','legal','developer','developers','web','api','challenge','oauth','tv'].includes(name)) invalid();
+  return 'https://www.instagram.com/' + name + '/';
+}
+function instagramComment(value: unknown): string | undefined {
+  if (value === undefined) return;
+  if (typeof value !== 'string' || value.length > 2000 || /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\u202a-\u202e\u2066-\u2069]/u.test(value)) invalid();
+  const normalized = value.replace(/\r\n?/g, '\n').trim().normalize('NFC');
+  if (normalized.length > 2000) invalid();
+  return normalized || undefined;
 }
 export function challenge(secret: string, path: string, now: number): string {
   const payload = Buffer.from(JSON.stringify({ at: now, path, nonce: randomUUID() })).toString('base64url');

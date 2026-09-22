@@ -7,6 +7,9 @@ export function formatNfc(lead: NfcLead, leadId: string, timestamp: string, isTe
     ['price', priceQuote.status === 'custom' ? 'custom quote' : priceQuote.amount + ' UAH'], ['customer_name', lead.customerName], ['preferred_contact', lead.contact.preferredMethod],
     ['phone', lead.contact.phone], ['email', lead.contact.email], ['telegram', lead.contact.telegram], ['timestamp', timestamp],
     ['source_page', lead.sourcePage], ['utm', Object.keys(lead.utm).length ? JSON.stringify(lead.utm) : undefined]];
+  if (lead.instagram) fields.push(['product_schema_version', lead.instagram.productSchemaVersion], ['product_id', lead.instagram.product_id],
+    ['sku', lead.instagram.sku], ['offer', lead.instagram.offer], ['instagram_url', lead.instagram.instagramUrl],
+    ['consent', String(lead.instagram.consent)], ['comment', lead.instagram.comment]);
   return (isTest && finalTest ? '🧪 FINAL TEST — NFC CARD' : isTest ? '🧪 TEST — NFC CARD' : '🆕 Нова заявка — NFC CARD') + '\n\n' +
     fields.filter(([, value]) => value !== undefined && value !== '').map(([key, value]) => key + ': ' + escapeHtml(String(value))).join('\n');
 }
