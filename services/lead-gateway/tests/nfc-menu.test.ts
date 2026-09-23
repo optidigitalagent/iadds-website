@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import type { Pool } from 'pg';
-import { ENDPOINT, MENU_VARIANTS, ORIGIN, challenge, parseNfcLead, publicMenuURL, sourcePath, type NfcLead } from '../src/nfc-card/contract.ts';
+import { ENDPOINT, MENU_VARIANTS, ORIGIN, parseNfcLead, publicMenuURL, sourcePath, type NfcLead } from '../src/nfc-card/contract.ts';
 import { quote } from '../src/nfc-card/commerce.ts';
 import { createNfcHandler } from '../src/nfc-card/handler.ts';
 import { formatNfc } from '../src/nfc-card/format.ts';
