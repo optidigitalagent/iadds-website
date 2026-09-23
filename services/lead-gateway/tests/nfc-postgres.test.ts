@@ -45,7 +45,7 @@ test('PostgreSQL 17 NFC integration — no external transports', { skip: !proces
         const outboxBefore = (await upgrade.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [id])).rows[0];
         assert.equal((await migrate(upgrade, true)).applied, false);
         assert.equal((await upgrade.query("SELECT count(*)::int AS n FROM information_schema.columns WHERE table_schema='nfc_card' AND table_name='leads' AND column_name='instagram_url'")).rows[0].n, 0);
-        const applied = await migrate(upgrade); assert.equal(applied.version, '003_instagram_card'); assert.equal(applied.applied, true);
+        const applied = await migrate(upgrade); assert.equal(applied.version, '004_menu_card'); assert.equal(applied.applied, true);
         assert.equal((await migrate(upgrade)).applied, false);
         const after = (await upgrade.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [id])).rows[0];
         assert.deepEqual(Object.fromEntries(Object.keys(before).map(k => [k, after[k]])), before);
@@ -164,7 +164,7 @@ test('PostgreSQL 17 NFC integration — no external transports', { skip: !proces
         assert.equal((await p.query('SELECT count(*)::int AS n FROM nfc_card.leads WHERE idempotency_key=$1',[key])).rows[0].n,0);
         const gateway=createGateway(readConfig({}));assert.equal((await gateway(new Request('http://local/healthz'))).status,200);await p.end();`;
       const child = spawnSync(process.execPath, ['--experimental-strip-types', '--input-type=module', '-e', code], { cwd: new URL('..', import.meta.url), env: { NODE_ENV: 'test', PATH: process.env.PATH, NFC_TEST_DATABASE_URL: url }, encoding: 'utf8', timeout: 10000 });
-      assert.equal(child.status, 0, 'checked-out disconnect must not crash gateway');
+      assert.equal(child.status, 0, 'checked-out disconnect must not crash gateway: ' + child.stderr);
       assert.ok(!child.stdout.includes('Synthetic'));
     });
     await t.test('maximum Unicode UTM accepted by validation persists without permanent 503', async () => {
@@ -188,7 +188,7 @@ test('PostgreSQL 17 NFC integration — no external transports', { skip: !proces
       // New OS process and fresh pool; fake sender only, no gateway credentials inherited.
       const code = `import {database} from './src/nfc-card/store.ts';import {drain} from './src/nfc-card/outbox.ts';const p=database(process.env.NFC_TEST_DATABASE_URL);await drain(p,{telegramEnabled:true,testOnly:false},async()=>({status:'sent'}),()=>{});await p.end();`;
       const child = spawnSync(process.execPath, ['--experimental-strip-types', '--input-type=module', '-e', code], { cwd: new URL('..', import.meta.url), env: { NODE_ENV: 'test', PATH: process.env.PATH, NFC_TEST_DATABASE_URL: url }, encoding: 'utf8' });
-      assert.equal(child.status, 0, 'fresh-process dispatcher failed'); assert.equal((await row(receipt.leadId)).status, 'sent');
+      assert.equal(child.status, 0, 'fresh-process dispatcher failed: ' + child.stderr); assert.equal((await row(receipt.leadId)).status, 'sent');
     });
     await t.test('expired in-flight delivery is reconciled without duplicate resend', async () => {
       const receipt = await save(); await pool.query("UPDATE nfc_card.notification_outbox SET status='sending',attempt_count=1,claimed_at=now()-interval '3 minutes' WHERE lead_id=$1", [receipt.leadId]);
