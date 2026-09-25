@@ -45,7 +45,7 @@ test('Menu 004 upgrades populated Instagram schema and preserves durable outbox 
     const oldRow = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [legacyId])).rows[0];
     assert.equal((await migrate(pool, true)).applied, false);
     assert.equal((await pool.query("SELECT count(*)::int AS n FROM information_schema.columns WHERE table_schema='nfc_card' AND table_name='leads' AND column_name='menu_status'")).rows[0].n, 0);
-    const result = await migrate(pool); assert.equal(result.version, '004_menu_card'); assert.equal(result.applied, true);
+    const result = await migrate(pool); assert.equal(result.version, '005_review_card_3d'); assert.equal(result.applied, true);
     assert.equal((await migrate(pool)).applied, false);
     const after = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [legacyId])).rows[0];
     assert.deepEqual(Object.fromEntries(Object.keys(oldRow).map(key => [key, after[key]])), oldRow);

@@ -7,14 +7,15 @@ export const ORIGIN = 'https://optidigitalagent.github.io';
 export const BASE_PATH = '/nfc-card-website';
 export const ENDPOINT = '/v1/public/leads/nfc-card';
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
-export const PRODUCTS = ['review-card', 'branded-review-card', 'nfc-instagram-card', 'nfc-menu-card'] as const;
+export const PRODUCTS = ['review-card', 'branded-review-card', 'review-card-3d', 'nfc-instagram-card', 'nfc-menu-card'] as const;
 export type Contact = { preferredMethod: 'phone' | 'sms' | 'email' | 'telegram' | 'whatsapp' | 'viber'; phone?: string; email?: string; telegram?: string };
 export interface InstagramDetails { productSchemaVersion: 1; product_id: 'nfc-instagram-card'; sku: 'NFC-IG-READY'; offer: 'ready'; instagramUrl: string; comment?: string; consent: true }
+export interface Review3dDetails { productSchemaVersion: 1; product_id: 'nfc-review-card-3d'; design: 'fixed_shown_design'; google_location_url?: string; comment?: string; consent: true }
 export const MENU_VARIANTS = ['square_100_black', 'square_100_white', 'square_60_black', 'square_60_white', 'round_70_black', 'round_70_white'] as const;
 export type MenuVariant = typeof MENU_VARIANTS[number];
 export type MenuItem = { variant_id: MenuVariant; quantity: number };
 export interface MenuDetails { productSchemaVersion: 1; product_id: 'nfc-menu-card'; intent: 'card_order' | 'menu_consultation'; menu_status: 'existing' | 'needs_development'; menu_url?: string; items: MenuItem[]; comment?: string; consent: true }
-export interface NfcLead { language: 'uk' | 'en'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; instagram?: InstagramDetails; menu?: MenuDetails }
+export interface NfcLead { language: 'uk' | 'en'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails }
 export class NfcError extends Error {
   readonly status: number;
   readonly leadId?: string;
@@ -36,22 +37,25 @@ export function sourcePath(value: unknown): string {
   const raw = text(value, 300)!;
   if (!raw.startsWith(BASE_PATH + '/') || /[%\\]/.test(raw)) invalid();
   const path = raw.split(/[?#]/, 1)[0].replace(/\/$/, '');
-  if (!new RegExp('^' + BASE_PATH + '(?:/en)?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|instagram-card|menu-card)))?$').test(path)) invalid();
+  if (!new RegExp('^' + BASE_PATH + '(?:/en)?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|review-card-3d|instagram-card|menu-card)))?$').test(path)) invalid();
   return path === BASE_PATH ? path + '/' : path;
 }
 export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const instagramFields = ['productSchemaVersion', 'product_id', 'sku', 'offer', 'instagramUrl', 'comment', 'consent'];
   const menuFields = ['intent', 'menu_status', 'menu_url', 'items'];
-  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', ...instagramFields, ...menuFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
+  const review3dFields = ['design', 'google_location_url'];
+  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
   if (!['uk', 'en'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
   const isMenu = input.product === 'nfc-menu-card';
   const consultation = isMenu && input.intent === 'menu_consultation';
   if (!consultation && (typeof input.quantity !== 'number' || !Number.isSafeInteger(input.quantity) || input.quantity < 1 || input.quantity > 10000)) invalid();
   if (consultation && input.quantity !== undefined) invalid();
   const isInstagram = input.product === 'nfc-instagram-card';
-  if (!isInstagram && !isMenu && [...instagramFields, ...menuFields].some(key => key in input)) invalid();
-  if (isInstagram && menuFields.some(key => key in input)) invalid();
-  if (isMenu && ['sku', 'offer', 'instagramUrl', 'selection'].some(key => key in input)) invalid();
+  const isReview3d = input.product === 'review-card-3d';
+  if (!isInstagram && !isMenu && !isReview3d && [...instagramFields, ...menuFields, ...review3dFields].some(key => key in input)) invalid();
+  if (isInstagram && [...menuFields, ...review3dFields].some(key => key in input)) invalid();
+  if (isMenu && ['sku', 'offer', 'instagramUrl', 'selection', ...review3dFields].some(key => key in input)) invalid();
+  if (isReview3d && ['sku', 'offer', 'instagramUrl', 'selection', ...menuFields].some(key => key in input)) invalid();
   let instagram: InstagramDetails | undefined;
   if (isInstagram) {
     if (input.productSchemaVersion !== 1 || input.product_id !== 'nfc-instagram-card' || input.sku !== 'NFC-IG-READY' ||
@@ -60,6 +64,16 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
     const comment = instagramComment(input.comment);
     instagram = { productSchemaVersion: 1, product_id: 'nfc-instagram-card', sku: 'NFC-IG-READY', offer: 'ready', instagramUrl,
       ...(comment ? { comment } : {}), consent: true };
+  }
+  let review3d: Review3dDetails | undefined;
+  if (isReview3d) {
+    if (input.productSchemaVersion !== 1 || input.product_id !== 'nfc-review-card-3d' ||
+        input.design !== 'fixed_shown_design' || input.consent !== true) invalid();
+    const google_location_url = input.google_location_url === undefined || input.google_location_url === '' ? undefined : googleLocationURL(input.google_location_url);
+    const comment = instagramComment(input.comment);
+    if (comment && comment.length > 1000) invalid();
+    review3d = { productSchemaVersion: 1, product_id: 'nfc-review-card-3d', design: 'fixed_shown_design',
+      ...(google_location_url ? { google_location_url } : {}), ...(comment ? { comment } : {}), consent: true };
   }
   let menu: MenuDetails | undefined;
   if (isMenu) {
@@ -98,10 +112,23 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const utm: Record<string, string> = {};
   for (const key of ['source', 'medium', 'campaign', 'term', 'content']) { const val = text(utmInput[key], 100, true); if (val) utm[key] = val; }
   const quantity = consultation ? 0 : input.quantity as number;
-  const selection = isMenu ? undefined : parseSelection(input.selection, String(input.product), quantity);
+  const selection = isMenu || isReview3d ? undefined : parseSelection(input.selection, String(input.product), quantity);
   return { language: input.language as NfcLead['language'], product: input.product as NfcLead['product'], quantity,
     customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}),
-    ...(instagram ? { instagram } : {}), ...(menu ? { menu } : {}) };
+    ...(instagram ? { instagram } : {}), ...(review3d ? { review3d } : {}), ...(menu ? { menu } : {}) };
+}
+// A Google place may be supplied with the request or agreed later. Validate only;
+// never fetch a visitor-supplied URL from the gateway.
+export function googleLocationURL(value: unknown): string {
+  if (typeof value !== 'string' || value.length > 1000 || /[\x00-\x20\x7f\\]/.test(value)) invalid();
+  const authority = value.match(/^https:\/\/([^/?#]+)/i)?.[1];
+  if (!authority || authority.includes(':')) invalid();
+  let url: URL;
+  try { url = new URL(value); } catch { invalid(); }
+  const host = url.hostname.toLowerCase();
+  if (url.protocol !== 'https:' || url.username || url.password || url.port || url.href.length > 1000 ||
+      !(/^([a-z0-9-]+\.)*google\.com$/.test(host) || ['maps.app.goo.gl', 'g.page', 'goo.gl'].includes(host))) invalid();
+  return url.href;
 }
 export function normalizeMenuItems(value: unknown, intent: MenuDetails['intent']): MenuItem[] {
   if (intent === 'menu_consultation') {

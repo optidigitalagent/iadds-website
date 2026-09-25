@@ -45,7 +45,7 @@ test('PostgreSQL 17 NFC integration — no external transports', { skip: !proces
         const outboxBefore = (await upgrade.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [id])).rows[0];
         assert.equal((await migrate(upgrade, true)).applied, false);
         assert.equal((await upgrade.query("SELECT count(*)::int AS n FROM information_schema.columns WHERE table_schema='nfc_card' AND table_name='leads' AND column_name='instagram_url'")).rows[0].n, 0);
-        const applied = await migrate(upgrade); assert.equal(applied.version, '004_menu_card'); assert.equal(applied.applied, true);
+        const applied = await migrate(upgrade); assert.equal(applied.version, '005_review_card_3d'); assert.equal(applied.applied, true);
         assert.equal((await migrate(upgrade)).applied, false);
         const after = (await upgrade.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [id])).rows[0];
         assert.deepEqual(Object.fromEntries(Object.keys(before).map(k => [k, after[k]])), before);

@@ -21,6 +21,13 @@ export function parseSelection(value: unknown, product: string, quantity: number
   return { variant, quantity: count } as Selection;
 }
 export function quote(lead: NfcLead): Quote {
+  if (lead.product === 'review-card-3d') {
+    if (!lead.review3d || !Number.isSafeInteger(lead.quantity) || lead.quantity < 1 || lead.quantity > 10000) throw new NfcError(422, 'invalid_review_3d');
+    const quantity = lead.quantity, unitPrice = 4000, amount = quantity * unitPrice;
+    return { currency: 'UAH', status: 'fixed', quantity, unitPrice, amount, deposit: 200, balance: amount - 200,
+      unitPriceKopecks: unitPrice * 100, amountKopecks: amount * 100, depositKopecks: 20000,
+      balanceKopecks: (amount - 200) * 100, depositIncluded: true };
+  }
   if (lead.product === 'nfc-menu-card') {
     if (!lead.menu) throw new NfcError(422, 'invalid_menu');
     if (lead.menu.intent === 'menu_consultation') return { currency: 'UAH', status: 'consultation', quantity: 0, unitPrice: null,

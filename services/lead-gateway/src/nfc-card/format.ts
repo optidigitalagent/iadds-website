@@ -11,6 +11,13 @@ export function formatNfc(lead: NfcLead, leadId: string, timestamp: string, isTe
   if (lead.instagram) fields.push(['product_schema_version', lead.instagram.productSchemaVersion], ['product_id', lead.instagram.product_id],
     ['sku', lead.instagram.sku], ['offer', lead.instagram.offer], ['instagram_url', lead.instagram.instagramUrl],
     ['consent', String(lead.instagram.consent)], ['comment', lead.instagram.comment]);
+  if (lead.review3d) {
+    fields.push(['product_schema_version', lead.review3d.productSchemaVersion], ['product_id', lead.review3d.product_id],
+      ['design', lead.review3d.design], ['google_location_url', lead.review3d.google_location_url],
+      ['consent', String(lead.review3d.consent)], ['comment', lead.review3d.comment]);
+    if ('unitPrice' in priceQuote) fields.push(['unit_price', priceQuote.unitPrice + ' UAH'],
+      ['deposit', priceQuote.deposit + ' UAH'], ['balance', priceQuote.balance + ' UAH']);
+  }
   if (lead.menu) {
     fields.push(['product_schema_version', lead.menu.productSchemaVersion], ['product_id', lead.menu.product_id],
       ['intent', lead.menu.intent], ['menu_status', lead.menu.menu_status], ['menu_url', lead.menu.menu_url],

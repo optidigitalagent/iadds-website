@@ -94,6 +94,16 @@ For consultation without cards, send `intent:"menu_consultation"`, `menu_status:
 
 Migration `004_menu_card.sql` preserves the immutable 001–003 checksums, adds nullable Menu detail columns and widens the NFC product/quantity checks only for Menu consultation. It retains all Review/Instagram rows and the existing outbox. Apply 004 before running a gateway that accepts Menu; no runtime migration occurs. Local tests upgrade a populated 003 database and use only fake Telegram transport.
 
+### NFC Review Card 3D (additive product schema 1)
+
+The distinct product value is `review-card-3d`. Its request carries top-level `productSchemaVersion:1`, `product_id:"nfc-review-card-3d"`, `design:"fixed_shown_design"`, `consent:true`, a positive integer `quantity` (1–10000), and the common name/contact/source fields. `google_location_url` and `comment` are optional. The 3D request cannot carry Review `selection`, Instagram SKU/profile, Menu fields, logo, color or any client price/quote. Its source pages are `/solutions/review-card-3d` in both locales, plus the existing shared order/contact routes.
+
+The gateway computes 4000 UAH per card for every quantity, without tiers: `amount=quantity×4000`, one included 200 UAH deposit per order, `balance=amount−200`. The durable quote and receipt include the amount, unit price, deposit, balance, kopeck equivalents and `depositIncluded:true`. For quantities 1/2/3 the totals are 4000/8000/12000 and balances 3800/7800/11800. The browser cannot override these values.
+
+The optional Google location URL is syntactically validated as HTTPS on `google.com` or its subdomains, `maps.app.goo.gl`, `g.page`, or `goo.gl`, at most 1000 characters, with no credentials, explicit port, controls or backslash; it is never fetched. The optional comment is at most 1000 characters after normalization. Both fields are part of the canonical idempotency digest, persisted with the lead, reconstructed by the outbox worker and HTML-escaped in the Telegram notification. Absence of a Google URL means the location must be agreed before programming; the gateway does not verify the business point.
+
+Migration `005_review_card_3d.sql` retains all earlier checksums and records, adds only nullable `design` and `google_location_url` columns, and extends the product-specific check to require fixed design, consent and the server quote for 3D. Earlier product rows require null 3D fields. Preflight rolls back the migration; runtime still does not migrate implicitly. Local integration tests upgrade a populated 004 schema, preserve an old Review lead/outbox, then prove 3D save, idempotency, rollback, fake Telegram formatting and SQL constraints without an external transport.
+
 Local verification adds Instagram parser/pricing/format/CORS tests and PostgreSQL upgrade, concurrent idempotency, rollback, durable retry and legacy-row delivery tests. The integration suite creates and drops its own randomly named upgrade database on the isolated local PostgreSQL fixture, so the test role needs `CREATEDB`. No live transport is used. Deployment still uses the existing Railway service, operational flags and secrets; this change creates no additional resource.
 
 ## Database and outbox

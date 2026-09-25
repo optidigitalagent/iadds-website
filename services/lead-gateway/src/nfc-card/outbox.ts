@@ -20,7 +20,8 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
       await client.query('BEGIN');
       const result = await client.query(`SELECT o.id,o.lead_id,o.attempt_count,l.language,l.product,l.quantity,l.customer_name,
         l.phone,l.email,l.telegram,l.preferred_contact,l.source_page,l.utm,l.created_at,l.is_test,l.is_final_test,l.selection,l.price_quote,
-        l.product_schema_version,l.product_id,l.sku,l.offer,l.instagram_url,l.comment,l.consent,l.intent,l.menu_status,l.menu_url,l.items
+        l.product_schema_version,l.product_id,l.sku,l.offer,l.instagram_url,l.comment,l.consent,l.intent,l.menu_status,l.menu_url,l.items,
+        l.design,l.google_location_url
         FROM nfc_card.notification_outbox o JOIN nfc_card.leads l USING(lead_id)
         WHERE o.delivery_enabled AND o.status IN ('pending','retry') AND o.next_attempt_at <= now()
         AND o.attempt_count < $1 AND (NOT l.is_final_test OR o.attempt_count < 1) AND ($2::uuid IS NULL OR (o.lead_id=$2 AND l.is_test))
@@ -37,6 +38,9 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
         sku: row.sku, offer: row.offer, instagramUrl: row.instagram_url, ...(row.comment ? { comment: row.comment } : {}), consent: row.consent } } : {}),
       ...(row.product === 'nfc-menu-card' ? { menu: { productSchemaVersion: row.product_schema_version, product_id: row.product_id,
         intent: row.intent, menu_status: row.menu_status, ...(row.menu_url ? { menu_url: row.menu_url } : {}), items: row.items,
+        ...(row.comment ? { comment: row.comment } : {}), consent: row.consent } } : {}),
+      ...(row.product === 'review-card-3d' ? { review3d: { productSchemaVersion: row.product_schema_version, product_id: row.product_id,
+        design: row.design, ...(row.google_location_url ? { google_location_url: row.google_location_url } : {}),
         ...(row.comment ? { comment: row.comment } : {}), consent: row.consent } } : {}) };
     let outcome: Delivery;
     try { outcome = await send(formatNfc(lead, row.lead_id, row.created_at.toISOString(), row.is_test, row.is_final_test, row.price_quote || undefined)); }
