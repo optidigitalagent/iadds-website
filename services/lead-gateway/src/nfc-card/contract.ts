@@ -15,7 +15,7 @@ export const MENU_VARIANTS = ['square_100_black', 'square_100_white', 'square_60
 export type MenuVariant = typeof MENU_VARIANTS[number];
 export type MenuItem = { variant_id: MenuVariant; quantity: number };
 export interface MenuDetails { productSchemaVersion: 1; product_id: 'nfc-menu-card'; intent: 'card_order' | 'menu_consultation'; menu_status: 'existing' | 'needs_development'; menu_url?: string; items: MenuItem[]; comment?: string; consent: true }
-export interface NfcLead { language: 'uk' | 'en'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails }
+export interface NfcLead { language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails }
 export class NfcError extends Error {
   readonly status: number;
   readonly leadId?: string;
@@ -37,7 +37,7 @@ export function sourcePath(value: unknown): string {
   const raw = text(value, 300)!;
   if (!raw.startsWith(BASE_PATH + '/') || /[%\\]/.test(raw)) invalid();
   const path = raw.split(/[?#]/, 1)[0].replace(/\/$/, '');
-  if (!new RegExp('^' + BASE_PATH + '(?:/en)?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|review-card-3d|instagram-card|menu-card)))?$').test(path)) invalid();
+  if (!new RegExp('^' + BASE_PATH + '(?:/(?:en|pl))?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|review-card-3d|instagram-card|menu-card)))?$').test(path)) invalid();
   return path === BASE_PATH ? path + '/' : path;
 }
 export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
@@ -45,7 +45,7 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const menuFields = ['intent', 'menu_status', 'menu_url', 'items'];
   const review3dFields = ['design', 'google_location_url'];
   const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
-  if (!['uk', 'en'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
+  if (!['uk', 'en', 'pl'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
   const isMenu = input.product === 'nfc-menu-card';
   const consultation = isMenu && input.intent === 'menu_consultation';
   if (!consultation && (typeof input.quantity !== 'number' || !Number.isSafeInteger(input.quantity) || input.quantity < 1 || input.quantity > 10000)) invalid();
