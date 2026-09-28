@@ -15,7 +15,7 @@ export function database(url: string): Pool {
   return pool;
 }
 export async function migrate(pool: Pool, preflight = false): Promise<{ version: string; checksum: string; applied: boolean }> {
-  const versions = ['001_nfc_card', '002_public_commerce', '003_instagram_card', '004_menu_card', '005_review_card_3d', '006_polish_locale'];
+  const versions = ['001_nfc_card', '002_public_commerce', '003_instagram_card', '004_menu_card', '005_review_card_3d', '006_polish_locale', '007_poland_commercial'];
   const migrations = await Promise.all(versions.map(async version => {
     const sql = await readFile(new URL('../../migrations/nfc-card/' + version + '.sql', import.meta.url), 'utf8');
     return { version, sql, checksum: createHash('sha256').update(sql).digest('hex') };

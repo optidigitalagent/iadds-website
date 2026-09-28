@@ -1,12 +1,56 @@
 import { NfcError, object, type NfcLead } from './contract.ts';
+import polandContract from './poland-commerce.json' with { type: 'json' };
 
 export type Selection = { variant: 'standard' | 'branded' | 'bulk' | 'consultation' | 'instagram'; quantity: '1' | '2' | 'more' };
 export type Quote = { currency: 'UAH'; status: 'fixed' | 'custom'; amount: number | null; deposit: 200; depositIncluded: true } |
   { currency: 'UAH'; status: 'fixed' | 'consultation'; quantity: number; unitPrice: number | null; amount: number | null;
     deposit: 200 | null; balance: number | null; unitPriceKopecks: number | null; amountKopecks: number | null;
-    depositKopecks: number | null; balanceKopecks: number | null; depositIncluded: boolean };
+    depositKopecks: number | null; balanceKopecks: number | null; depositIncluded: boolean } |
+  { currency: 'PLN'; status: 'fixed' | 'custom'; amount: number | null; deposit: number; balance: number | null;
+    amountMinor: number | null; depositMinor: number; balanceMinor: number | null; depositIncluded: true } |
+  { currency: 'PLN'; status: 'fixed' | 'consultation'; quantity: number; unitPrice: number | null; amount: number | null;
+    deposit: number | null; balance: number | null; unitPriceMinor: number | null; amountMinor: number | null;
+    depositMinor: number | null; balanceMinor: number | null; depositIncluded: boolean };
 // Accepted Review prices v11 and Instagram ready offer v18: totals include the deposit.
 const prices = { 'review-card': { 1: 1500, 2: 2600 }, 'branded-review-card': { 1: 2000, 2: 3600 }, 'nfc-instagram-card': { 1: 1500, 2: 2600 } };
+export const POLAND_CONTRACT_ID = polandContract.contractId;
+const polishCurrency = polandContract.currency as 'PLN';
+const polishMinorFactor = 10 ** polandContract.minorUnitDigits;
+const polishDeposit = polandContract.deposit.amount;
+const polishPairPrices = {
+  'review-card': polandContract.products['review-card'].fixedPrices,
+  'branded-review-card': polandContract.products['branded-review-card'].fixedPrices,
+  'nfc-instagram-card': polandContract.products['nfc-instagram-card'].fixedPrices,
+};
+function polishDetailed(quantity: number, unitPrice: number | null): Quote {
+  if (unitPrice === null) return { currency: polishCurrency, status: 'consultation', quantity: 0, unitPrice: null,
+    amount: null, deposit: null, balance: null, unitPriceMinor: null, amountMinor: null,
+    depositMinor: null, balanceMinor: null, depositIncluded: false };
+  const amount = quantity * unitPrice, balance = amount - polishDeposit;
+  return { currency: polishCurrency, status: 'fixed', quantity, unitPrice, amount, deposit: polishDeposit, balance,
+    unitPriceMinor: unitPrice * polishMinorFactor, amountMinor: amount * polishMinorFactor,
+    depositMinor: polishDeposit * polishMinorFactor, balanceMinor: balance * polishMinorFactor, depositIncluded: true };
+}
+function quotePolish(lead: NfcLead): Quote {
+  if (lead.product === 'review-card-3d') {
+    if (!lead.review3d || !Number.isSafeInteger(lead.quantity) || lead.quantity < 1 || lead.quantity > 10000) throw new NfcError(422, 'invalid_review_3d');
+    return polishDetailed(lead.quantity, polandContract.products['review-card-3d'].unitPrice);
+  }
+  if (lead.product === 'nfc-menu-card') {
+    if (!lead.menu) throw new NfcError(422, 'invalid_menu');
+    if (lead.menu.intent === 'menu_consultation') return polishDetailed(0, null);
+    const tier = polandContract.products['nfc-menu-card'].tiers.find(item => lead.quantity >= item.min && (item.max === null || lead.quantity <= item.max));
+    if (!tier) throw new NfcError(422, 'invalid_menu');
+    return polishDetailed(lead.quantity, tier.unitPrice);
+  }
+  if (lead.product === 'nfc-instagram-card' && (![1, 2].includes(lead.quantity) || lead.selection?.variant !== 'instagram')) throw new NfcError(422, 'invalid_selection');
+  const custom = lead.quantity > 2 || ['bulk', 'consultation'].includes(lead.selection?.variant || '');
+  const amount = custom ? null : polishPairPrices[lead.product][String(lead.quantity) as '1' | '2'];
+  const balance = amount === null ? null : amount - polishDeposit;
+  return { currency: polishCurrency, status: custom ? 'custom' : 'fixed', amount, deposit: polishDeposit, balance,
+    amountMinor: amount === null ? null : amount * polishMinorFactor, depositMinor: polishDeposit * polishMinorFactor,
+    balanceMinor: balance === null ? null : balance * polishMinorFactor, depositIncluded: true };
+}
 export function parseSelection(value: unknown, product: string, quantity: number): Selection | undefined {
   if (value === undefined) {
     if (product === 'nfc-instagram-card') throw new NfcError(422, 'invalid_selection');
@@ -21,6 +65,7 @@ export function parseSelection(value: unknown, product: string, quantity: number
   return { variant, quantity: count } as Selection;
 }
 export function quote(lead: NfcLead): Quote {
+  if (lead.language === 'pl') return quotePolish(lead);
   if (lead.product === 'review-card-3d') {
     if (!lead.review3d || !Number.isSafeInteger(lead.quantity) || lead.quantity < 1 || lead.quantity > 10000) throw new NfcError(422, 'invalid_review_3d');
     const quantity = lead.quantity, unitPrice = 4000, amount = quantity * unitPrice;

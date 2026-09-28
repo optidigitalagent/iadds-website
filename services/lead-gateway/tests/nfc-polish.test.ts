@@ -25,22 +25,23 @@ test('PL source paths, strict language allowlist and canonical prices for all fi
   for (const path of ['/nfc-card-website/pl/unknown', '/nfc-card-website/%70l/order', '/nfc-card-website/pl/../order'])
     assert.throws(() => sourcePath(path));
   const cases = [
-    [{ ...base(), sourcePage: '/nfc-card-website/pl/solutions/review-card' }, 1500],
-    [{ ...base(), product: 'branded-review-card', sourcePage: '/nfc-card-website/pl/solutions/branded-review-card' }, 2000],
+    [{ ...base(), sourcePage: '/nfc-card-website/pl/solutions/review-card' }, 129],
+    [{ ...base(), product: 'branded-review-card', sourcePage: '/nfc-card-website/pl/solutions/branded-review-card' }, 169],
     [{ ...base(), product: 'review-card-3d', productSchemaVersion: 1, product_id: 'nfc-review-card-3d',
-      design: 'fixed_shown_design', consent: true, sourcePage: '/nfc-card-website/pl/solutions/review-card-3d' }, 4000],
+      design: 'fixed_shown_design', consent: true, sourcePage: '/nfc-card-website/pl/solutions/review-card-3d' }, 349],
     [{ ...base(), product: 'nfc-instagram-card', productSchemaVersion: 1, product_id: 'nfc-instagram-card',
       sku: 'NFC-IG-READY', offer: 'ready', instagramUrl: 'https://www.instagram.com/synthetic_pl/', consent: true,
       selection: { variant: 'instagram', quantity: '1' }, contact: { preferredMethod: 'telegram', phone: '+12025550123' },
-      sourcePage: '/nfc-card-website/pl/instagram-card' }, 1500],
+      sourcePage: '/nfc-card-website/pl/instagram-card' }, 129],
     [{ ...base(), product: 'nfc-menu-card', productSchemaVersion: 1, product_id: 'nfc-menu-card', intent: 'card_order',
       menu_status: 'existing', menu_url: 'https://example.invalid/menu', items: [{ variant_id: 'square_100_black', quantity: 1 }],
-      consent: true, sourcePage: '/nfc-card-website/pl/menu-card' }, 1000]
+      consent: true, sourcePage: '/nfc-card-website/pl/menu-card' }, 89]
   ] as const;
   for (const [raw, amount] of cases) {
     const lead = parseNfcLead(raw);
     assert.equal(lead.language, 'pl'); assert.equal(quote(lead).amount, amount);
-    assert.match(formatNfc(lead, randomUUID(), new Date().toISOString()), /language: pl/);
+    assert.equal(quote(lead).currency, 'PLN'); assert.equal(quote(lead).deposit, 20);
+    assert.match(formatNfc(lead, randomUUID(), new Date().toISOString()), /price: \d+ PLN/);
   }
 });
 
@@ -63,7 +64,7 @@ test('PL browser challenge and durable-save receipt use the existing contract wi
   assert.equal(post?.status, 202); assert.equal((await post!.json()).durableSaved, true); assert.equal(saved, 1);
 });
 
-test('PostgreSQL 17 migration 006 preserves populated 005 data and PL survives outbox/fake Telegram',
+test('PostgreSQL 17 migrations 006–007 preserve populated 005 data and PLN survives outbox/fake Telegram',
   { skip: !process.env.NFC_TEST_DATABASE_URL }, async () => {
     const url = process.env.NFC_TEST_DATABASE_URL!, parsed = new URL(url);
     if (!['localhost', '127.0.0.1'].includes(parsed.hostname) || !parsed.pathname.endsWith('_test'))
@@ -91,7 +92,7 @@ test('PostgreSQL 17 migration 006 preserves populated 005 data and PL survives o
       assert.equal((await migrate(pool, true)).applied, false);
       await assert.rejects(persist(pool, parseNfcLead(base()), randomUUID()), /storage_unavailable/);
       const upgrade = await migrate(pool);
-      assert.equal(upgrade.version, '006_polish_locale'); assert.equal(upgrade.applied, true);
+      assert.equal(upgrade.version, '007_poland_commercial'); assert.equal(upgrade.applied, true);
       assert.equal((await migrate(pool)).applied, false);
       assert.deepEqual((await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [oldId])).rows[0], oldLead);
       assert.deepEqual((await pool.query('SELECT * FROM nfc_card.notification_outbox WHERE id=$1', [oldOutboxId])).rows[0], oldOutbox);
@@ -100,14 +101,15 @@ test('PostgreSQL 17 migration 006 preserves populated 005 data and PL survives o
       const lead = parseNfcLead(base()), key = randomUUID();
       const receipts = await Promise.all([1, 2].map(() => persist(pool, lead, key, { isTest: true, deliveryEnabled: true })));
       assert.equal(receipts[0].leadId, receipts[1].leadId);
-      assert.equal(receipts[0].durableSaved, true); assert.equal(receipts[0].quote?.amount, 1500);
+      assert.equal(receipts[0].durableSaved, true); assert.equal(receipts[0].quote?.amount, 129);
+      assert.equal(receipts[0].quote?.currency, 'PLN'); assert.equal(receipts[0].quote?.deposit, 20);
       const saved = (await pool.query('SELECT language,source_page FROM nfc_card.leads WHERE lead_id=$1', [receipts[0].leadId])).rows[0];
       assert.deepEqual(saved, { language: 'pl', source_page: '/nfc-card-website/pl/order' });
       await assert.rejects(pool.query("UPDATE nfc_card.leads SET language='ru' WHERE lead_id=$1", [receipts[0].leadId]));
       await assert.rejects(persist(pool, { ...lead, language: 'en' }, key), /idempotency_conflict/);
       let messages = 0;
       await drain(pool, { telegramEnabled: true, testOnly: false } as never, async message => {
-        messages++; assert.match(message, /language: pl/); assert.match(message, /price: 1500 UAH/);
+        messages++; assert.match(message, /language: pl/); assert.match(message, /price: 129 PLN/);
         assert.match(message, /source_page: \/nfc-card-website\/pl\/order/);
         return { status: 'sent' };
       }, () => {});
