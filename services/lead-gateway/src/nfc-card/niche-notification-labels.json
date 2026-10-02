@@ -1,0 +1,35 @@
+{
+  "uk": {
+    "solution": "Рішення",
+    "base": "Базовий товар",
+    "scenario": "Сценарій",
+    "quantity": "Орієнтовна кількість",
+    "request": "Тип звернення",
+    "request_value": "Безкоштовний перший макет і рекомендації щодо розміщення",
+    "beauty_scenario": "Салон краси: робочі місця / reception",
+    "restaurant_scenario": "Ресторан: столи / разом із рахунком",
+    "quantity_unknown": "Потрібна порада; кількість і сума не погоджені"
+  },
+  "en": {
+    "solution": "Solution",
+    "base": "Base product",
+    "scenario": "Use case",
+    "quantity": "Estimated quantity",
+    "request": "Enquiry type",
+    "request_value": "Free first mockup and placement recommendations",
+    "beauty_scenario": "Beauty salon: treatment stations / reception",
+    "restaurant_scenario": "Restaurant: tables / with the bill",
+    "quantity_unknown": "Advice needed; quantity and total have not been agreed"
+  },
+  "pl": {
+    "solution": "Rozwiązanie",
+    "base": "Produkt bazowy",
+    "scenario": "Zastosowanie",
+    "quantity": "Orientacyjna liczba kart",
+    "request": "Rodzaj zapytania",
+    "request_value": "Pierwsza bezpłatna wizualizacja i propozycja rozmieszczenia",
+    "beauty_scenario": "Salon urody: stanowiska / recepcja",
+    "restaurant_scenario": "Restauracja: stoliki / z rachunkiem",
+    "quantity_unknown": "Potrzebna porada; liczba kart i kwota nie zostały uzgodnione"
+  }
+}

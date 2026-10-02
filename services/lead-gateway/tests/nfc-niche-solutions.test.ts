@@ -12,6 +12,17 @@ import type { NfcConfig } from '../src/nfc-card/config.ts';
 
 const pairs = { 'beauty-review-card': 'beauty_salon', 'restaurant-review-card': 'restaurant' } as const;
 type SolutionId = keyof typeof pairs;
+const approved = {
+  uk: { scenario: 'Сценарій', beauty: 'Салон краси: робочі місця / reception', restaurant: 'Ресторан: столи / разом із рахунком',
+    request: 'Тип звернення: Безкоштовний перший макет і рекомендації щодо розміщення',
+    advice: 'Орієнтовна кількість: Потрібна порада; кількість і сума не погоджені' },
+  en: { scenario: 'Use case', beauty: 'Beauty salon: treatment stations / reception', restaurant: 'Restaurant: tables / with the bill',
+    request: 'Enquiry type: Free first mockup and placement recommendations',
+    advice: 'Estimated quantity: Advice needed; quantity and total have not been agreed' },
+  pl: { scenario: 'Zastosowanie', beauty: 'Salon urody: stanowiska / recepcja', restaurant: 'Restauracja: stoliki / z rachunkiem',
+    request: 'Rodzaj zapytania: Pierwsza bezpłatna wizualizacja i propozycja rozmieszczenia',
+    advice: 'Orientacyjna liczba kart: Potrzebna porada; liczba kart i kwota nie zostały uzgodnione' },
+} as const;
 const payload = (id: SolutionId, language: 'uk' | 'en' | 'pl', mode: '1' | '2' | 'more' | 'advice') => ({
   language, product: 'branded-review-card', ...(mode === 'advice' ? {} : { quantity: mode === 'more' ? 3 : Number(mode) }),
   customerName: 'Synthetic <Niche> QA', contact: { preferredMethod: 'email', email: 'niche-qa@example.invalid' },
@@ -27,12 +38,16 @@ test('niche solution context is strictly allowlisted and locale/route bound', ()
       assert.equal(lead.solution?.solution_id, id);
       assert.equal(lead.solution?.niche, pairs[id]);
       const price = quote(lead);
+      const message = formatNfc(lead, randomUUID(), new Date().toISOString());
+      assert.ok(message.includes(approved[language].scenario + ': ' + approved[language][id === 'beauty-review-card' ? 'beauty' : 'restaurant']));
+      assert.ok(message.includes(approved[language].request));
+      assert.ok(message.includes('public_solution: ' + id));
       assert.equal(price.currency, language === 'pl' ? 'PLN' : 'UAH');
       assert.equal(price.amount, mode === '1' ? language === 'pl' ? 169 : 2000 : mode === '2' ? language === 'pl' ? 299 : 3600 : null);
       if (mode === 'advice') {
         assert.equal(price.status, 'consultation'); assert.equal(price.deposit, null); assert.equal(price.depositIncluded, false);
-        const message = formatNfc(lead, randomUUID(), new Date().toISOString());
         assert.ok(message.includes('quantity_mode: need quantity advice'));
+        assert.ok(message.includes(approved[language].advice));
         assert.ok(!message.includes('\nquantity: 0'));
         assert.ok(!message.includes('\nprice: 2000'));
       }
@@ -86,6 +101,15 @@ test('PostgreSQL niche persistence, idempotency and outbox replay', { skip: !pro
       assert.deepEqual(stored.solution, lead.solution); assert.deepEqual(stored.selection, lead.selection);
       assert.equal(stored.quantity, mode === 'advice' ? 0 : 1);
       assert.deepEqual(stored.price_quote, first.quote);
+      if (mode === '1') {
+        const client = await pool.connect();
+        try {
+          await client.query('BEGIN');
+          await client.query("UPDATE nfc_card.leads SET price_quote=jsonb_set(jsonb_set(price_quote,'{amount}','2101'::jsonb),'{deposit}','21'::jsonb) WHERE lead_id=$1", [first.leadId]);
+          const changed = (await client.query('SELECT price_quote FROM nfc_card.leads WHERE lead_id=$1', [first.leadId])).rows[0].price_quote;
+          assert.equal(changed.amount, 2101); assert.equal(changed.deposit, 21);
+        } finally { await client.query('ROLLBACK'); client.release(); }
+      }
       await assert.rejects(pool.query("UPDATE nfc_card.leads SET solution=jsonb_set(solution,'{niche}','\"unknown\"'::jsonb) WHERE lead_id=$1", [first.leadId]));
       await assert.rejects(pool.query("UPDATE nfc_card.leads SET price_quote=jsonb_set(price_quote,'{amount}','1'::jsonb) WHERE lead_id=$1", [first.leadId]));
       if (mode === 'advice') await assert.rejects(pool.query('UPDATE nfc_card.leads SET quantity=1 WHERE lead_id=$1', [first.leadId]));

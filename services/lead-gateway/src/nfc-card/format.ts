@@ -1,5 +1,6 @@
 import { quote, type Quote } from './commerce.ts';
 import type { NfcLead } from './contract.ts';
+import nicheLabels from './niche-notification-labels.json' with { type: 'json' };
 export function escapeHtml(value: string): string { return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;'); }
 export function formatNfc(lead: NfcLead, leadId: string, timestamp: string, isTest = false, finalTest = false, priceQuote: Quote = quote(lead)): string {
   const money = (amount: number | null) => amount === null ? undefined : amount + ' ' + priceQuote.currency;
@@ -11,8 +12,16 @@ export function formatNfc(lead: NfcLead, leadId: string, timestamp: string, isTe
     ['price', priceQuote.status === 'custom' ? customQuote : priceQuote.status === 'consultation' ? 'consultation only' : money(priceQuote.amount)], ['customer_name', lead.customerName], ['preferred_contact', lead.contact.preferredMethod],
     ['phone', lead.contact.phone], ['email', lead.contact.email], ['telegram', lead.contact.telegram], ['timestamp', timestamp],
     ['source_page', lead.sourcePage], ['utm', Object.keys(lead.utm).length ? JSON.stringify(lead.utm) : undefined]];
-  if (lead.solution) fields.push(['public_solution', lead.solution.solution_id], ['base_physical_product', 'branded-review-card'],
-    ['scenario', lead.solution.niche], ['request_type', lead.solution.request_type]);
+  if (lead.solution) {
+    const labels = nicheLabels[lead.language], beauty = lead.solution.solution_id === 'beauty-review-card';
+    const quantity = lead.selection?.quantity === 'advice' ? labels.quantity_unknown : lead.selection?.quantity === 'more' ? '3+' : String(lead.quantity);
+    fields.push(['public_solution', lead.solution.solution_id], ['base_physical_product', 'branded-review-card'],
+      ['scenario', lead.solution.niche], ['request_type', lead.solution.request_type],
+      [labels.solution, beauty ? 'Beauty Review Card' : 'Restaurant Review Card'],
+      [labels.base, 'Branded Review Card'],
+      [labels.scenario, beauty ? labels.beauty_scenario : labels.restaurant_scenario],
+      [labels.quantity, quantity], [labels.request, labels.request_value]);
+  }
   if (lead.instagram) fields.push(['product_schema_version', lead.instagram.productSchemaVersion], ['product_id', lead.instagram.product_id],
     ['sku', lead.instagram.sku], ['offer', lead.instagram.offer], ['instagram_url', lead.instagram.instagramUrl],
     ['consent', String(lead.instagram.consent)], ['comment', lead.instagram.comment]);
