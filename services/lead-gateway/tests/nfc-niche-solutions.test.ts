@@ -72,9 +72,9 @@ test('niche solution context is strictly allowlisted and locale/route bound', ()
 test('public intake accepts niche context without a number or payment', async () => {
   const secret = randomBytes(32).toString('hex'), now = Date.now(), id = randomUUID();
   const config: NfcConfig = { secret, databaseUrl: '', publicIntake: true, telegramEnabled: false, testOnly: true };
-  let saved;
   const handler = createNfcHandler({} as Pool, config, { now: () => now, log: () => {}, save: async lead => {
-    saved = lead; return { ok: true, source: 'NFC_CARD', leadId: id, durableSaved: true, notificationStatus: 'disabled', quote: quote(lead) };
+    assert.equal(lead.solution?.solution_id, 'restaurant-review-card');
+    return { ok: true, source: 'NFC_CARD', leadId: id, durableSaved: true, notificationStatus: 'disabled', quote: quote(lead) };
   } });
   const source = payload('restaurant-review-card', 'en', 'advice');
   const body = { ...source, website: '', challenge: challenge(secret, source.sourcePage, now - 3000) };
@@ -83,7 +83,6 @@ test('public intake accepts niche context without a number or payment', async ()
   assert.equal(response?.status, 202);
   const receipt = await response!.json();
   assert.equal(receipt.quote.amount, null); assert.equal(receipt.quote.deposit, null);
-  assert.equal(saved?.solution?.solution_id, 'restaurant-review-card');
 });
 
 test('PostgreSQL niche persistence, idempotency and outbox replay', { skip: !process.env.NFC_TEST_DATABASE_URL }, async () => {
