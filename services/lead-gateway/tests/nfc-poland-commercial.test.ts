@@ -122,8 +122,10 @@ test('007 migration preserves a historical PL UAH 3D lead and durable PLN replay
       const before = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [historicalId])).rows[0];
       const oldOutbox = (await pool.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [historicalId])).rows[0];
       assert.equal((await migrate(pool, true)).applied, false);
-      assert.equal((await migrate(pool)).version, '007_poland_commercial');
-      assert.deepEqual((await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [historicalId])).rows[0], before);
+      assert.equal((await migrate(pool)).version, '008_niche_solutions');
+      const after = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [historicalId])).rows[0];
+      assert.deepEqual(Object.fromEntries(Object.keys(before).map(key => [key, after[key]])), before);
+      assert.equal(after.solution, null);
       assert.deepEqual((await pool.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [historicalId])).rows[0], oldOutbox);
       for (const raw of [base(), { ...base(), product: 'branded-review-card' }, instagram(2), threeD(2), menu([2, 2, 2])]) {
         const lead = parseNfcLead(raw), key = randomUUID();

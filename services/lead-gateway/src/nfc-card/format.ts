@@ -6,10 +6,13 @@ export function formatNfc(lead: NfcLead, leadId: string, timestamp: string, isTe
   const customQuote = priceQuote.currency === 'PLN' ? 'custom quote (PLN)' : 'custom quote';
   const fields: [string, string | number | undefined][] = [['source', 'NFC_CARD'], ['lead_id', leadId], ['language', lead.language],
     ['product', lead.selection && ['bulk', 'consultation'].includes(lead.selection.variant) ? lead.selection.variant : lead.product],
-    ['quantity', lead.menu?.intent === 'menu_consultation' ? undefined : lead.selection?.quantity === 'more' ? '3+' : lead.quantity],
+    ['quantity', lead.menu?.intent === 'menu_consultation' || lead.selection?.quantity === 'advice' ? undefined : lead.selection?.quantity === 'more' ? '3+' : lead.quantity],
+    ['quantity_mode', lead.selection?.quantity === 'advice' ? 'need quantity advice' : undefined],
     ['price', priceQuote.status === 'custom' ? customQuote : priceQuote.status === 'consultation' ? 'consultation only' : money(priceQuote.amount)], ['customer_name', lead.customerName], ['preferred_contact', lead.contact.preferredMethod],
     ['phone', lead.contact.phone], ['email', lead.contact.email], ['telegram', lead.contact.telegram], ['timestamp', timestamp],
     ['source_page', lead.sourcePage], ['utm', Object.keys(lead.utm).length ? JSON.stringify(lead.utm) : undefined]];
+  if (lead.solution) fields.push(['public_solution', lead.solution.solution_id], ['base_physical_product', 'branded-review-card'],
+    ['scenario', lead.solution.niche], ['request_type', lead.solution.request_type]);
   if (lead.instagram) fields.push(['product_schema_version', lead.instagram.productSchemaVersion], ['product_id', lead.instagram.product_id],
     ['sku', lead.instagram.sku], ['offer', lead.instagram.offer], ['instagram_url', lead.instagram.instagramUrl],
     ['consent', String(lead.instagram.consent)], ['comment', lead.instagram.comment]);

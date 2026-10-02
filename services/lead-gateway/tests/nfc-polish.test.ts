@@ -92,9 +92,11 @@ test('PostgreSQL 17 migrations 006–007 preserve populated 005 data and PLN sur
       assert.equal((await migrate(pool, true)).applied, false);
       await assert.rejects(persist(pool, parseNfcLead(base()), randomUUID()), /storage_unavailable/);
       const upgrade = await migrate(pool);
-      assert.equal(upgrade.version, '007_poland_commercial'); assert.equal(upgrade.applied, true);
+      assert.equal(upgrade.version, '008_niche_solutions'); assert.equal(upgrade.applied, true);
       assert.equal((await migrate(pool)).applied, false);
-      assert.deepEqual((await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [oldId])).rows[0], oldLead);
+      const after = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [oldId])).rows[0];
+      assert.deepEqual(Object.fromEntries(Object.keys(oldLead).map(key => [key, after[key]])), oldLead);
+      assert.equal(after.solution, null);
       assert.deepEqual((await pool.query('SELECT * FROM nfc_card.notification_outbox WHERE id=$1', [oldOutboxId])).rows[0], oldOutbox);
       for (const version of versions) assert.equal((await pool.query('SELECT checksum FROM nfc_card.schema_migrations WHERE version=$1', [version])).rows[0].checksum,
         checksums.get(version));

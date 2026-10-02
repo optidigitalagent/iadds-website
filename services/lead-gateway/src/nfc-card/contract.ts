@@ -15,7 +15,9 @@ export const MENU_VARIANTS = ['square_100_black', 'square_100_white', 'square_60
 export type MenuVariant = typeof MENU_VARIANTS[number];
 export type MenuItem = { variant_id: MenuVariant; quantity: number };
 export interface MenuDetails { productSchemaVersion: 1; product_id: 'nfc-menu-card'; intent: 'card_order' | 'menu_consultation'; menu_status: 'existing' | 'needs_development'; menu_url?: string; items: MenuItem[]; comment?: string; consent: true }
-export interface NfcLead { language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails }
+export type Solution = { schemaVersion: 1; solution_id: 'beauty-review-card'; niche: 'beauty_salon'; request_type: 'free_first_mockup' } |
+  { schemaVersion: 1; solution_id: 'restaurant-review-card'; niche: 'restaurant'; request_type: 'free_first_mockup' };
+export interface NfcLead { language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; solution?: Solution; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails }
 export class NfcError extends Error {
   readonly status: number;
   readonly leadId?: string;
@@ -37,19 +39,22 @@ export function sourcePath(value: unknown): string {
   const raw = text(value, 300)!;
   if (!raw.startsWith(BASE_PATH + '/') || /[%\\]/.test(raw)) invalid();
   const path = raw.split(/[?#]/, 1)[0].replace(/\/$/, '');
-  if (!new RegExp('^' + BASE_PATH + '(?:/(?:en|pl))?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|review-card-3d|instagram-card|menu-card)))?$').test(path)) invalid();
+  if (!new RegExp('^' + BASE_PATH + '(?:/(?:en|pl))?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|review-card-3d|instagram-card|menu-card|beauty-review-card|restaurant-review-card)))?$').test(path)) invalid();
   return path === BASE_PATH ? path + '/' : path;
 }
 export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const instagramFields = ['productSchemaVersion', 'product_id', 'sku', 'offer', 'instagramUrl', 'comment', 'consent'];
   const menuFields = ['intent', 'menu_status', 'menu_url', 'items'];
   const review3dFields = ['design', 'google_location_url'];
-  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
+  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', 'solution', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
   if (!['uk', 'en', 'pl'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
   const isMenu = input.product === 'nfc-menu-card';
   const consultation = isMenu && input.intent === 'menu_consultation';
-  if (!consultation && (typeof input.quantity !== 'number' || !Number.isSafeInteger(input.quantity) || input.quantity < 1 || input.quantity > 10000)) invalid();
-  if (consultation && input.quantity !== undefined) invalid();
+  const solution = input.solution === undefined ? undefined : parseSolution(input.solution, input.product, input.sourcePage, input.language);
+  if (!solution && /\/solutions\/(?:beauty-review-card|restaurant-review-card)$/.test(sourcePath(input.sourcePage))) invalid();
+  const advice = !!solution && object(input.selection, ['variant', 'quantity']).quantity === 'advice';
+  if (!consultation && !advice && (typeof input.quantity !== 'number' || !Number.isSafeInteger(input.quantity) || input.quantity < 1 || input.quantity > 10000)) invalid();
+  if ((consultation || advice) && input.quantity !== undefined) invalid();
   const isInstagram = input.product === 'nfc-instagram-card';
   const isReview3d = input.product === 'review-card-3d';
   if (!isInstagram && !isMenu && !isReview3d && [...instagramFields, ...menuFields, ...review3dFields].some(key => key in input)) invalid();
@@ -111,11 +116,20 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const utmInput = object(input.utm ?? {}, ['source', 'medium', 'campaign', 'term', 'content']);
   const utm: Record<string, string> = {};
   for (const key of ['source', 'medium', 'campaign', 'term', 'content']) { const val = text(utmInput[key], 100, true); if (val) utm[key] = val; }
-  const quantity = consultation ? 0 : input.quantity as number;
-  const selection = isMenu || isReview3d ? undefined : parseSelection(input.selection, String(input.product), quantity);
+  const quantity = consultation || advice ? 0 : input.quantity as number;
+  const selection = isMenu || isReview3d ? undefined : parseSelection(input.selection, String(input.product), quantity, !!solution);
   return { language: input.language as NfcLead['language'], product: input.product as NfcLead['product'], quantity,
     customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}),
-    ...(instagram ? { instagram } : {}), ...(review3d ? { review3d } : {}), ...(menu ? { menu } : {}) };
+    ...(solution ? { solution } : {}), ...(instagram ? { instagram } : {}), ...(review3d ? { review3d } : {}), ...(menu ? { menu } : {}) };
+}
+function parseSolution(value: unknown, product: unknown, page: unknown, language: unknown): Solution {
+  const input = object(value, ['schemaVersion', 'solution_id', 'niche', 'request_type']);
+  const pairs = { 'beauty-review-card': 'beauty_salon', 'restaurant-review-card': 'restaurant' } as const;
+  if (product !== 'branded-review-card' || input.schemaVersion !== 1 || input.request_type !== 'free_first_mockup' ||
+      !Object.hasOwn(pairs, String(input.solution_id)) || pairs[input.solution_id as keyof typeof pairs] !== input.niche) invalid();
+  const path = sourcePath(page), prefix = BASE_PATH + (language === 'uk' ? '' : '/' + language);
+  if (![prefix + '/solutions/' + input.solution_id, prefix + '/order', prefix + '/contact'].includes(path)) invalid();
+  return { schemaVersion: 1, solution_id: input.solution_id, niche: input.niche, request_type: 'free_first_mockup' } as Solution;
 }
 // A Google place may be supplied with the request or agreed later. Validate only;
 // never fetch a visitor-supplied URL from the gateway.

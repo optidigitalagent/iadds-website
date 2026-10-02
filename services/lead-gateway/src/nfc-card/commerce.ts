@@ -1,8 +1,9 @@
 import { NfcError, object, type NfcLead } from './contract.ts';
 import polandContract from './poland-commerce.json' with { type: 'json' };
 
-export type Selection = { variant: 'standard' | 'branded' | 'bulk' | 'consultation' | 'instagram'; quantity: '1' | '2' | 'more' };
+export type Selection = { variant: 'standard' | 'branded' | 'bulk' | 'consultation' | 'instagram'; quantity: '1' | '2' | 'more' | 'advice' };
 export type Quote = { currency: 'UAH'; status: 'fixed' | 'custom'; amount: number | null; deposit: 200; depositIncluded: true } |
+  { currency: 'UAH' | 'PLN'; status: 'consultation'; amount: null; deposit: null; depositIncluded: false; balance?: null; amountMinor?: null; depositMinor?: null; balanceMinor?: null } |
   { currency: 'UAH'; status: 'fixed' | 'consultation'; quantity: number; unitPrice: number | null; amount: number | null;
     deposit: 200 | null; balance: number | null; unitPriceKopecks: number | null; amountKopecks: number | null;
     depositKopecks: number | null; balanceKopecks: number | null; depositIncluded: boolean } |
@@ -32,6 +33,9 @@ function polishDetailed(quantity: number, unitPrice: number | null): Quote {
     depositMinor: polishDeposit * polishMinorFactor, balanceMinor: balance * polishMinorFactor, depositIncluded: true };
 }
 function quotePolish(lead: NfcLead): Quote {
+  if (lead.solution?.request_type === 'free_first_mockup' && lead.selection?.quantity === 'advice') return {
+    currency: polishCurrency, status: 'consultation', amount: null, deposit: null, balance: null,
+    amountMinor: null, depositMinor: null, balanceMinor: null, depositIncluded: false };
   if (lead.product === 'review-card-3d') {
     if (!lead.review3d || !Number.isSafeInteger(lead.quantity) || lead.quantity < 1 || lead.quantity > 10000) throw new NfcError(422, 'invalid_review_3d');
     return polishDetailed(lead.quantity, polandContract.products['review-card-3d'].unitPrice);
@@ -51,21 +55,24 @@ function quotePolish(lead: NfcLead): Quote {
     amountMinor: amount === null ? null : amount * polishMinorFactor, depositMinor: polishDeposit * polishMinorFactor,
     balanceMinor: balance === null ? null : balance * polishMinorFactor, depositIncluded: true };
 }
-export function parseSelection(value: unknown, product: string, quantity: number): Selection | undefined {
+export function parseSelection(value: unknown, product: string, quantity: number, solution = false): Selection | undefined {
   if (value === undefined) {
     if (product === 'nfc-instagram-card') throw new NfcError(422, 'invalid_selection');
     return;
   }
   const selection = object(value, ['variant', 'quantity']);
   const { variant, quantity: count } = selection;
-  if (!['standard', 'branded', 'bulk', 'consultation', 'instagram'].includes(String(variant)) || !['1', '2', 'more'].includes(String(count)) ||
+  if (!['standard', 'branded', 'bulk', 'consultation', 'instagram'].includes(String(variant)) || !['1', '2', 'more', ...(solution ? ['advice'] : [])].includes(String(count)) ||
       (variant === 'instagram' && count === 'more') ||
-      (variant === 'bulk' && count !== 'more') || product !== (variant === 'instagram' ? 'nfc-instagram-card' : variant === 'branded' ? 'branded-review-card' : 'review-card') ||
-      quantity !== (count === 'more' ? 3 : Number(count))) throw new NfcError(422, 'invalid_selection');
+      (variant === 'bulk' && count !== 'more') || (solution && variant !== 'branded') ||
+      product !== (variant === 'instagram' ? 'nfc-instagram-card' : variant === 'branded' ? 'branded-review-card' : 'review-card') ||
+      quantity !== (count === 'more' ? 3 : count === 'advice' ? 0 : Number(count))) throw new NfcError(422, 'invalid_selection');
   return { variant, quantity: count } as Selection;
 }
 export function quote(lead: NfcLead): Quote {
   if (lead.language === 'pl') return quotePolish(lead);
+  if (lead.solution?.request_type === 'free_first_mockup' && lead.selection?.quantity === 'advice') return {
+    currency: 'UAH', status: 'consultation', amount: null, deposit: null, depositIncluded: false };
   if (lead.product === 'review-card-3d') {
     if (!lead.review3d || !Number.isSafeInteger(lead.quantity) || lead.quantity < 1 || lead.quantity > 10000) throw new NfcError(422, 'invalid_review_3d');
     const quantity = lead.quantity, unitPrice = 4000, amount = quantity * unitPrice;
