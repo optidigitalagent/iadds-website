@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "contractId": "NFC-CARD-BEAUTY-RESTAURANT-MINI-PRICE-v31",
+  "supersedes": [
+    "v30_uah_tier_contract",
+    "v29_branded_price_inheritance"
+  ],
+  "pricingMode": "explicit_supported_pack_quantities_no_interpolation",
+  "locales": {
+    "uk": {
+      "market": "UA",
+      "currency": "UAH"
+    },
+    "en": {
+      "market": "UA",
+      "currency": "UAH"
+    },
+    "pl": {
+      "market": "PL",
+      "currency": "PLN"
+    }
+  },
+  "UA": {
+    "readyMini": {
+      "appliesTo": [
+        "beauty-review-card",
+        "restaurant-review-card"
+      ],
+      "bundles": {
+        "1": {
+          "unitPrice": 900,
+          "total": 900
+        },
+        "2": {
+          "unitPrice": 720,
+          "total": 1440
+        },
+        "4": {
+          "unitPrice": 650,
+          "total": 2600
+        },
+        "10": {
+          "unitPrice": 440,
+          "total": 4400
+        }
+      },
+      "otherQuantities": "individual_quote"
+    },
+    "brandedMini": {
+      "appliesTo": [
+        "branded-beauty-review-card",
+        "branded-restaurant-review-card"
+      ],
+      "bundles": {
+        "1": {
+          "unitPrice": 900,
+          "total": 900
+        },
+        "2": {
+          "unitPrice": 900,
+          "total": 1800
+        },
+        "4": {
+          "unitPrice": 750,
+          "total": 3000
+        },
+        "10": {
+          "unitPrice": 500,
+          "total": 5000
+        }
+      },
+      "otherQuantities": "individual_quote",
+      "mixedApprovedDesignsWithinSameNicheOrder": {
+        "allowed": true,
+        "priceBasis": "total_physical_quantity",
+        "example": {
+          "quantity": 10,
+          "split": [
+            {
+              "design": "A",
+              "quantity": 5
+            },
+            {
+              "design": "B",
+              "quantity": 5
+            }
+          ],
+          "unitPrice": 500,
+          "total": 5000
+        }
+      }
+    },
+    "deposit": {
+      "amount": 200,
+      "currency": "UAH",
+      "frequency": "once_per_confirmed_physical_order",
+      "includedInTotal": true,
+      "freeDesignRequestOrQuote": null
+    }
+  },
+  "PL": {
+    "status": "OPEN_OWNER_DECISION_NO_AUTOMATIC_CONVERSION",
+    "readyMini": "individual_quote",
+    "brandedMini": "individual_quote",
+    "deposit": {
+      "amount": 20,
+      "currency": "PLN",
+      "frequency": "once_per_confirmed_physical_order_after_price_agreement",
+      "includedInTotal": true
+    },
+    "rule": "Do not reuse old 169/299 PLN values for these new Mini contracts and do not convert UAH by exchange rate."
+  },
+  "rules": {
+    "noInterpolation": true,
+    "quantity3": "individual_quote",
+    "quantity5To9": "individual_quote",
+    "quantityAbove10": "individual_quote",
+    "beautyAndRestaurantQuantitiesCombine": false,
+    "readyAndBrandedQuantitiesCombine": false,
+    "browserPriceAuthoritative": false,
+    "serverDerivesPrice": true
+  }
+}

@@ -1,8 +1,12 @@
 import { NfcError, object, type NfcLead } from './contract.ts';
 import polandContract from './poland-commerce.json' with { type: 'json' };
+import miniContract from './mini-price-contract.json' with { type: 'json' };
 
-export type Selection = { variant: 'standard' | 'branded' | 'bulk' | 'consultation' | 'instagram'; quantity: '1' | '2' | 'more' | 'advice' };
+export type Selection = { variant: 'standard' | 'branded' | 'bulk' | 'consultation' | 'instagram'; quantity: '1' | '2' | '4' | '10' | 'more' | 'other' | 'advice' | 'concepts' };
 export type Quote = { currency: 'UAH'; status: 'fixed' | 'custom'; amount: number | null; deposit: 200; depositIncluded: true } |
+  { currency: 'UAH' | 'PLN'; status: 'fixed' | 'custom' | 'consultation'; quantity: number | null;
+    unitPrice: number | null; amount: number | null; deposit: number | null; balance: number | null;
+    depositIncluded: boolean; depositDueNow: false; contractId: 'NFC-CARD-BEAUTY-RESTAURANT-MINI-PRICE-v31' } |
   { currency: 'UAH' | 'PLN'; status: 'consultation'; amount: null; deposit: null; depositIncluded: false; balance?: null; amountMinor?: null; depositMinor?: null; balanceMinor?: null } |
   { currency: 'UAH'; status: 'fixed' | 'consultation'; quantity: number; unitPrice: number | null; amount: number | null;
     deposit: 200 | null; balance: number | null; unitPriceKopecks: number | null; amountKopecks: number | null;
@@ -23,6 +27,21 @@ const polishPairPrices = {
   'branded-review-card': polandContract.products['branded-review-card'].fixedPrices,
   'nfc-instagram-card': polandContract.products['nfc-instagram-card'].fixedPrices,
 };
+export const MINI_CONTRACT_ID = miniContract.contractId as 'NFC-CARD-BEAUTY-RESTAURANT-MINI-PRICE-v31';
+function quoteMini(lead: NfcLead): Quote {
+  if (lead.product !== 'nfc-review-card-mini' || lead.solution?.schemaVersion !== 2) throw new NfcError(422, 'invalid_mini');
+  const context = lead.solution, currency = lead.language === 'pl' ? 'PLN' : 'UAH';
+  const base = { currency, quantity: lead.quantity || null, unitPrice: null, amount: null, deposit: null, balance: null,
+    depositIncluded: false, depositDueNow: false, contractId: MINI_CONTRACT_ID } as const;
+  if (context.quantity_mode === 'advice' || context.quantity_mode === 'free_design_concepts') return { ...base, status: 'consultation' };
+  if (context.quantity_mode === 'custom_quote' || lead.language === 'pl') return { ...base, status: 'custom' };
+  const bundles = context.design_mode === 'ready' ? miniContract.UA.readyMini.bundles : miniContract.UA.brandedMini.bundles;
+  const bundle = bundles[String(lead.quantity) as keyof typeof bundles];
+  if (!bundle) throw new NfcError(422, 'invalid_mini_quantity');
+  const deposit = miniContract.UA.deposit.amount;
+  return { ...base, status: 'fixed', quantity: lead.quantity, unitPrice: bundle.unitPrice, amount: bundle.total,
+    deposit, balance: bundle.total - deposit, depositIncluded: true };
+}
 function polishDetailed(quantity: number, unitPrice: number | null): Quote {
   if (unitPrice === null) return { currency: polishCurrency, status: 'consultation', quantity: 0, unitPrice: null,
     amount: null, deposit: null, balance: null, unitPriceMinor: null, amountMinor: null,
@@ -33,7 +52,8 @@ function polishDetailed(quantity: number, unitPrice: number | null): Quote {
     depositMinor: polishDeposit * polishMinorFactor, balanceMinor: balance * polishMinorFactor, depositIncluded: true };
 }
 function quotePolish(lead: NfcLead): Quote {
-  if (lead.solution?.request_type === 'free_first_mockup' && lead.selection?.quantity === 'advice') return {
+  if (lead.product === 'nfc-review-card-mini') return quoteMini(lead);
+  if (lead.solution?.schemaVersion === 1 && lead.solution.request_type === 'free_first_mockup' && lead.selection?.quantity === 'advice') return {
     currency: polishCurrency, status: 'consultation', amount: null, deposit: null, balance: null,
     amountMinor: null, depositMinor: null, balanceMinor: null, depositIncluded: false };
   if (lead.product === 'review-card-3d') {
@@ -70,8 +90,9 @@ export function parseSelection(value: unknown, product: string, quantity: number
   return { variant, quantity: count } as Selection;
 }
 export function quote(lead: NfcLead): Quote {
+  if (lead.product === 'nfc-review-card-mini') return quoteMini(lead);
   if (lead.language === 'pl') return quotePolish(lead);
-  if (lead.solution?.request_type === 'free_first_mockup' && lead.selection?.quantity === 'advice') return {
+  if (lead.solution?.schemaVersion === 1 && lead.solution.request_type === 'free_first_mockup' && lead.selection?.quantity === 'advice') return {
     currency: 'UAH', status: 'consultation', amount: null, deposit: null, depositIncluded: false };
   if (lead.product === 'review-card-3d') {
     if (!lead.review3d || !Number.isSafeInteger(lead.quantity) || lead.quantity < 1 || lead.quantity > 10000) throw new NfcError(422, 'invalid_review_3d');

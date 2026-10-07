@@ -7,12 +7,12 @@ export function formatNfc(lead: NfcLead, leadId: string, timestamp: string, isTe
   const customQuote = priceQuote.currency === 'PLN' ? 'custom quote (PLN)' : 'custom quote';
   const fields: [string, string | number | undefined][] = [['source', 'NFC_CARD'], ['lead_id', leadId], ['language', lead.language],
     ['product', lead.selection && ['bulk', 'consultation'].includes(lead.selection.variant) ? lead.selection.variant : lead.product],
-    ['quantity', lead.menu?.intent === 'menu_consultation' || lead.selection?.quantity === 'advice' ? undefined : lead.selection?.quantity === 'more' ? '3+' : lead.quantity],
-    ['quantity_mode', lead.selection?.quantity === 'advice' ? 'need quantity advice' : undefined],
+    ['quantity', lead.menu?.intent === 'menu_consultation' || lead.selection?.quantity === 'advice' || lead.selection?.quantity === 'concepts' ? undefined : lead.selection?.quantity === 'more' ? '3+' : lead.quantity],
+    ['quantity_mode', lead.solution?.schemaVersion === 2 ? lead.solution.quantity_mode : lead.selection?.quantity === 'advice' ? 'need quantity advice' : undefined],
     ['price', priceQuote.status === 'custom' ? customQuote : priceQuote.status === 'consultation' ? 'consultation only' : money(priceQuote.amount)], ['customer_name', lead.customerName], ['preferred_contact', lead.contact.preferredMethod],
     ['phone', lead.contact.phone], ['email', lead.contact.email], ['telegram', lead.contact.telegram], ['timestamp', timestamp],
     ['source_page', lead.sourcePage], ['utm', Object.keys(lead.utm).length ? JSON.stringify(lead.utm) : undefined]];
-  if (lead.solution) {
+  if (lead.solution?.schemaVersion === 1) {
     const labels = nicheLabels[lead.language], beauty = lead.solution.solution_id === 'beauty-review-card';
     const quantity = lead.selection?.quantity === 'advice' ? labels.quantity_unknown : lead.selection?.quantity === 'more' ? '3+' : String(lead.quantity);
     fields.push(['public_solution', lead.solution.solution_id], ['base_physical_product', 'branded-review-card'],
@@ -21,6 +21,20 @@ export function formatNfc(lead: NfcLead, leadId: string, timestamp: string, isTe
       [labels.base, 'Branded Review Card'],
       [labels.scenario, beauty ? labels.beauty_scenario : labels.restaurant_scenario],
       [labels.quantity, quantity], [labels.request, labels.request_value]);
+  }
+  if (lead.solution?.schemaVersion === 2) {
+    const context = lead.solution;
+    const names = { 'beauty-review-card': 'Beauty Review Card Mini',
+      'branded-beauty-review-card': 'Branded Beauty Review Card Mini',
+      'restaurant-review-card': 'Restaurant Review Card Mini',
+      'branded-restaurant-review-card': 'Branded Restaurant Review Card Mini' };
+    fields.push(['product_family', context.product_family], ['public_solution', context.solution_id],
+      ['public_product', names[context.solution_id]], ['niche', context.niche], ['design_mode', context.design_mode],
+      ['design_split_note', context.design_split_note], ['logo_note', context.brand_inputs?.logo_note],
+      ['website_or_instagram', context.brand_inputs?.website_or_instagram], ['style_note', context.brand_inputs?.style_note],
+      ['unit_price', 'depositDueNow' in priceQuote && priceQuote.unitPrice !== null ? money(priceQuote.unitPrice) : undefined],
+      ['deposit_after_confirmation', 'depositDueNow' in priceQuote && priceQuote.deposit !== null ? money(priceQuote.deposit) : undefined],
+      ['deposit_due_now', 'false']);
   }
   if (lead.instagram) fields.push(['product_schema_version', lead.instagram.productSchemaVersion], ['product_id', lead.instagram.product_id],
     ['sku', lead.instagram.sku], ['offer', lead.instagram.offer], ['instagram_url', lead.instagram.instagramUrl],

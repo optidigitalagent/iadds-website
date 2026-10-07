@@ -91,7 +91,7 @@ test('PostgreSQL niche persistence, idempotency and outbox replay', { skip: !pro
   if (!['localhost', '127.0.0.1'].includes(parsed.hostname) || !parsed.pathname.endsWith('_test')) throw new Error('isolated_local_test_database_required');
   const pool = database(url), ids: string[] = [];
   try {
-    assert.equal((await migrate(pool)).version, '008_niche_solutions');
+    assert.equal((await migrate(pool)).version, '009_mini_products');
     for (const id of Object.keys(pairs) as SolutionId[]) for (const language of ['uk', 'pl'] as const) {
       const mode = id === 'beauty-review-card' ? '1' : 'advice';
       const lead = parseNfcLead(payload(id, language, mode)), key = randomUUID();
@@ -116,9 +116,9 @@ test('PostgreSQL niche persistence, idempotency and outbox replay', { skip: !pro
       const changed = parseNfcLead(payload(id === 'beauty-review-card' ? 'restaurant-review-card' : 'beauty-review-card', language, mode));
       await assert.rejects(persist(pool, changed, key), { status: 409, message: 'idempotency_conflict' });
     }
-    const config: NfcConfig = { secret: randomBytes(32).toString('hex'), databaseUrl: url, publicIntake: false, telegramEnabled: true, testOnly: false };
+    const config: NfcConfig = { secret: randomBytes(32).toString('hex'), databaseUrl: url, publicIntake: false, telegramEnabled: true, testOnly: true };
     const sent: string[] = [];
-    await drain(pool, config, async text => { sent.push(text); return { status: 'sent' }; }, () => {});
+    for (const id of ids) await drain(pool, { ...config, testLeadId: id }, async text => { sent.push(text); return { status: 'sent' }; }, () => {});
     assert.equal(sent.length, 4);
     for (const text of sent) {
       assert.ok(text.includes('base_physical_product: branded-review-card'));

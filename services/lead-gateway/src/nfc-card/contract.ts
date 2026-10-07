@@ -7,7 +7,7 @@ export const ORIGIN = 'https://optidigitalagent.github.io';
 export const BASE_PATH = '/nfc-card-website';
 export const ENDPOINT = '/v1/public/leads/nfc-card';
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
-export const PRODUCTS = ['review-card', 'branded-review-card', 'review-card-3d', 'nfc-instagram-card', 'nfc-menu-card'] as const;
+export const PRODUCTS = ['review-card', 'branded-review-card', 'review-card-3d', 'nfc-instagram-card', 'nfc-menu-card', 'nfc-review-card-mini'] as const;
 export type Contact = { preferredMethod: 'phone' | 'sms' | 'email' | 'telegram' | 'whatsapp' | 'viber'; phone?: string; email?: string; telegram?: string };
 export interface InstagramDetails { productSchemaVersion: 1; product_id: 'nfc-instagram-card'; sku: 'NFC-IG-READY'; offer: 'ready'; instagramUrl: string; comment?: string; consent: true }
 export interface Review3dDetails { productSchemaVersion: 1; product_id: 'nfc-review-card-3d'; design: 'fixed_shown_design'; google_location_url?: string; comment?: string; consent: true }
@@ -15,8 +15,14 @@ export const MENU_VARIANTS = ['square_100_black', 'square_100_white', 'square_60
 export type MenuVariant = typeof MENU_VARIANTS[number];
 export type MenuItem = { variant_id: MenuVariant; quantity: number };
 export interface MenuDetails { productSchemaVersion: 1; product_id: 'nfc-menu-card'; intent: 'card_order' | 'menu_consultation'; menu_status: 'existing' | 'needs_development'; menu_url?: string; items: MenuItem[]; comment?: string; consent: true }
-export type Solution = { schemaVersion: 1; solution_id: 'beauty-review-card'; niche: 'beauty_salon'; request_type: 'free_first_mockup' } |
+export type LegacySolution = { schemaVersion: 1; solution_id: 'beauty-review-card'; niche: 'beauty_salon'; request_type: 'free_first_mockup' } |
   { schemaVersion: 1; solution_id: 'restaurant-review-card'; niche: 'restaurant'; request_type: 'free_first_mockup' };
+export type MiniSolution = { schemaVersion: 2; product_family: 'nfc-review-card-mini';
+  solution_id: 'beauty-review-card' | 'branded-beauty-review-card' | 'restaurant-review-card' | 'branded-restaurant-review-card';
+  niche: 'beauty' | 'restaurant'; design_mode: 'ready' | 'branded';
+  quantity_mode: 'fixed_bundle' | 'custom_quote' | 'advice' | 'free_design_concepts'; design_split_note?: string;
+  brand_inputs?: { logo_note?: string; website_or_instagram?: string; style_note?: string } };
+export type Solution = LegacySolution | MiniSolution;
 export interface NfcLead { language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; solution?: Solution; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails }
 export class NfcError extends Error {
   readonly status: number;
@@ -39,7 +45,7 @@ export function sourcePath(value: unknown): string {
   const raw = text(value, 300)!;
   if (!raw.startsWith(BASE_PATH + '/') || /[%\\]/.test(raw)) invalid();
   const path = raw.split(/[?#]/, 1)[0].replace(/\/$/, '');
-  if (!new RegExp('^' + BASE_PATH + '(?:/(?:en|pl))?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|review-card-3d|instagram-card|menu-card|beauty-review-card|restaurant-review-card)))?$').test(path)) invalid();
+  if (!new RegExp('^' + BASE_PATH + '(?:/(?:en|pl))?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|review-card-3d|instagram-card|menu-card|beauty-review-card|branded-beauty-review-card|restaurant-review-card|branded-restaurant-review-card)))?$').test(path)) invalid();
   return path === BASE_PATH ? path + '/' : path;
 }
 export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
@@ -51,10 +57,17 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const isMenu = input.product === 'nfc-menu-card';
   const consultation = isMenu && input.intent === 'menu_consultation';
   const solution = input.solution === undefined ? undefined : parseSolution(input.solution, input.product, input.sourcePage, input.language);
-  if (!solution && /\/solutions\/(?:beauty-review-card|restaurant-review-card)$/.test(sourcePath(input.sourcePage))) invalid();
-  const advice = !!solution && object(input.selection, ['variant', 'quantity']).quantity === 'advice';
+  if (!solution && /\/solutions\/(?:branded-)?(?:beauty|restaurant)-review-card$/.test(sourcePath(input.sourcePage))) invalid();
+  const mini = solution?.schemaVersion === 2;
+  const advice = (solution?.schemaVersion === 1 && object(input.selection, ['variant', 'quantity']).quantity === 'advice') ||
+    (mini && ['advice', 'free_design_concepts'].includes(solution.quantity_mode));
   if (!consultation && !advice && (typeof input.quantity !== 'number' || !Number.isSafeInteger(input.quantity) || input.quantity < 1 || input.quantity > 10000)) invalid();
   if ((consultation || advice) && input.quantity !== undefined) invalid();
+  if (mini) {
+    const supported = [1, 2, 4, 10].includes(input.quantity as number);
+    if ((solution.quantity_mode === 'fixed_bundle' && (input.language === 'pl' || !supported)) ||
+        (solution.quantity_mode === 'custom_quote' && input.language !== 'pl' && supported)) invalid();
+  }
   const isInstagram = input.product === 'nfc-instagram-card';
   const isReview3d = input.product === 'review-card-3d';
   if (!isInstagram && !isMenu && !isReview3d && [...instagramFields, ...menuFields, ...review3dFields].some(key => key in input)) invalid();
@@ -117,19 +130,58 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const utm: Record<string, string> = {};
   for (const key of ['source', 'medium', 'campaign', 'term', 'content']) { const val = text(utmInput[key], 100, true); if (val) utm[key] = val; }
   const quantity = consultation || advice ? 0 : input.quantity as number;
-  const selection = isMenu || isReview3d ? undefined : parseSelection(input.selection, String(input.product), quantity, !!solution);
+  const selection = mini ? parseMiniSelection(input.selection, solution, quantity) : isMenu || isReview3d ? undefined :
+    parseSelection(input.selection, String(input.product), quantity, solution?.schemaVersion === 1);
   return { language: input.language as NfcLead['language'], product: input.product as NfcLead['product'], quantity,
     customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}),
     ...(solution ? { solution } : {}), ...(instagram ? { instagram } : {}), ...(review3d ? { review3d } : {}), ...(menu ? { menu } : {}) };
 }
 function parseSolution(value: unknown, product: unknown, page: unknown, language: unknown): Solution {
+  if (value && typeof value === 'object' && !Array.isArray(value) && (value as Record<string, unknown>).schemaVersion === 2)
+    return parseMiniSolution(value, product, page, language);
   const input = object(value, ['schemaVersion', 'solution_id', 'niche', 'request_type']);
   const pairs = { 'beauty-review-card': 'beauty_salon', 'restaurant-review-card': 'restaurant' } as const;
   if (product !== 'branded-review-card' || input.schemaVersion !== 1 || input.request_type !== 'free_first_mockup' ||
       !Object.hasOwn(pairs, String(input.solution_id)) || pairs[input.solution_id as keyof typeof pairs] !== input.niche) invalid();
   const path = sourcePath(page), prefix = BASE_PATH + (language === 'uk' ? '' : '/' + language);
   if (![prefix + '/solutions/' + input.solution_id, prefix + '/order', prefix + '/contact'].includes(path)) invalid();
-  return { schemaVersion: 1, solution_id: input.solution_id, niche: input.niche, request_type: 'free_first_mockup' } as Solution;
+  return { schemaVersion: 1, solution_id: input.solution_id, niche: input.niche, request_type: 'free_first_mockup' } as LegacySolution;
+}
+function parseMiniSolution(value: unknown, product: unknown, page: unknown, language: unknown): MiniSolution {
+  const input = object(value, ['schemaVersion', 'product_family', 'solution_id', 'niche', 'design_mode', 'quantity_mode', 'design_split_note', 'brand_inputs']);
+  const variants = {
+    'beauty-review-card': ['beauty', 'ready'], 'branded-beauty-review-card': ['beauty', 'branded'],
+    'restaurant-review-card': ['restaurant', 'ready'], 'branded-restaurant-review-card': ['restaurant', 'branded'],
+  } as const;
+  if (product !== 'nfc-review-card-mini' || input.product_family !== 'nfc-review-card-mini' ||
+      !Object.hasOwn(variants, String(input.solution_id))) invalid();
+  const [niche, designMode] = variants[input.solution_id as keyof typeof variants];
+  if (input.niche !== niche || input.design_mode !== designMode ||
+      !['fixed_bundle', 'custom_quote', 'advice', 'free_design_concepts'].includes(String(input.quantity_mode)) ||
+      (input.quantity_mode === 'free_design_concepts' && designMode !== 'branded')) invalid();
+  const path = sourcePath(page), prefix = BASE_PATH + (language === 'uk' ? '' : '/' + language);
+  if (![prefix + '/solutions/' + input.solution_id, prefix + '/order', prefix + '/contact'].includes(path)) invalid();
+  const note = text(input.design_split_note, 300, true);
+  if (note && designMode !== 'branded') invalid();
+  let brandInputs: MiniSolution['brand_inputs'];
+  if (input.brand_inputs !== undefined) {
+    if (designMode !== 'branded') invalid();
+    const raw = object(input.brand_inputs, ['logo_note', 'website_or_instagram', 'style_note']);
+    const logo_note = text(raw.logo_note, 300, true), website_or_instagram = text(raw.website_or_instagram, 300, true),
+      style_note = text(raw.style_note, 300, true);
+    if (logo_note || website_or_instagram || style_note) brandInputs = { ...(logo_note ? { logo_note } : {}),
+      ...(website_or_instagram ? { website_or_instagram } : {}), ...(style_note ? { style_note } : {}) };
+  }
+  return { schemaVersion: 2, product_family: 'nfc-review-card-mini', solution_id: input.solution_id as MiniSolution['solution_id'],
+    niche, design_mode: designMode, quantity_mode: input.quantity_mode as MiniSolution['quantity_mode'],
+    ...(note ? { design_split_note: note } : {}), ...(brandInputs ? { brand_inputs: brandInputs } : {}) };
+}
+function parseMiniSelection(value: unknown, solution: MiniSolution, quantity: number): Selection {
+  const input = object(value, ['variant', 'quantity']);
+  const count = solution.quantity_mode === 'advice' ? 'advice' : solution.quantity_mode === 'free_design_concepts' ? 'concepts' :
+    [1, 2, 4, 10].includes(quantity) ? String(quantity) : 'other';
+  if (input.variant !== (solution.design_mode === 'ready' ? 'standard' : 'branded') || input.quantity !== count) invalid();
+  return { variant: input.variant, quantity: count } as Selection;
 }
 // A Google place may be supplied with the request or agreed later. Validate only;
 // never fetch a visitor-supplied URL from the gateway.
