@@ -4,7 +4,7 @@ import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import type { Pool } from 'pg';
 import { challenge, ENDPOINT, ORIGIN, parseNfcLead, type MiniSolution } from '../src/nfc-card/contract.ts';
-import { MINI_CONTRACT_ID, quote } from '../src/nfc-card/commerce.ts';
+import { MINI_CONTRACT_ID, quote, type Quote } from '../src/nfc-card/commerce.ts';
 import { createNfcHandler } from '../src/nfc-card/handler.ts';
 import { formatNfc } from '../src/nfc-card/format.ts';
 import { drain } from '../src/nfc-card/outbox.ts';
@@ -20,6 +20,11 @@ const solutions = {
 } as const;
 type Id = keyof typeof solutions;
 type Mode = MiniSolution['quantity_mode'];
+type MiniQuote = Extract<Quote, { contractId: typeof MINI_CONTRACT_ID }>;
+function assertMiniQuote(value: Quote): asserts value is MiniQuote {
+  assert.ok('contractId' in value, 'Mini quote contract expected');
+  assert.equal(value.contractId, MINI_CONTRACT_ID);
+}
 const input = (id: Id, language: 'uk' | 'en' | 'pl', mode: Mode, count?: number) => {
   const [niche, design_mode, variant] = solutions[id];
   return { language, product: 'nfc-review-card-mini', ...(count === undefined ? {} : { quantity: count }),
@@ -47,6 +52,7 @@ test('Mini v31 exact UA/EN packs use contract values and one deferred order depo
     for (const count of [1, 2, 4, 10] as const) {
       const lead = parseNfcLead(input(id, language, 'fixed_bundle', count));
       const quoted = quote(lead), expected = bundles[String(count) as keyof typeof bundles];
+      assertMiniQuote(quoted);
       assert.equal(quoted.currency, 'UAH'); assert.equal(quoted.status, 'fixed');
       assert.equal(quoted.unitPrice, expected.unitPrice); assert.equal(quoted.amount, expected.total);
       assert.equal(quoted.deposit, 200); assert.equal(quoted.depositIncluded, true);
@@ -60,6 +66,7 @@ test('Mini v31 exact UA/EN packs use contract values and one deferred order depo
     }
     for (const count of [3, 5, 9, 11]) {
       const quoted = quote(parseNfcLead(input(id, language, 'custom_quote', count)));
+      assertMiniQuote(quoted);
       assert.equal(quoted.status, 'custom'); assert.equal(quoted.amount, null); assert.equal(quoted.deposit, null);
       assert.equal(quoted.depositDueNow, false);
     }
@@ -70,6 +77,7 @@ test('Mini PL is quote-only; free concepts and advice never create purchase or d
   for (const id of Object.keys(solutions) as Id[]) {
     for (const count of [1, 2, 3, 4, 5, 9, 10, 11]) {
       const quoted = quote(parseNfcLead(input(id, 'pl', 'custom_quote', count)));
+      assertMiniQuote(quoted);
       assert.equal(quoted.currency, 'PLN'); assert.equal(quoted.status, 'custom');
       assert.equal(quoted.unitPrice, null); assert.equal(quoted.amount, null); assert.equal(quoted.deposit, null);
       assert.equal(quoted.depositDueNow, false);
