@@ -114,6 +114,6 @@ test('Review callers retain optional selection and exact legacy NFC formatting w
     assert.throws(() => parseNfcLead({ ...input, [key]: payload()[key as keyof ReturnType<typeof payload>] }));
   }
   assert.throws(() => parseNfcLead({ ...input, selection: { variant: 'instagram', quantity: '2' } }));
-  for (const [product, amount] of [['review-card', 2600], ['branded-review-card', 3600]] as const) assert.equal(quote(parseNfcLead({ ...input, product })).amount, amount);
+  for (const [product, amount] of [['review-card', 2600], ['branded-review-card', 2600]] as const) assert.equal(quote(parseNfcLead({ ...input, product })).amount, amount);
   for (const variant of ['bulk', 'consultation']) assert.equal(quote(parseNfcLead({ ...input, quantity: 3, selection: { variant, quantity: 'more' } })).status, 'custom');
 });

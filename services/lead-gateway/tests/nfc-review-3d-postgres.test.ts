@@ -37,7 +37,7 @@ test('Review 3D 005 upgrades populated schema; save, outbox and fake Telegram pr
       const outboxBefore = (await pool.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [oldId])).rows[0];
       assert.equal((await migrate(pool, true)).applied, false);
       assert.equal((await pool.query("SELECT count(*)::int AS n FROM information_schema.columns WHERE table_schema='nfc_card' AND table_name='leads' AND column_name='design'")).rows[0].n, 0);
-      const upgrade = await migrate(pool); assert.equal(upgrade.version, '009_mini_products'); assert.equal(upgrade.applied, true);
+      const upgrade = await migrate(pool); assert.equal(upgrade.version, '010_v33_price_truth'); assert.equal(upgrade.applied, true);
       assert.equal((await migrate(pool)).applied, false);
       const after = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [oldId])).rows[0];
       assert.deepEqual(Object.fromEntries(Object.keys(before).map(key => [key, after[key]])), before);

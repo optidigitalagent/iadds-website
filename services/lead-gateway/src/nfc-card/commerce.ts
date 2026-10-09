@@ -6,7 +6,7 @@ export type Selection = { variant: 'standard' | 'branded' | 'bulk' | 'consultati
 export type Quote = { currency: 'UAH'; status: 'fixed' | 'custom'; amount: number | null; deposit: 200; depositIncluded: true } |
   { currency: 'UAH' | 'PLN'; status: 'fixed' | 'custom' | 'consultation'; quantity: number | null;
     unitPrice: number | null; amount: number | null; deposit: number | null; balance: number | null;
-    depositIncluded: boolean; depositDueNow: false; contractId: 'NFC-CARD-BEAUTY-RESTAURANT-MINI-PRICE-v31' } |
+    depositIncluded: boolean; depositDueNow: false; contractId: 'NFC-CARD-CONTENT-TRUTH-PRICE-v33' } |
   { currency: 'UAH' | 'PLN'; status: 'consultation'; amount: null; deposit: null; depositIncluded: false; balance?: null; amountMinor?: null; depositMinor?: null; balanceMinor?: null } |
   { currency: 'UAH'; status: 'fixed' | 'consultation'; quantity: number; unitPrice: number | null; amount: number | null;
     deposit: 200 | null; balance: number | null; unitPriceKopecks: number | null; amountKopecks: number | null;
@@ -17,7 +17,7 @@ export type Quote = { currency: 'UAH'; status: 'fixed' | 'custom'; amount: numbe
     deposit: number | null; balance: number | null; unitPriceMinor: number | null; amountMinor: number | null;
     depositMinor: number | null; balanceMinor: number | null; depositIncluded: boolean };
 // Accepted Review prices v11 and Instagram ready offer v18: totals include the deposit.
-const prices = { 'review-card': { 1: 1500, 2: 2600 }, 'branded-review-card': { 1: 2000, 2: 3600 }, 'nfc-instagram-card': { 1: 1500, 2: 2600 } };
+const prices = { 'review-card': { 1: 1500, 2: 2600 }, 'branded-review-card': { 1: 2000, 2: 2600 }, 'nfc-instagram-card': { 1: 1500, 2: 2600 } };
 export const POLAND_CONTRACT_ID = polandContract.contractId;
 const polishCurrency = polandContract.currency as 'PLN';
 const polishMinorFactor = 10 ** polandContract.minorUnitDigits;
@@ -27,15 +27,16 @@ const polishPairPrices = {
   'branded-review-card': polandContract.products['branded-review-card'].fixedPrices,
   'nfc-instagram-card': polandContract.products['nfc-instagram-card'].fixedPrices,
 };
-export const MINI_CONTRACT_ID = miniContract.contractId as 'NFC-CARD-BEAUTY-RESTAURANT-MINI-PRICE-v31';
+export const MINI_CONTRACT_ID = miniContract.contractId as 'NFC-CARD-CONTENT-TRUTH-PRICE-v33';
 function quoteMini(lead: NfcLead): Quote {
   if (lead.product !== 'nfc-review-card-mini' || lead.solution?.schemaVersion !== 2) throw new NfcError(422, 'invalid_mini');
   const context = lead.solution, currency = lead.language === 'pl' ? 'PLN' : 'UAH';
   const base = { currency, quantity: lead.quantity || null, unitPrice: null, amount: null, deposit: null, balance: null,
     depositIncluded: false, depositDueNow: false, contractId: MINI_CONTRACT_ID } as const;
   if (context.quantity_mode === 'advice' || context.quantity_mode === 'free_design_concepts') return { ...base, status: 'consultation' };
-  if (context.quantity_mode === 'custom_quote' || lead.language === 'pl') return { ...base, status: 'custom' };
-  const bundles = context.design_mode === 'ready' ? miniContract.UA.readyMini.bundles : miniContract.UA.brandedMini.bundles;
+  if (context.quantity_mode === 'custom_quote' || lead.language === 'pl' || context.niche === 'restaurant' || ![1, 2].includes(lead.quantity))
+    return { ...base, status: 'custom' };
+  const bundles = context.design_mode === 'ready' ? miniContract.UA.beautyReadyMini.bundles : miniContract.UA.brandedBeautyMini.bundles;
   const bundle = bundles[String(lead.quantity) as keyof typeof bundles];
   if (!bundle) throw new NfcError(422, 'invalid_mini_quantity');
   const deposit = miniContract.UA.deposit.amount;

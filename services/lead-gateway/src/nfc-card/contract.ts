@@ -64,9 +64,12 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   if (!consultation && !advice && (typeof input.quantity !== 'number' || !Number.isSafeInteger(input.quantity) || input.quantity < 1 || input.quantity > 10000)) invalid();
   if ((consultation || advice) && input.quantity !== undefined) invalid();
   if (mini) {
-    const supported = [1, 2, 4, 10].includes(input.quantity as number);
-    if ((solution.quantity_mode === 'fixed_bundle' && (input.language === 'pl' || !supported)) ||
-        (solution.quantity_mode === 'custom_quote' && input.language !== 'pl' && supported)) invalid();
+    const legacyFixedSelection = [1, 2, 4, 10].includes(input.quantity as number);
+    const approvedFixedPrice = input.language !== 'pl' && solution.niche === 'beauty' && [1, 2].includes(input.quantity as number);
+    // Accept old v31 fixed selections during the gateway-first rollout, but quote
+    // unsupported Beauty quantities and every Restaurant quantity individually.
+    if ((solution.quantity_mode === 'fixed_bundle' && (input.language === 'pl' || !legacyFixedSelection)) ||
+        (solution.quantity_mode === 'custom_quote' && approvedFixedPrice)) invalid();
   }
   const isInstagram = input.product === 'nfc-instagram-card';
   const isReview3d = input.product === 'review-card-3d';

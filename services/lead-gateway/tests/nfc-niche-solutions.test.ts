@@ -43,7 +43,7 @@ test('niche solution context is strictly allowlisted and locale/route bound', ()
       assert.ok(message.includes(approved[language].request));
       assert.ok(message.includes('public_solution: ' + id));
       assert.equal(price.currency, language === 'pl' ? 'PLN' : 'UAH');
-      assert.equal(price.amount, mode === '1' ? language === 'pl' ? 169 : 2000 : mode === '2' ? language === 'pl' ? 299 : 3600 : null);
+      assert.equal(price.amount, mode === '1' ? language === 'pl' ? 169 : 2000 : mode === '2' ? language === 'pl' ? 299 : 2600 : null);
       if (mode === 'advice') {
         assert.equal(price.status, 'consultation'); assert.equal(price.deposit, null); assert.equal(price.depositIncluded, false);
         assert.ok(message.includes('quantity_mode: need quantity advice'));
@@ -91,7 +91,7 @@ test('PostgreSQL niche persistence, idempotency and outbox replay', { skip: !pro
   if (!['localhost', '127.0.0.1'].includes(parsed.hostname) || !parsed.pathname.endsWith('_test')) throw new Error('isolated_local_test_database_required');
   const pool = database(url), ids: string[] = [];
   try {
-    assert.equal((await migrate(pool)).version, '009_mini_products');
+    assert.equal((await migrate(pool)).version, '010_v33_price_truth');
     for (const id of Object.keys(pairs) as SolutionId[]) for (const language of ['uk', 'pl'] as const) {
       const mode = id === 'beauty-review-card' ? '1' : 'advice';
       const lead = parseNfcLead(payload(id, language, mode)), key = randomUUID();

@@ -131,7 +131,7 @@ test('NFC Telegram transport retries only confirmed rejection and never ambiguou
 
 test('NFC commerce intent preserves 3+ and consultation without trusting a price', async () => {
   const { quote } = await import('../src/nfc-card/commerce.ts');
-  for (const [product, expected] of [['review-card',[1500,2600]],['branded-review-card',[2000,3600]]] as const) {
+  for (const [product, expected] of [['review-card',[1500,2600]],['branded-review-card',[2000,2600]]] as const) {
     for (const quantity of [1,2]) assert.equal(quote(parseNfcLead({...payload(),product,quantity})).amount,expected[quantity-1]);
   }
   for (const variant of ['standard','branded','bulk','consultation']) {

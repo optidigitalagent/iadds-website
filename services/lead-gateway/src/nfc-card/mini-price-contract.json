@@ -1,7 +1,8 @@
 {
   "schemaVersion": 1,
-  "contractId": "NFC-CARD-BEAUTY-RESTAURANT-MINI-PRICE-v31",
+  "contractId": "NFC-CARD-CONTENT-TRUTH-PRICE-v33",
   "supersedes": [
+    "NFC-CARD-BEAUTY-RESTAURANT-MINI-PRICE-v31",
     "v30_uah_tier_contract",
     "v29_branded_price_inheritance"
   ],
@@ -21,75 +22,40 @@
     }
   },
   "UA": {
-    "readyMini": {
+    "beautyReadyMini": {
       "appliesTo": [
-        "beauty-review-card",
-        "restaurant-review-card"
+        "beauty-review-card"
       ],
       "bundles": {
         "1": {
-          "unitPrice": 900,
-          "total": 900
+          "unitPrice": 800,
+          "total": 800
         },
         "2": {
-          "unitPrice": 720,
-          "total": 1440
-        },
-        "4": {
-          "unitPrice": 650,
-          "total": 2600
-        },
-        "10": {
-          "unitPrice": 440,
-          "total": 4400
+          "unitPrice": 700,
+          "total": 1400
         }
       },
       "otherQuantities": "individual_quote"
     },
-    "brandedMini": {
+    "brandedBeautyMini": {
       "appliesTo": [
-        "branded-beauty-review-card",
-        "branded-restaurant-review-card"
+        "branded-beauty-review-card"
       ],
       "bundles": {
         "1": {
-          "unitPrice": 900,
-          "total": 900
+          "unitPrice": 800,
+          "total": 800
         },
         "2": {
-          "unitPrice": 900,
-          "total": 1800
-        },
-        "4": {
-          "unitPrice": 750,
-          "total": 3000
-        },
-        "10": {
-          "unitPrice": 500,
-          "total": 5000
+          "unitPrice": 800,
+          "total": 1600
         }
       },
-      "otherQuantities": "individual_quote",
-      "mixedApprovedDesignsWithinSameNicheOrder": {
-        "allowed": true,
-        "priceBasis": "total_physical_quantity",
-        "example": {
-          "quantity": 10,
-          "split": [
-            {
-              "design": "A",
-              "quantity": 5
-            },
-            {
-              "design": "B",
-              "quantity": 5
-            }
-          ],
-          "unitPrice": 500,
-          "total": 5000
-        }
-      }
+      "otherQuantities": "individual_quote"
     },
+    "restaurantReadyMini": { "appliesTo": ["restaurant-review-card"], "allQuantities": "individual_quote" },
+    "brandedRestaurantMini": { "appliesTo": ["branded-restaurant-review-card"], "allQuantities": "individual_quote" },
     "deposit": {
       "amount": 200,
       "currency": "UAH",
@@ -112,9 +78,8 @@
   },
   "rules": {
     "noInterpolation": true,
-    "quantity3": "individual_quote",
-    "quantity5To9": "individual_quote",
-    "quantityAbove10": "individual_quote",
+    "beautyQuantity3AndAbove": "individual_quote",
+    "restaurantAllQuantities": "individual_quote",
     "beautyAndRestaurantQuantitiesCombine": false,
     "readyAndBrandedQuantitiesCombine": false,
     "browserPriceAuthoritative": false,
