@@ -30,6 +30,29 @@ test('NFC contact method requirements and optional omissions', () => {
   const lead = parseNfcLead({ ...payload(), contact: { preferredMethod: 'email', email: ' QA@EXAMPLE.INVALID ' } });
   assert.equal(lead.contact.email, 'qa@example.invalid'); assert.equal(lead.contact.phone, undefined);
 });
+test('request notice is scoped to answering the enquiry and keeps phone-only Review forms valid', () => {
+  const versioned = parseNfcLead({ ...payload(), consent: true, formVersion: 'NFC-CARD-FORM-V34',
+    privacyNoticeVersion: 'NFC-CARD-PRIVACY-V34' });
+  assert.equal(versioned.contact.email, undefined);
+  assert.deepEqual(versioned.notice, { consent: true, formVersion: 'NFC-CARD-FORM-V34', privacyNoticeVersion: 'NFC-CARD-PRIVACY-V34', capture: 'trusted_signed_intake' });
+  assert.throws(() => parseNfcLead({ ...payload(), formVersion: 'NFC-CARD-FORM-V34' }));
+  assert.throws(() => parseNfcLead({ ...payload(), consent: false, formVersion: 'NFC-CARD-FORM-V34', privacyNoticeVersion: 'NFC-CARD-PRIVACY-V34' }));
+});
+test('authenticated inbound feed has no browser access and returns only one bounded read page', async () => {
+  const readSecret = randomBytes(32).toString('hex'), at = '1720000000', now = Number(at) * 1000;
+  const path = '/v1/internal/nfc-card/leads?afterAt=1970-01-01T00%3A00%3A00.000Z&afterId=00000000-0000-0000-0000-000000000000';
+  let reads = 0;
+  const handler = createNfcHandler(noPool, { ...config, inboundReadSecret: readSecret }, { now: () => now, log: quiet,
+    read: async () => { reads++; return [{ lead_id: randomUUID(), created_at: '2026-10-12T10:00:00.000Z', source: 'NFC_CARD' }]; } });
+  const signature = createHmac('sha256', readSecret).update(at + '.' + path).digest('hex');
+  const headers = { 'x-nfc-sync-ts': at, 'x-nfc-sync-signature': signature };
+  assert.equal((await handler(new Request('http://local' + path)))!.status, 401);
+  assert.equal((await handler(new Request('http://local' + path, { headers: { ...headers, Origin: ORIGIN } })))!.status, 401);
+  assert.equal((await handler(new Request('http://local' + path, { headers: { ...headers, 'x-nfc-sync-signature': '0'.repeat(64) } })))!.status, 401);
+  const result = (await handler(new Request('http://local' + path, { headers })))!;
+  assert.equal(result.status, 200); assert.equal((await result.json()).items.length, 1); assert.equal(reads, 1);
+  assert.equal(result.headers.get('Access-Control-Allow-Origin'), null);
+});
 test('challenge enforces age, signature and exact path without client secret', () => {
   const path = '/nfc-card-website/order', t = challenge(secret, path, 10000);
   verifyChallenge(secret, t, path, 12000);

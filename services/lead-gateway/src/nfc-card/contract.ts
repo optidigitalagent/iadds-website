@@ -23,7 +23,7 @@ export type MiniSolution = { schemaVersion: 2; product_family: 'nfc-review-card-
   quantity_mode: 'fixed_bundle' | 'custom_quote' | 'advice' | 'free_design_concepts'; design_split_note?: string;
   brand_inputs?: { logo_note?: string; website_or_instagram?: string; style_note?: string } };
 export type Solution = LegacySolution | MiniSolution;
-export interface NfcLead { language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; solution?: Solution; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails }
+export interface NfcLead { language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; solution?: Solution; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails; notice?: { formVersion: string; privacyNoticeVersion: string; consent: true; capture: 'submitted_form_consent_flag' | 'trusted_signed_intake' } }
 export class NfcError extends Error {
   readonly status: number;
   readonly leadId?: string;
@@ -49,10 +49,10 @@ export function sourcePath(value: unknown): string {
   return path === BASE_PATH ? path + '/' : path;
 }
 export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
-  const instagramFields = ['productSchemaVersion', 'product_id', 'sku', 'offer', 'instagramUrl', 'comment', 'consent'];
+  const instagramFields = ['productSchemaVersion', 'product_id', 'sku', 'offer', 'instagramUrl', 'comment'];
   const menuFields = ['intent', 'menu_status', 'menu_url', 'items'];
   const review3dFields = ['design', 'google_location_url'];
-  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', 'solution', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
+  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', 'solution', 'consent', 'formVersion', 'privacyNoticeVersion', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
   if (!['uk', 'en', 'pl'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
   const isMenu = input.product === 'nfc-menu-card';
   const consultation = isMenu && input.intent === 'menu_consultation';
@@ -74,6 +74,11 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const isInstagram = input.product === 'nfc-instagram-card';
   const isReview3d = input.product === 'review-card-3d';
   if (!isInstagram && !isMenu && !isReview3d && [...instagramFields, ...menuFields, ...review3dFields].some(key => key in input)) invalid();
+  const hasNotice = input.formVersion !== undefined || input.privacyNoticeVersion !== undefined;
+  if (hasNotice && (input.consent !== true || !/^NFC-CARD-FORM-V[0-9]{1,3}$/.test(String(input.formVersion)) ||
+      !/^NFC-CARD-PRIVACY-V[0-9]{1,3}$/.test(String(input.privacyNoticeVersion)))) invalid();
+  if (!hasNotice && input.consent !== undefined && input.consent !== true) invalid();
+  if (!hasNotice && input.consent === true && !isInstagram && !isMenu && !isReview3d) invalid();
   if (isInstagram && [...menuFields, ...review3dFields].some(key => key in input)) invalid();
   if (isMenu && ['sku', 'offer', 'instagramUrl', 'selection', ...review3dFields].some(key => key in input)) invalid();
   if (isReview3d && ['sku', 'offer', 'instagramUrl', 'selection', ...menuFields].some(key => key in input)) invalid();
@@ -137,7 +142,9 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
     parseSelection(input.selection, String(input.product), quantity, solution?.schemaVersion === 1);
   return { language: input.language as NfcLead['language'], product: input.product as NfcLead['product'], quantity,
     customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}),
-    ...(solution ? { solution } : {}), ...(instagram ? { instagram } : {}), ...(review3d ? { review3d } : {}), ...(menu ? { menu } : {}) };
+    ...(solution ? { solution } : {}), ...(instagram ? { instagram } : {}), ...(review3d ? { review3d } : {}), ...(menu ? { menu } : {}),
+    ...(hasNotice ? { notice: { formVersion: String(input.formVersion), privacyNoticeVersion: String(input.privacyNoticeVersion), consent: true as const,
+      capture: publicRequest ? 'submitted_form_consent_flag' as const : 'trusted_signed_intake' as const } } : {}) };
 }
 function parseSolution(value: unknown, product: unknown, page: unknown, language: unknown): Solution {
   if (value && typeof value === 'object' && !Array.isArray(value) && (value as Record<string, unknown>).schemaVersion === 2)

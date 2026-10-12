@@ -1,9 +1,9 @@
-import { createHash } from 'node:crypto';
+import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import type { Pool } from 'pg';
 import { verifyLeadSignature } from '../contract.ts';
 import type { NfcConfig } from './config.ts';
 import { ENDPOINT, ORIGIN, UUID, NfcError, challenge, parseNfcLead, sourcePath, verifyChallenge } from './contract.ts';
-import { persist, type Receipt } from './store.ts';
+import { inboundRows, persist, type Receipt } from './store.ts';
 import { quote } from './commerce.ts';
 import { nfcLog } from './logger.ts';
 
@@ -23,7 +23,8 @@ async function body(request: Request): Promise<Uint8Array> {
   return Buffer.concat(chunks, length);
 }
 export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?: () => number; log?: (line: string) => void;
-  save?: (lead: ReturnType<typeof parseNfcLead>, key: string, enabled: boolean) => Promise<Receipt> } = {}) {
+  save?: (lead: ReturnType<typeof parseNfcLead>, key: string, enabled: boolean) => Promise<Receipt>;
+  read?: (afterAt: string, afterId: string) => Promise<Record<string, unknown>[]> } = {}) {
   const now = options.now ?? Date.now;
   const rates = new Map<string, { count: number; until: number }>();
   function consume(key: string, limit: number) {
@@ -34,7 +35,8 @@ export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?:
   }
   return async (request: Request): Promise<Response | undefined> => {
     const url = new URL(request.url), signed = url.pathname === '/v1/leads' && request.headers.get('x-lead-source') === 'NFC_CARD';
-    if (!signed && url.pathname !== ENDPOINT && url.pathname !== ENDPOINT + '/challenge') return;
+    const inboundFeed = url.pathname === '/v1/internal/nfc-card/leads';
+    if (!signed && !inboundFeed && url.pathname !== ENDPOINT && url.pathname !== ENDPOINT + '/challenge') return;
     const origin = request.headers.get('origin'), browser = !signed;
     const headers = new Headers({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Vary': 'Origin' });
     if (browser && origin === ORIGIN) {
@@ -45,6 +47,20 @@ export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?:
     }
     const respond = (status: number, payload: unknown) => Response.json(payload, { status, headers });
     try {
+      if (inboundFeed) {
+        if (!config.inboundReadSecret) return respond(404, { code: 'not_found' });
+        if (request.method !== 'GET' || origin || [...url.searchParams.keys()].some(key => !['afterAt', 'afterId'].includes(key))) return respond(401, { code: 'unauthorized' });
+        const at = request.headers.get('x-nfc-sync-ts') || '';
+        const signature = request.headers.get('x-nfc-sync-signature') || '';
+        const expected = createHmac('sha256', config.inboundReadSecret).update(at + '.' + url.pathname + url.search).digest('hex');
+        if (!/^\d{10}$/.test(at) || Math.abs(Math.floor(now() / 1000) - Number(at)) > 300 ||
+            !/^[a-f0-9]{64}$/.test(signature) || !timingSafeEqual(Buffer.from(signature, 'hex'), Buffer.from(expected, 'hex'))) return respond(401, { code: 'unauthorized' });
+        const afterAt = url.searchParams.get('afterAt') || '1970-01-01T00:00:00.000Z';
+        const afterId = url.searchParams.get('afterId') || '00000000-0000-0000-0000-000000000000';
+        if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/.test(afterAt) || !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(afterId)) return respond(422, { code: 'invalid_cursor' });
+        const items = await (options.read ? options.read(afterAt, afterId) : inboundRows(pool, afterAt, afterId));
+        return respond(200, { items, next: items.length ? { afterAt: items.at(-1)!.created_at, afterId: items.at(-1)!.lead_id } : null });
+      }
       if (browser && origin !== ORIGIN) throw new NfcError(403, 'origin_not_allowed');
       if (browser && request.method === 'OPTIONS') {
         const method = request.headers.get('access-control-request-method');

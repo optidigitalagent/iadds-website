@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
-import { database, migrate, persist } from '../src/nfc-card/store.ts';
+import { database, inboundRows, migrate, persist } from '../src/nfc-card/store.ts';
 import { createNfcHandler } from '../src/nfc-card/handler.ts';
 import { ORIGIN, ENDPOINT, challenge, parseNfcLead } from '../src/nfc-card/contract.ts';
 import { drain } from '../src/nfc-card/outbox.ts';
@@ -45,7 +45,7 @@ test('PostgreSQL 17 NFC integration — no external transports', { skip: !proces
         const outboxBefore = (await upgrade.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [id])).rows[0];
         assert.equal((await migrate(upgrade, true)).applied, false);
         assert.equal((await upgrade.query("SELECT count(*)::int AS n FROM information_schema.columns WHERE table_schema='nfc_card' AND table_name='leads' AND column_name='instagram_url'")).rows[0].n, 0);
-        const applied = await migrate(upgrade); assert.equal(applied.version, '010_v33_price_truth'); assert.equal(applied.applied, true);
+        const applied = await migrate(upgrade); assert.equal(applied.version, '011_inbound_notice'); assert.equal(applied.applied, true);
         assert.equal((await migrate(upgrade)).applied, false);
         const after = (await upgrade.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [id])).rows[0];
         assert.deepEqual(Object.fromEntries(Object.keys(before).map(k => [k, after[k]])), before);
@@ -76,6 +76,24 @@ test('PostgreSQL 17 NFC integration — no external transports', { skip: !proces
       assert.deepEqual(tables.rows.map(x => x.tablename).sort(), ['leads', 'notification_outbox', 'schema_migrations']);
       const indexes = await pool.query("SELECT indexname FROM pg_indexes WHERE schemaname='nfc_card'");
       assert.ok(indexes.rows.some(x => x.indexname === 'nfc_card_outbox_due'));
+    });
+    await t.test('phone and messenger form saves notice evidence once and appears in the read feed', async () => {
+      const candidate = parseNfcLead({ language: 'uk', product: 'review-card', quantity: 2,
+        customerName: 'Synthetic inbound QA', contact: { preferredMethod: 'viber', phone: '+12025550123' },
+        sourcePage: '/nfc-card-website/order', consent: true, formVersion: 'NFC-CARD-FORM-V34',
+        privacyNoticeVersion: 'NFC-CARD-PRIVACY-V34', selection: { variant: 'standard', quantity: '2' } }, true);
+      const key = randomUUID(), first = await persist(pool, candidate, key, { deliveryEnabled: false });
+      ids.push(first.leadId);
+      const again = await persist(pool, candidate, key, { deliveryEnabled: false });
+      assert.equal(again.leadId, first.leadId);
+      const stored = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [first.leadId])).rows[0];
+      assert.equal(stored.email, null); assert.equal(stored.phone, '+12025550123');
+      assert.equal(stored.form_version, 'NFC-CARD-FORM-V34');
+      assert.equal(stored.processing_evidence.scope, 'REQUEST_SCOPED_RESPONSE');
+      assert.equal(stored.processing_evidence.emailMarketingPermission, false);
+      const feed = await inboundRows(pool, '1970-01-01T00:00:00.000Z', '00000000-0000-0000-0000-000000000000');
+      assert.equal(feed.filter(row => row.lead_id === first.leadId).length, 1);
+      assert.equal((await pool.query('SELECT count(*)::int AS n FROM nfc_card.notification_outbox WHERE lead_id=$1', [first.leadId])).rows[0].n, 1);
     });
     await t.test('Instagram Pages intake commits complete data once; a fresh worker formats durable fields and retries safely', async () => {
       for (const quantity of [1, 2]) {

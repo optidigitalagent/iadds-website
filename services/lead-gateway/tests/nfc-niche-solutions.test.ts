@@ -91,7 +91,7 @@ test('PostgreSQL niche persistence, idempotency and outbox replay', { skip: !pro
   if (!['localhost', '127.0.0.1'].includes(parsed.hostname) || !parsed.pathname.endsWith('_test')) throw new Error('isolated_local_test_database_required');
   const pool = database(url), ids: string[] = [];
   try {
-    assert.equal((await migrate(pool)).version, '010_v33_price_truth');
+    assert.equal((await migrate(pool)).version, '011_inbound_notice');
     for (const id of Object.keys(pairs) as SolutionId[]) for (const language of ['uk', 'pl'] as const) {
       const mode = id === 'beauty-review-card' ? '1' : 'advice';
       const lead = parseNfcLead(payload(id, language, mode)), key = randomUUID();

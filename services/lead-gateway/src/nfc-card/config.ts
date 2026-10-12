@@ -1,5 +1,5 @@
 import { UUID } from './contract.ts';
-export interface NfcConfig { secret: string; databaseUrl: string; publicIntake: boolean; telegramEnabled: boolean; testOnly: boolean; testLeadId?: string; finalTestKey?: string }
+export interface NfcConfig { secret: string; databaseUrl: string; publicIntake: boolean; telegramEnabled: boolean; testOnly: boolean; testLeadId?: string; finalTestKey?: string; inboundReadSecret?: string }
 export function readNfcConfig(env: Record<string, string | undefined> = process.env): NfcConfig | undefined {
   const secret = env.LEAD_SOURCE_NFC_CARD_SECRET;
   if (!secret && !env.NFC_DATABASE_URL) return;
@@ -12,7 +12,8 @@ export function readNfcConfig(env: Record<string, string | undefined> = process.
   const testOnly = env.NFC_TELEGRAM_MODE !== 'live', telegramEnabled = env.NFC_TELEGRAM_ENABLED === 'true';
   if (telegramEnabled && testOnly && !UUID.test(env.NFC_TELEGRAM_TEST_LEAD_ID || '')) throw new Error('invalid_nfc_configuration');
   if (env.NFC_FINAL_TEST_KEY && !UUID.test(env.NFC_FINAL_TEST_KEY)) throw new Error('invalid_nfc_configuration');
+  if (env.NFC_INBOUND_READ_SECRET && (Buffer.byteLength(env.NFC_INBOUND_READ_SECRET) < 32 || env.NFC_INBOUND_READ_SECRET === secret || env.NFC_INBOUND_READ_SECRET === env.LEAD_SOURCE_IADDS_SECRET)) throw new Error('invalid_nfc_configuration');
   const url = new URL(env.NFC_DATABASE_URL);
   if (!['postgres:', 'postgresql:'].includes(url.protocol) || (env.NODE_ENV === 'production' && !url.hostname.endsWith('.railway.internal'))) throw new Error('invalid_nfc_configuration');
-  return { secret, databaseUrl: env.NFC_DATABASE_URL, publicIntake: env.NFC_PUBLIC_INTAKE_ENABLED === 'true', telegramEnabled, testOnly, testLeadId: env.NFC_TELEGRAM_TEST_LEAD_ID, finalTestKey: env.NFC_FINAL_TEST_KEY };
+  return { secret, databaseUrl: env.NFC_DATABASE_URL, publicIntake: env.NFC_PUBLIC_INTAKE_ENABLED === 'true', telegramEnabled, testOnly, testLeadId: env.NFC_TELEGRAM_TEST_LEAD_ID, finalTestKey: env.NFC_FINAL_TEST_KEY, inboundReadSecret: env.NFC_INBOUND_READ_SECRET };
 }

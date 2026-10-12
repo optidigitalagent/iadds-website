@@ -161,7 +161,7 @@ test('Mini PostgreSQL migration, persistence, idempotency and fake outbox', { sk
   if (!['localhost', '127.0.0.1'].includes(parsed.hostname) || !parsed.pathname.endsWith('_test')) throw new Error('isolated_local_test_database_required');
   const pool = database(url), ids: string[] = [];
   try {
-    assert.equal((await migrate(pool)).version, '010_v33_price_truth');
+    assert.equal((await migrate(pool)).version, '011_inbound_notice');
     for (const id of Object.keys(solutions) as Id[]) {
       const language = id.startsWith('branded') ? 'pl' : 'uk';
       const mode = 'custom_quote';
@@ -288,7 +288,7 @@ test('010 upgrades populated v31 schema without rewriting historical leads or ou
     const miniBefore = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [miniLeadId])).rows[0];
     const miniOutboxBefore = (await pool.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [miniLeadId])).rows[0];
     assert.equal((await migrate(pool, true)).applied, false);
-    assert.equal((await migrate(pool)).version, '010_v33_price_truth');
+    assert.equal((await migrate(pool)).version, '011_inbound_notice');
     const after = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [leadId])).rows[0];
     assert.deepEqual(Object.fromEntries(Object.keys(before).map(field => [field, after[field]])), before);
     assert.equal(after.mini_context, null);
