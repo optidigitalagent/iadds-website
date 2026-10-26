@@ -17,7 +17,7 @@ test('email proposal is explicit, exact and scoped; legacy messenger remains val
  for(const patch of [{requested:false},{intent:'newsletter'},{niche:'unapproved'},{businessName:'bad\nname'},{businessUrl:'http://localhost/private'}])
   assert.throws(()=>parseNfcLead({...input(),emailProposal:{...input().emailProposal,...patch}},true));
  assert.throws(()=>parseNfcLead({...input(),contact:{preferredMethod:'telegram',phone:'+380671234567'}},true));
- const {emailProposal,...legacy}=input();
+ const legacy={...input(),emailProposal:undefined};
  assert.equal(parseNfcLead({...legacy,contact:{preferredMethod:'telegram',phone:'+380671234567'}},true).contact.preferredMethod,'telegram');
 });
 test('isolated PostgreSQL persists exact basis and feed, idempotency never creates permission', {skip:!process.env.NFC_TEST_DATABASE_URL},async()=>{
