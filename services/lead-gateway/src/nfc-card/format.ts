@@ -12,6 +12,7 @@ export function formatNfc(lead: NfcLead, leadId: string, timestamp: string, isTe
     ['price', priceQuote.status === 'custom' ? customQuote : priceQuote.status === 'consultation' ? 'consultation only' : money(priceQuote.amount)], ['customer_name', lead.customerName], ['preferred_contact', lead.contact.preferredMethod],
     ['phone', lead.contact.phone], ['email', lead.contact.email], ['telegram', lead.contact.telegram], ['timestamp', timestamp],
     ['source_page', lead.sourcePage], ['utm', Object.keys(lead.utm).length ? JSON.stringify(lead.utm) : undefined]];
+  if (lead.emailProposal) fields.push(['request_intent',lead.emailProposal.intent],['business_name',lead.emailProposal.businessName],['business_niche',lead.emailProposal.niche],['business_url',lead.emailProposal.businessUrl],['permission','one request-scoped email response; no marketing subscription']);
   if (lead.solution?.schemaVersion === 1) {
     const labels = nicheLabels[lead.language], beauty = lead.solution.solution_id === 'beauty-review-card';
     const quantity = lead.selection?.quantity === 'advice' ? labels.quantity_unknown : lead.selection?.quantity === 'more' ? '3+' : String(lead.quantity);

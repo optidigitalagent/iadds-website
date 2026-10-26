@@ -293,7 +293,11 @@ test('010 upgrades populated v31 schema without rewriting historical leads or ou
     assert.deepEqual(Object.fromEntries(Object.keys(before).map(field => [field, after[field]])), before);
     assert.equal(after.mini_context, null);
     assert.deepEqual((await pool.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [leadId])).rows[0], outboxBefore);
-    assert.deepEqual((await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [miniLeadId])).rows[0], miniBefore);
+    const miniAfter = (await pool.query('SELECT * FROM nfc_card.leads WHERE lead_id=$1', [miniLeadId])).rows[0];
+    assert.deepEqual(Object.fromEntries(Object.keys(miniBefore).map(field => [field, miniAfter[field]])), miniBefore);
+    assert.equal(miniAfter.form_version, null);
+    assert.equal(miniAfter.privacy_notice_version, null);
+    assert.equal(miniAfter.processing_evidence, null);
     assert.deepEqual((await pool.query('SELECT * FROM nfc_card.notification_outbox WHERE lead_id=$1', [miniLeadId])).rows[0], miniOutboxBefore);
     assert.equal((await persist(pool, old, key)).leadId, leadId);
   } finally {

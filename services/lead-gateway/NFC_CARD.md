@@ -164,3 +164,25 @@ Existing project/environment only; one private `nfc-card-postgres`, one data vol
 Before migration, take a private `pg_dump` through a Railway private shell, stream it to access-restricted owner storage, validate with `pg_restore --list`, and restore-test in an isolated local database. Credentials remain environment references. Keep dumps out of Git and CI artifacts. A 1 GB data volume is not a backup; no recurring/off-host backup service is created. A private, access-restricted off-host checkpoint is taken before this release and restore-tested locally. This does not create recurring backup automation; operators must maintain subsequent backups and retention in their existing private storage. No backup add-on is provisioned.
 
 Rollback order: disable NFC public intake and Telegram, redeploy the last known-good gateway commit with its old pre-deploy configuration. Preserve the NFC schema/volume/data; **never** DROP/TRUNCATE/reverse-migrate or overwrite production from a dump. Existing iADDS source and formatter are unaffected. Prefer a forward additive fix after reviewing the exact failure. Restore into a separate local disposable database first; any production data restore requires an explicit incident decision. Do not delete this volume or unrelated Railway resources.
+
+### Website-requested email proposal (2026-10-26)
+
+The existing Branded Review Card public form may send `contact.preferredMethod=email`
+with its exact email and `emailProposal={intent:commercial_offer_by_email,
+businessName,niche,businessUrl?,requested:true}`. Supported submitted niche values
+are dental_orthodontics, beauty_salons_barbershops and other; selecting a niche
+never approves its email content. V35 form/privacy notice describes this single
+requested response. Existing phone/messenger payloads retain V34 compatibility.
+
+The canonical parser rejects a proposal on another product or channel, missing
+explicit request/notice, invalid business fields and unsafe website URLs. The
+existing leads processing_evidence JSON persists this scope, selected channel,
+exact normalized email and emailMarketingPermission=false. Existing created_at,
+source_page, immutable digest/idempotency and authenticated read feed apply.
+No new table, migration, CRM or messaging transport is introduced. Public success
+still means PostgreSQL COMMIT, independently of notification or customer email.
+
+Local release evidence: 172 gateway tests including isolated PostgreSQL17/fake
+transports, typecheck/build and independent review passed. Never submit synthetic
+production leads. Rollback dependent Pages first, then revert the gateway commit;
+existing processing_evidence remains readable and no database rollback is needed.

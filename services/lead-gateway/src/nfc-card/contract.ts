@@ -23,7 +23,8 @@ export type MiniSolution = { schemaVersion: 2; product_family: 'nfc-review-card-
   quantity_mode: 'fixed_bundle' | 'custom_quote' | 'advice' | 'free_design_concepts'; design_split_note?: string;
   brand_inputs?: { logo_note?: string; website_or_instagram?: string; style_note?: string } };
 export type Solution = LegacySolution | MiniSolution;
-export interface NfcLead { language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; solution?: Solution; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails; notice?: { formVersion: string; privacyNoticeVersion: string; consent: true; capture: 'submitted_form_consent_flag' | 'trusted_signed_intake' } }
+export interface EmailProposal { intent: 'commercial_offer_by_email'; businessName: string; niche: 'dental_orthodontics' | 'beauty_salons_barbershops' | 'other'; businessUrl?: string; requested: true }
+export interface NfcLead { emailProposal?: EmailProposal; language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; solution?: Solution; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails; notice?: { formVersion: string; privacyNoticeVersion: string; consent: true; capture: 'submitted_form_consent_flag' | 'trusted_signed_intake' } }
 export class NfcError extends Error {
   readonly status: number;
   readonly leadId?: string;
@@ -52,7 +53,7 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const instagramFields = ['productSchemaVersion', 'product_id', 'sku', 'offer', 'instagramUrl', 'comment'];
   const menuFields = ['intent', 'menu_status', 'menu_url', 'items'];
   const review3dFields = ['design', 'google_location_url'];
-  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', 'solution', 'consent', 'formVersion', 'privacyNoticeVersion', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
+  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', 'solution', 'consent', 'formVersion', 'privacyNoticeVersion', 'emailProposal', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
   if (!['uk', 'en', 'pl'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
   const isMenu = input.product === 'nfc-menu-card';
   const consultation = isMenu && input.intent === 'menu_consultation';
@@ -134,6 +135,23 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   if (isInstagram && (!phone || !['telegram', 'whatsapp', 'viber'].includes(String(c.preferredMethod)))) invalid();
   const contact: Contact = { preferredMethod: c.preferredMethod as Contact['preferredMethod'], ...(phone ? { phone } : {}),
     ...(emailInput ? { email: emailInput.toLowerCase() } : {}), ...(telegramInput ? { telegram: '@' + telegramInput.replace(/^@/, '') } : {}) };
+  let emailProposal: EmailProposal | undefined;
+  if (input.emailProposal !== undefined) {
+    const proposal = object(input.emailProposal, ['intent', 'businessName', 'niche', 'businessUrl', 'requested']);
+    if (input.product !== 'branded-review-card' || c.preferredMethod !== 'email' || !hasNotice ||
+        proposal.intent !== 'commercial_offer_by_email' || proposal.requested !== true ||
+        !['dental_orthodontics', 'beauty_salons_barbershops', 'other'].includes(String(proposal.niche))) invalid();
+    const businessName = text(proposal.businessName, 150)!;
+    const businessUrl = text(proposal.businessUrl, 300, true);
+    if (businessUrl) {
+      let url: URL;
+      try { url = new URL(businessUrl); } catch { invalid(); }
+      if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password ||
+          !url.hostname.includes('.') || isIP(url.hostname) || /(?:^|\.)(?:localhost|local|internal)$/.test(url.hostname)) invalid();
+    }
+    emailProposal = { intent: 'commercial_offer_by_email', businessName, niche: proposal.niche as EmailProposal['niche'],
+      ...(businessUrl ? {businessUrl} : {}), requested: true };
+  }
   const utmInput = object(input.utm ?? {}, ['source', 'medium', 'campaign', 'term', 'content']);
   const utm: Record<string, string> = {};
   for (const key of ['source', 'medium', 'campaign', 'term', 'content']) { const val = text(utmInput[key], 100, true); if (val) utm[key] = val; }
@@ -143,7 +161,7 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   return { language: input.language as NfcLead['language'], product: input.product as NfcLead['product'], quantity,
     customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}),
     ...(solution ? { solution } : {}), ...(instagram ? { instagram } : {}), ...(review3d ? { review3d } : {}), ...(menu ? { menu } : {}),
-    ...(hasNotice ? { notice: { formVersion: String(input.formVersion), privacyNoticeVersion: String(input.privacyNoticeVersion), consent: true as const,
+    ...(emailProposal ? {emailProposal} : {}), ...(hasNotice ? { notice: { formVersion: String(input.formVersion), privacyNoticeVersion: String(input.privacyNoticeVersion), consent: true as const,
       capture: publicRequest ? 'submitted_form_consent_flag' as const : 'trusted_signed_intake' as const } } : {}) };
 }
 function parseSolution(value: unknown, product: unknown, page: unknown, language: unknown): Solution {
