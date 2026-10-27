@@ -17,7 +17,7 @@ export type Quote = { currency: 'UAH'; status: 'fixed' | 'custom'; amount: numbe
     deposit: number | null; balance: number | null; unitPriceMinor: number | null; amountMinor: number | null;
     depositMinor: number | null; balanceMinor: number | null; depositIncluded: boolean };
 // Accepted Review prices v11 and Instagram ready offer v18: totals include the deposit.
-const prices = { 'review-card': { 1: 1500, 2: 2600 }, 'branded-review-card': { 1: 2000, 2: 2600 }, 'nfc-instagram-card': { 1: 1500, 2: 2600 } };
+const prices = { 'review-card': { 1: 1500, 2: 2600 }, 'branded-review-card': { 1: 2000, 2: 3600 }, 'nfc-instagram-card': { 1: 1500, 2: 2600 } };
 export const POLAND_CONTRACT_ID = polandContract.contractId;
 const polishCurrency = polandContract.currency as 'PLN';
 const polishMinorFactor = 10 ** polandContract.minorUnitDigits;

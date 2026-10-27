@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import {parseNfcLead} from '../src/nfc-card/contract.ts';
 import {database,inboundRows,migrate,persist} from '../src/nfc-card/store.ts';
+import {quote} from '../src/nfc-card/commerce.ts';
 import {formatNfc} from '../src/nfc-card/format.ts';
 const input=()=>({language:'uk',product:'branded-review-card',quantity:1,customerName:'Synthetic local QA',
  contact:{preferredMethod:'email',email:'Test.Case+offer@example.com'},sourcePage:'/nfc-card-website/solutions/branded-review-card',
@@ -39,4 +40,12 @@ test('isolated PostgreSQL persists exact basis and feed, idempotency never creat
   assert.equal((await pool.query('SELECT count(*)::int n FROM nfc_card.leads')).rows[0].n,1);
   const delivery=(await pool.query('SELECT delivery_enabled,status FROM nfc_card.notification_outbox')).rows[0];assert.equal(delivery.delivery_enabled,false);assert.equal(delivery.status,'pending');
  }finally{await pool.end();await admin.query('DROP DATABASE "'+name+'"');await admin.end();}
+});
+
+test('owner-approved Branded pair is 3600 UAH; one-card and standard prices stay intact',()=>{
+ const lead=parseNfcLead({...input(),quantity:2,selection:{variant:'branded',quantity:'2'}},true);
+ assert.equal(quote(lead).amount,3600);
+ assert.equal(quote(parseNfcLead(input(),true)).amount,2000);
+ const {emailProposal:request,...old}=input();assert.equal(request.requested,true);
+ assert.equal(quote(parseNfcLead({...old,product:'review-card',quantity:2,selection:{variant:'standard',quantity:'2'}},true)).amount,2600);
 });

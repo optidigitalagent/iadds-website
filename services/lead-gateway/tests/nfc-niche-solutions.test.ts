@@ -43,7 +43,7 @@ test('niche solution context is strictly allowlisted and locale/route bound', ()
       assert.ok(message.includes(approved[language].request));
       assert.ok(message.includes('public_solution: ' + id));
       assert.equal(price.currency, language === 'pl' ? 'PLN' : 'UAH');
-      assert.equal(price.amount, mode === '1' ? language === 'pl' ? 169 : 2000 : mode === '2' ? language === 'pl' ? 299 : 2600 : null);
+      assert.equal(price.amount, mode === '1' ? language === 'pl' ? 169 : 2000 : mode === '2' ? language === 'pl' ? 299 : 3600 : null);
       if (mode === 'advice') {
         assert.equal(price.status, 'consultation'); assert.equal(price.deposit, null); assert.equal(price.depositIncluded, false);
         assert.ok(message.includes('quantity_mode: need quantity advice'));

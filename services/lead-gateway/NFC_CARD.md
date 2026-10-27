@@ -186,3 +186,9 @@ Local release evidence: 172 gateway tests including isolated PostgreSQL17/fake
 transports, typecheck/build and independent review passed. Never submit synthetic
 production leads. Rollback dependent Pages first, then revert the gateway commit;
 existing processing_evidence remains readable and no database rollback is needed.
+
+
+Owner price reconciliation 2026-10-26: explicit choice “3 600 грн — привести
+сайт и Gateway к утверждённому письму”. Future UA/EN ordinary Branded Review Card
+pairs cost3600 UAH, one remains2000. Standard/Instagram/Mini/PL unchanged. No
+historical price_quote is rewritten; idempotent receipts keep their stored quote.
