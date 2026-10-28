@@ -68,7 +68,7 @@ export async function persist(pool: Pool, lead: NfcLead, key: string, options: P
       lead.solution?.schemaVersion === 2 ? JSON.stringify(lead.solution) : null,
       lead.notice?.formVersion ?? null, lead.notice?.privacyNoticeVersion ?? null,
       lead.notice ? JSON.stringify({ capture: lead.notice.capture, scope: 'REQUEST_SCOPED_RESPONSE', emailMarketingPermission: false,
-        sourcePage: lead.sourcePage, formVersion: lead.notice.formVersion, privacyNoticeVersion: lead.notice.privacyNoticeVersion, ...(lead.emailProposal ? {emailProposal: lead.emailProposal, replyChannel: 'EMAIL', replyEmail: lead.contact.email} : {}) }) : null]);
+        sourcePage: lead.sourcePage, formVersion: lead.notice.formVersion, privacyNoticeVersion: lead.notice.privacyNoticeVersion, ...(lead.notice.policyBinding ? {policyBinding:lead.notice.policyBinding} : {}), ...(lead.emailProposal ? {emailProposal: lead.emailProposal, replyChannel: 'EMAIL', replyEmail: lead.contact.email} : {}) }) : null]);
     if (!inserted.rowCount) {
       const saved = await client.query(`SELECT l.lead_id, l.request_digest, l.price_quote, o.delivery_enabled FROM nfc_card.leads l
         JOIN nfc_card.notification_outbox o USING(lead_id) WHERE l.idempotency_key=$1`, [key]);
@@ -81,7 +81,13 @@ export async function persist(pool: Pool, lead: NfcLead, key: string, options: P
     await client.query('INSERT INTO nfc_card.notification_outbox(id,lead_id,delivery_enabled) VALUES ($1,$2,$3)', [randomUUID(), leadId, options.deliveryEnabled === true]);
     await client.query('COMMIT');
     return receipt(leadId, options.deliveryEnabled === true, quote(lead));
-  } catch (error) { await client.query('ROLLBACK').catch(() => {}); if (error instanceof NfcError) throw error; throw new NfcError(503, 'storage_unavailable'); }
+  } catch (error) { await client.query('ROLLBACK').catch(() => {}); if (error instanceof NfcError) throw error;
+    const failure = error as {code?:string;constraint?:string};
+    // Only the new identity fence's exact errors gain v2-compatible semantics.
+    // All pre-existing legacy failures keep their existing response mapping.
+    if (failure.code === '23505' && failure.constraint === 'v2_identity_global_key') throw new NfcError(409,'idempotency_conflict');
+    if (failure.code === '23514' && failure.constraint === 'v2_identity_tombstone') throw new NfcError(410,'idempotency_tombstoned');
+    throw new NfcError(503, 'storage_unavailable'); }
   finally { client.release(); }
 }
 function receipt(leadId: string, enabled: boolean, priceQuote: Quote): Receipt { return { ok: true, source: 'NFC_CARD', leadId, durableSaved: true, notificationStatus: enabled ? 'queued' : 'disabled', quote: priceQuote }; }

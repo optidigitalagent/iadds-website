@@ -14,7 +14,9 @@
     "migrate:nfc": "node --experimental-strip-types scripts/nfc-ops.ts migrate",
     "preflight:nfc": "node --experimental-strip-types scripts/nfc-ops.ts preflight",
     "inspect:nfc": "node --experimental-strip-types scripts/nfc-ops.ts inspect",
-    "setup:telegram": "node --experimental-strip-types scripts/telegram-setup.ts"
+    "setup:telegram": "node --experimental-strip-types scripts/telegram-setup.ts",
+    "preflight:nfc:v2": "node --experimental-strip-types scripts/nfc-v2-ops.ts preflight",
+    "migrate:nfc:v2": "node --experimental-strip-types scripts/nfc-v2-ops.ts migrate"
   },
   "devDependencies": {
     "@types/node": "24.13.4",

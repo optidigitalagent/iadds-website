@@ -83,6 +83,26 @@ jobs:
           cache-dependency-path: services/lead-gateway/package-lock.json
       - run: npm ci
         working-directory: services/lead-gateway
+      - name: Use matching backup clients from the existing isolated PostgreSQL17 service
+        env:
+          NFC_PG17_BIN: ${{ runner.temp }}/nfc-pg17-client
+          NFC_PG17_CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: |
+          mkdir -p "$NFC_PG17_BIN"
+          for program in pg_dump pg_restore; do
+            cat > "$NFC_PG17_BIN/$program" <<'SH'
+          #!/bin/sh
+          set -eu
+          exec docker exec -i --env PGHOST=127.0.0.1 --env PGPORT=5432 \
+            --env PGUSER --env PGPASSWORD --env PGDATABASE \
+            "$NFC_PG17_CONTAINER_ID" "$(basename "$0")" "$@"
+          SH
+            chmod 700 "$NFC_PG17_BIN/$program"
+          done
+          "$NFC_PG17_BIN/pg_dump" --version
       - run: npm run typecheck && npm test && npm run build
+        env:
+          NFC_PG17_BIN: ${{ runner.temp }}/nfc-pg17-client
+          NFC_PG17_CONTAINER_ID: ${{ job.services.postgres.id }}
         working-directory: services/lead-gateway
       - run: git diff --exit-code
