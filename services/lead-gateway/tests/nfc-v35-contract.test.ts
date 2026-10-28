@@ -4,6 +4,8 @@ import { readFileSync } from 'node:fs';
 import { normalizeRequest,parseWire,requestDigest,quoteRequest,buildReceipt,validateReceipt,canonicalJSON,NfcV2Error,normalizeGoogleURL,normalizeMenuURL,normalizeInstagramURL,errorEnvelope,validateErrorEnvelope,ERROR_STATUSES } from '../src/nfc-card/v2/contract.ts';
 import { ACTIVE_ENTRIES, DRAFT_ENTRIES, LIMITS, MENU_VARIANTS, groupPrice, getEntry } from '../src/nfc-card/v2/registry.ts';
 const specimens=JSON.parse(readFileSync(new URL('./fixtures/nfc-v35-requests.json',import.meta.url),'utf8'));
+// Deliberately mutable invalid receipts exercise the parser's unknown boundary.
+type MutatedReceipt={quote:{totalMinor:number;currency:string;pricingRevision:string;groups:{lineIds:string[]}[]};acceptedRequest:{lines:{configuration:{notes?:string}}[]};requestDigest:{sha256:string};durableSaved:boolean;notificationStatus:string;extra?:boolean};
 const clone=<T>(x:T):T=>structuredClone(x);
 const base=()=>clone(specimens.positive[0].wire);
 function rejects(fn:()=>unknown,code?:string,status?:number){assert.throws(fn,(e:unknown)=>e instanceof NfcV2Error&&(!code||e.code===code)&&(!status||e.status===status));}
@@ -15,12 +17,12 @@ for(const e of specimens.positive)test('CF01 positive '+e.id,()=>{
 });
 for(const e of specimens.negative)test('CF01 negative '+e.id,()=>{rejects(()=>normalizeRequest(e.wire),e.expectedCode,e.expectedHttp);rejects(()=>parseWire(JSON.stringify(e.wire)),e.expectedCode,e.expectedHttp);});
 for(const e of specimens.rawNegative)test('CF01 raw negative '+e.id,()=>{rejects(()=>parseWire(e.rawHex?Buffer.from(e.rawHex,'hex'):e.rawUtf8),e.expectedCode,e.expectedHttp);});
-test('registry immutable, nine active, six variants, draft excluded',()=>{assert.equal(ACTIVE_ENTRIES.length,9);assert.equal(MENU_VARIANTS.length,6);for(const d of DRAFT_ENTRIES)assert.equal(getEntry(d),undefined);assert.throws(()=>{(ACTIVE_ENTRIES[0]as any).offerId='branded';},TypeError);});
+test('registry immutable, nine active, six variants, draft excluded',()=>{assert.equal(ACTIVE_ENTRIES.length,9);assert.equal(MENU_VARIANTS.length,6);for(const d of DRAFT_ENTRIES)assert.equal(getEntry(d),undefined);assert.throws(()=>{(ACTIVE_ENTRIES[0]as {offerId:string}).offerId='branded';},TypeError);});
 test('all approved Menu tier boundaries and 3D unit arithmetic',()=>{for(const [q,ua,pl]of [[1,1000,89],[4,4000,356],[5,3750,345],[9,6750,621],[10,6000,550],[24,14400,1320],[25,12500,1125],[10000,5000000,450000]]){assert.equal(groupPrice('nfc-menu-card',q,'UA').amountMinor,ua*100);assert.equal(groupPrice('nfc-menu-card',q,'PL').amountMinor,pl*100);}assert.equal(groupPrice('review-card-3d',10000,'UA').amountMinor,4000000000);assert.equal(groupPrice('review-card-3d',10000,'PL').amountMinor,349000000);});
 test('quote known partial/null, included once deposit, no online pay, source currency',()=>{
  for(const e of specimens.positive){const q=quoteRequest(normalizeRequest(e.wire));assert.equal(q.paymentRequired,false);assert.equal(q.dueNowMinor,null);if(q.completeness==='complete')assert.equal(q.depositPolicy.amountMinor,q.market==='PL'?2000:20000);else assert.equal(q.depositPolicy.amountMinor,null);if(q.completeness==='partial'||q.completeness==='quote_required')assert.equal(q.totalMinor,null);if(q.completeness==='consultation'){assert.deepEqual(q.groups,[]);assert.equal(q.physicalQuantity,null);assert.equal(q.knownSubtotalMinor,null);}if(q.market==='PL')assert.equal(q.delivery.amountMinor,null);}
 });
-test('bundle groups span locations but never merge fulfillment lines',()=>{const e=specimens.positive.find((x:any)=>x.id==='uk_google_split_pack');const n=normalizeRequest(e.wire);assert.equal(quoteRequest(n).totalMinor,260000);assert.equal(n.lines.length,2);assert.notEqual(n.lines[0].configuration.googleLocationUrl,n.lines[1].configuration.googleLocationUrl);assert.equal(quoteRequest(n).groups[0].unitAmountMinor,null);});
+test('bundle groups span locations but never merge fulfillment lines',()=>{const e=specimens.positive.find((x:{id:string})=>x.id==='uk_google_split_pack');const n=normalizeRequest(e.wire);assert.equal(quoteRequest(n).totalMinor,260000);assert.equal(n.lines.length,2);assert.notEqual(n.lines[0].configuration.googleLocationUrl,n.lines[1].configuration.googleLocationUrl);assert.equal(quoteRequest(n).groups[0].unitAmountMinor,null);});
 test('scalar length, raw/normalized Unicode, LF/CRLF and optional empty normalization',()=>{
  const b=base();b.customerName=' '+ '😀'.repeat(98)+' ';assert.equal([...normalizeRequest(b).customerName].length,98);b.customerName='😀'.repeat(101);rejects(()=>normalizeRequest(b));
  const c=base();c.lines[0].configuration.notes=' e\u0301\r\nSecond\rThird ';c.serviceNotes='';c.utm={source:''};const n=normalizeRequest(c);assert.equal(n.lines[0].configuration.notes,'é\nSecond\nThird');assert.equal(n.serviceNotes,null);assert.deepEqual(n.utm,{});
@@ -28,7 +30,7 @@ test('scalar length, raw/normalized Unicode, LF/CRLF and optional empty normaliz
 });
 test('optional contact/URL must be nonempty; forbidden Menu URL presence wins',()=>{
  for(const [k,v]of [['email',''],['phone',''],['telegram','']]){const b=base();b.contact[k]=v;rejects(()=>normalizeRequest(b));}
- const b=base();b.lines[0].configuration.googleLocationUrl='';rejects(()=>normalizeRequest(b));const m=clone(specimens.positive.find((x:any)=>x.id==='uk_menu_development_physical').wire);m.lines[0].configuration.menuUrl='';rejects(()=>normalizeRequest(m),'invalid_configuration');
+ const b=base();b.lines[0].configuration.googleLocationUrl='';rejects(()=>normalizeRequest(b));const m=clone(specimens.positive.find((x:{id:string})=>x.id==='uk_menu_development_physical').wire);m.lines[0].configuration.menuUrl='';rejects(()=>normalizeRequest(m),'invalid_configuration');
 });
 test('raw duplicate decoded keys at every depth, prohibited object keys',()=>{
  for(const s of ['{"x":1,"x":2}','{"x":{"q":1,"\\u0071":1}}','{"a":[{"b":1,"b":1}]}'])rejects(()=>parseWire(s),'duplicate_json_key',400);
@@ -59,22 +61,22 @@ test('URL grammars syntax only, raw default ports/private literals and reserved 
  for(const s of ['https://instagram.com/reel/','https://instagram.com/p/','https://instagram.com/name..bad/','https://instagram.com/.bad/','https://instagram.com/name/?x=1','@synthetic'])rejects(()=>normalizeInstagramURL(s),'invalid_configuration');
 });
 test('every Branded service preserves full context, ready/draft do not inherit',()=>{
- for(const e of specimens.positive.filter((x:any)=>x.id.includes('_design_'))){const n=normalizeRequest(e.wire);assert.equal(n.serviceContext?.entryId,e.normalized.serviceContext.entryId);assert.deepEqual(n.serviceContext?.configuration,e.normalized.serviceContext.configuration);assert.deepEqual(n.lines,[]);assert.equal(quoteRequest(n).totalMinor,null);}
- const b=clone(specimens.positive.find((x:any)=>x.id==='uk_design_branded-beauty-review-card').wire);b.serviceContext.entryId='universal-branded-mini';rejects(()=>normalizeRequest(b),'offer_unavailable');b.serviceContext.entryId='beauty-review-card';b.serviceContext.offerId='ready';rejects(()=>normalizeRequest(b),'invalid_configuration');
+ for(const e of specimens.positive.filter((x:{id:string})=>x.id.includes('_design_'))){const n=normalizeRequest(e.wire);assert.equal(n.serviceContext?.entryId,e.normalized.serviceContext.entryId);assert.deepEqual(n.serviceContext?.configuration,e.normalized.serviceContext.configuration);assert.deepEqual(n.lines,[]);assert.equal(quoteRequest(n).totalMinor,null);}
+ const b=clone(specimens.positive.find((x:{id:string})=>x.id==='uk_design_branded-beauty-review-card').wire);b.serviceContext.entryId='universal-branded-mini';rejects(()=>normalizeRequest(b),'offer_unavailable');b.serviceContext.entryId='beauty-review-card';b.serviceContext.offerId='ready';rejects(()=>normalizeRequest(b),'invalid_configuration');
 });
 test('consent is synthetic shape only and cannot be unlocked by a client test flag',()=>{const b=base();b.testMode=true;rejects(()=>normalizeRequest(b));delete b.testMode;b.consent.formVersion='NFC-CARD-FORM-V35';rejects(()=>normalizeRequest(b));b.consent.requestProcessing=false;rejects(()=>normalizeRequest(b));});
 test('normalizer does not mutate frozen input and rejects getters/cycles/undefined/null',()=>{
- function freeze(o:any){if(o&&typeof o==='object'){Object.values(o).forEach(freeze);Object.freeze(o);}return o;}normalizeRequest(freeze(base()));
+ function freeze(o:unknown){if(o&&typeof o==='object'){Object.values(o).forEach(freeze);Object.freeze(o);}return o;}normalizeRequest(freeze(base()));
  const b=base();Object.defineProperty(b,'customerName',{get(){throw Error('getter executed');},enumerable:true});rejects(()=>normalizeRequest(b));const c=base();c.utm=c;rejects(()=>normalizeRequest(c));const u=base();u.serviceNotes=undefined;rejects(()=>normalizeRequest(u));const n=base();n.serviceNotes=null;rejects(()=>normalizeRequest(n));
 });
 test('digest domain and semantic mutations; order/challenge/NFC equivalence',()=>{
- const e=specimens.positive.find((x:any)=>x.id==='uk_google_split_pack');const b=clone(e.wire),hash=requestDigest(normalizeRequest(b));b.lines.reverse();b.challenge='DIFFERENT.'+'B'.repeat(43);assert.equal(requestDigest(normalizeRequest(b)),hash);
+ const e=specimens.positive.find((x:{id:string})=>x.id==='uk_google_split_pack');const b=clone(e.wire),hash=requestDigest(normalizeRequest(b));b.lines.reverse();b.challenge='DIFFERENT.'+'B'.repeat(43);assert.equal(requestDigest(normalizeRequest(b)),hash);
  const n=clone(e.normalized);n.lines[0].configuration.notes='Different';assert.notEqual(requestDigest(n),hash);const c=clone(e.normalized);c.contact.email='other@example.invalid';assert.notEqual(requestDigest(c),hash);
- const u=clone(specimens.positive.find((x:any)=>x.id==='unicode_escape_vector').wire);const d=requestDigest(normalizeRequest(u));u.lines[0].configuration.brandInputs.styleNote='e\u0301';assert.equal(requestDigest(normalizeRequest(u)),d);
+ const u=clone(specimens.positive.find((x:{id:string})=>x.id==='unicode_escape_vector').wire);const d=requestDigest(normalizeRequest(u));u.lines[0].configuration.brandInputs.styleNote='e\u0301';assert.equal(requestDigest(normalizeRequest(u)),d);
 });
 test('receipt rejects any config/money/revision/coverage/unknown-field mismatch',()=>{
  const e=specimens.positive[0],n=normalizeRequest(e.wire);
- for(const mutate of [(r:any)=>r.quote.totalMinor++, (r:any)=>r.quote.currency='PLN',(r:any)=>r.quote.pricingRevision='UNAPPROVED',(r:any)=>r.quote.groups[0].lineIds=[],(r:any)=>r.acceptedRequest.lines[0].configuration.notes='Changed',(r:any)=>r.requestDigest.sha256='0'.repeat(64),(r:any)=>r.durableSaved=false,(r:any)=>r.notificationStatus='sent',(r:any)=>r.extra=true]){const r=clone(e.receipt);mutate(r);assert.equal(validateReceipt(n,r),false);}
+ for(const mutate of [(r:MutatedReceipt)=>r.quote.totalMinor++, (r:MutatedReceipt)=>r.quote.currency='PLN',(r:MutatedReceipt)=>r.quote.pricingRevision='UNAPPROVED',(r:MutatedReceipt)=>r.quote.groups[0].lineIds=[],(r:MutatedReceipt)=>r.acceptedRequest.lines[0].configuration.notes='Changed',(r:MutatedReceipt)=>r.requestDigest.sha256='0'.repeat(64),(r:MutatedReceipt)=>r.durableSaved=false,(r:MutatedReceipt)=>r.notificationStatus='sent',(r:MutatedReceipt)=>r.extra=true]){const r=clone(e.receipt);mutate(r);assert.equal(validateReceipt(n,r),false);}
  assert.equal(validateReceipt(n,null),false);assert.equal(validateReceipt(n,{}),false);
 });
 test('receipt construction copies accepted request and treats durability as a shape only',()=>{const e=specimens.positive[0],n=normalizeRequest(e.wire),r=buildReceipt(n,{requestId:e.receipt.requestId,acceptedAt:e.receipt.acceptedAt,quoteId:e.receipt.quote.quoteId,pricingRevision:e.receipt.quote.pricingRevision});n.customerName='Changed';assert.notEqual(r.acceptedRequest.customerName,n.customerName);rejects(()=>buildReceipt(normalizeRequest(e.wire),{requestId:'bad',acceptedAt:e.receipt.acceptedAt,quoteId:e.receipt.quote.quoteId,pricingRevision:e.receipt.quote.pricingRevision}));});
@@ -84,8 +86,8 @@ test('strict error validators cover every frozen code and retry disposition',()=
 test('canonical CJSON uses exact control escape profile and normalized inputs reject accessors',()=>{assert.equal(canonicalJSON('\b\f\r\t\n'),String.raw`"\u0008\u000c\u000d\u0009\n"`);const n=normalizeRequest(base());Object.defineProperty(n,'lines',{get(){throw Error('getter executed');},enumerable:true});rejects(()=>requestDigest(n));});
 
 test('enum fields reject arrays, objects, booleans and null without coercion',()=>{
- const menu=clone(specimens.positive.find((x:any)=>x.id==='uk_nfc-menu-card').wire);
- const service=clone(specimens.positive.find((x:any)=>x.id==='uk_quantity_advice').wire);
+ const menu=clone(specimens.positive.find((x:{id:string})=>x.id==='uk_nfc-menu-card').wire);
+ const service=clone(specimens.positive.find((x:{id:string})=>x.id==='uk_quantity_advice').wire);
  for(const bad of [['quantity_advice'],{toString:'quantity_advice'},true,null]){const b=clone(service);b.kind=bad;rejects(()=>normalizeRequest(b));}
  for(const bad of [['pl'],{toString:'pl'},false,null]){const b=base();b.language=bad;b.sourcePage='/nfc-card-website/pl/cart/';rejects(()=>normalizeRequest(b));}
  for(const bad of [['email'],{toString:'email'},true,null]){const b=base();b.contact.preferredMethod=bad;rejects(()=>normalizeRequest(b));}

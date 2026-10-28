@@ -2,9 +2,9 @@
 import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import type {Pool,PoolClient} from 'pg';
-import {UUID_V4} from './contract.ts';
+import {UUID_V4,type NormalizedRequest} from './contract.ts';
 
-type Snapshot={request_id:string;idempotency_key:string;state:string;normalized:Record<string,any>|null;receipt:unknown;payload:unknown;tombstoned:boolean};
+type Snapshot={request_id:string;idempotency_key:string;state:string;normalized:NormalizedRequest|null;receipt:unknown;payload:unknown;tombstoned:boolean};
 const digest=(x:unknown)=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const hex=(x:unknown)=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const iso=(x:unknown)=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(x)&&Number.isFinite(Date.parse(x));
@@ -35,12 +35,12 @@ export function validateRightsCase(value:unknown,ownerApprovalRecord:Uint8Array)
 /** Raw bodies are absent; retained IDs/digests/audit references are still pseudonymous data. */
 export function completeRightsBodyScrub(value:unknown,requestId:string):boolean{
  if(!value||typeof value!=='object'||Array.isArray(value))return false;
- const p=value as Record<string,any>;
+ const p=value as Record<string,unknown>;
  if(p.schemaVersion!==2||p.requestId!==requestId||p.idempotencyTombstone!==true)return false;
  if(Object.keys(p).sort().join(',')==='idempotencyTombstone,requestId,schemaVersion')return true;
  if(Object.keys(p).sort().join(',')!=='idempotencyTombstone,requestId,rightsCaseAudit,schemaVersion')return false;
- const a=p.rightsCaseAudit;
- return a&&typeof a==='object'&&Object.keys(a).sort().join(',')==='appliedAt,approvedAt,caseId,caseSha256,ownerApprovalEvidenceSha256'&&UUID_V4.test(a.caseId)&&hex(a.caseSha256)&&hex(a.ownerApprovalEvidenceSha256)&&iso(a.approvedAt)&&iso(a.appliedAt);
+ const raw=p.rightsCaseAudit;if(!raw||typeof raw!=='object'||Array.isArray(raw))return false;const a=raw as Record<string,unknown>;
+ return Object.keys(a).sort().join(',')==='appliedAt,approvedAt,caseId,caseSha256,ownerApprovalEvidenceSha256'&&typeof a.caseId==='string'&&UUID_V4.test(a.caseId)&&hex(a.caseSha256)&&hex(a.ownerApprovalEvidenceSha256)&&iso(a.approvedAt)&&iso(a.appliedAt);
 }
 async function snapshot(c:Pick<PoolClient,'query'>,requestId:string,lock=false):Promise<Snapshot>{
  if(!UUID_V4.test(requestId))throw Error('invalid_rights_target');
@@ -65,7 +65,7 @@ export async function applyV2RightsCase(pool:Pool,value:unknown,ownerApprovalRec
   await c.query('BEGIN');await c.query("SET LOCAL lock_timeout='5s'");
   const row=await snapshot(c,approval.requestId,true);
   if(row.state==='tombstone'||row.tombstoned){
-   const audit=(row.payload as any)?.rightsCaseAudit;
+   const audit=(row.payload as {rightsCaseAudit?:{caseSha256?:unknown}}|null)?.rightsCaseAudit;
    if(row.state!=='tombstone'||row.tombstoned!==true||row.normalized!==null||row.receipt!==null||!completeRightsBodyScrub(row.payload,approval.requestId)||audit?.caseSha256!==caseSha256)throw Error('rights_case_conflict');
    await c.query('COMMIT');return{requestId:approval.requestId,caseId:approval.caseId,caseSha256,applied:false,alreadyErased:true,bodyScrubbed:true,pseudonymousIdentityRetained:true};
   }
@@ -89,7 +89,7 @@ export async function eraseSyntheticV2(pool:Pool,requestId:string,expectedPlanSh
   await c.query('BEGIN');await c.query("SET LOCAL lock_timeout='5s'");
   const row=await snapshot(c,requestId,true);
   if(digest(row)!==expectedPlanSha256)throw Error('rights_target_changed');
-  const n=row.normalized,contact=n?.contact??{};
+  const n=row.normalized,contact:Partial<NormalizedRequest['contact']>=n?.contact??{};
   if(row.state!=='accepted'||row.tombstoned||!n?.customerName?.startsWith('Synthetic')||
     (contact.email&&!/^[^@]+@[^@]+\.invalid$/i.test(contact.email))||
     (contact.phone&&contact.phone!=='+12025550123')||

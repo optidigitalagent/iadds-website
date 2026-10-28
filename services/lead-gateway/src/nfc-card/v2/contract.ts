@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { isIP } from 'node:net';
 import { isDeepStrictEqual } from 'node:util';
 import { SYNTHETIC_PROFILE,validConsentProfile,type ConsentProfile } from './policy.ts';
-import { ACTIVE_ENTRIES, DRAFT_ENTRIES, MENU_VARIANTS, LIMITS, NORMALIZATION_PROFILE, DIGEST_PROFILE,
+import { DRAFT_ENTRIES, MENU_VARIANTS, LIMITS, NORMALIZATION_PROFILE, DIGEST_PROFILE,
   getEntry, groupPrice, pricingRevision, pricingProfile, type CatalogEntry, type Currency, type Market, type Niche, type DesignMode } from './registry.ts';
 export { CONTRACT_ID, CORE_SHA256, NORMALIZATION_PROFILE, DIGEST_PROFILE } from './registry.ts';
 export const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
@@ -181,8 +181,10 @@ export function canonicalJSON(value:unknown):string {
   return serialize(value);
 }
 function normalizedWire(n:NormalizedRequest):unknown {
-  const {normalizationProfile,source,market,currency,utm,serviceNotes,serviceContext,...r}=n;
-  return {...r,lines:n.lines.map(({niche,designMode,...line})=>line),utm,...(serviceNotes===null?{}:{serviceNotes}),...(serviceContext===null?{}:{serviceContext:(({niche,designMode,...c})=>c)(serviceContext)}),website:'',challenge:'SYNTHETIC.'+'A'.repeat(43)};
+  const {utm,serviceNotes,serviceContext}=n,r:Partial<NormalizedRequest>={...n};
+  for(const key of ['normalizationProfile','source','market','currency','utm','serviceNotes','serviceContext']as const)delete r[key];
+  const omitDerived=<T extends {niche:Niche;designMode:DesignMode}>(value:T)=>{const copy:Partial<T>={...value};delete copy.niche;delete copy.designMode;return copy;};
+  return {...r,lines:n.lines.map(omitDerived),utm,...(serviceNotes===null?{}:{serviceNotes}),...(serviceContext===null?{}:{serviceContext:omitDerived(serviceContext)}),website:'',challenge:'SYNTHETIC.'+'A'.repeat(43)};
 }
 function assertNormalized(n:NormalizedRequest):void {
   assertJSON(n);let rebuilt:NormalizedRequest;try{rebuilt=normalizeRequest(normalizedWire(n),{consentProfile:n.consent});}catch{fail();}

@@ -72,7 +72,8 @@ jobs:
     env:
       NFC_TEST_DATABASE_URL: postgres://nfc_test@127.0.0.1:5432/nfc_gateway_test
       NFC_TELEGRAM_ENABLED: 'false'
-      NFC_PG17_BIN: /usr/lib/postgresql/17/bin
+      NFC_PG17_BIN: ${{ runner.temp }}/nfc-pg17-client
+      NFC_PG17_CONTAINER_ID: ${{ job.services.postgres.id }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -84,11 +85,20 @@ jobs:
           cache-dependency-path: services/lead-gateway/package-lock.json
       - run: npm ci
         working-directory: services/lead-gateway
-      - name: Install matching isolated PostgreSQL17 backup client
+      - name: Use matching backup clients from the existing isolated PostgreSQL17 service
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install --yes --no-install-recommends postgresql-client-17
-          test -x /usr/lib/postgresql/17/bin/pg_dump
+          mkdir -p "$NFC_PG17_BIN"
+          for program in pg_dump pg_restore; do
+            cat > "$NFC_PG17_BIN/$program" <<'SH'
+          #!/bin/sh
+          set -eu
+          exec docker exec -i --env PGHOST=127.0.0.1 --env PGPORT=5432 \
+            --env PGUSER --env PGPASSWORD --env PGDATABASE \
+            "$NFC_PG17_CONTAINER_ID" "$(basename "$0")" "$@"
+          SH
+            chmod 700 "$NFC_PG17_BIN/$program"
+          done
+          "$NFC_PG17_BIN/pg_dump" --version
       - run: npm run typecheck && npm test && npm run build
         working-directory: services/lead-gateway
       - run: git diff --exit-code
