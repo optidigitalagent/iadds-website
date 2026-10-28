@@ -1,3 +1,4 @@
+import { approvedPolicy,type ApprovedPolicy } from './v2/policy.ts';
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { parseSelection, type Selection } from './commerce.ts';
@@ -24,7 +25,7 @@ export type MiniSolution = { schemaVersion: 2; product_family: 'nfc-review-card-
   brand_inputs?: { logo_note?: string; website_or_instagram?: string; style_note?: string } };
 export type Solution = LegacySolution | MiniSolution;
 export interface EmailProposal { intent: 'commercial_offer_by_email'; businessName: string; niche: 'dental_orthodontics' | 'beauty_salons_barbershops' | 'other'; businessUrl?: string; requested: true }
-export interface NfcLead { emailProposal?: EmailProposal; language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; solution?: Solution; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails; notice?: { formVersion: string; privacyNoticeVersion: string; consent: true; capture: 'submitted_form_consent_flag' | 'trusted_signed_intake' } }
+export interface NfcLead { emailProposal?: EmailProposal; language: 'uk' | 'en' | 'pl'; product: typeof PRODUCTS[number]; quantity: number; customerName: string; contact: Contact; sourcePage: string; utm: Record<string, string>; selection?: Selection; solution?: Solution; instagram?: InstagramDetails; review3d?: Review3dDetails; menu?: MenuDetails; notice?: { formVersion: string; privacyNoticeVersion: string; consent: true; capture: 'submitted_form_consent_flag' | 'trusted_signed_intake'; policyBinding?: {scope:'NFC_CARD_V2_RICH_REQUEST';formVersion:string;privacyNoticeVersion:string;policySha256:string;approvalReference:string} } }
 export class NfcError extends Error {
   readonly status: number;
   readonly leadId?: string;
@@ -49,11 +50,11 @@ export function sourcePath(value: unknown): string {
   if (!new RegExp('^' + BASE_PATH + '(?:/(?:en|pl))?(?:/(?:order|contact|about|instagram-card|menu-card|solutions/(?:review-card|branded-review-card|review-card-3d|instagram-card|menu-card|beauty-review-card|branded-beauty-review-card|restaurant-review-card|branded-restaurant-review-card)))?$').test(path)) invalid();
   return path === BASE_PATH ? path + '/' : path;
 }
-export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
+export function parseNfcLead(value: unknown, publicRequest = false, options: {currentPolicy?: ApprovedPolicy} = {}): NfcLead {
   const instagramFields = ['productSchemaVersion', 'product_id', 'sku', 'offer', 'instagramUrl', 'comment'];
   const menuFields = ['intent', 'menu_status', 'menu_url', 'items'];
   const review3dFields = ['design', 'google_location_url'];
-  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', 'solution', 'consent', 'formVersion', 'privacyNoticeVersion', 'emailProposal', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
+  const input = object(value, ['language', 'product', 'quantity', 'customerName', 'contact', 'sourcePage', 'utm', 'selection', 'solution', 'consent', 'formVersion', 'privacyNoticeVersion', 'currentPolicySha256', 'emailProposal', ...instagramFields, ...menuFields, ...review3dFields, ...(publicRequest ? ['website', 'challenge'] : [])]);
   if (!['uk', 'en', 'pl'].includes(String(input.language)) || !PRODUCTS.includes(input.product as typeof PRODUCTS[number])) invalid();
   const isMenu = input.product === 'nfc-menu-card';
   const consultation = isMenu && input.intent === 'menu_consultation';
@@ -78,6 +79,19 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
   const hasNotice = input.formVersion !== undefined || input.privacyNoticeVersion !== undefined;
   if (hasNotice && (input.consent !== true || !/^NFC-CARD-FORM-V[0-9]{1,3}$/.test(String(input.formVersion)) ||
       !/^NFC-CARD-PRIVACY-V[0-9]{1,3}$/.test(String(input.privacyNoticeVersion)))) invalid();
+  // The new current disclosure is opt-in, content-bound and configured by the
+  // approved server policy. It never relabels legacy V36/V35 evidence.
+  const currentDisclosure = input.currentPolicySha256 !== undefined || input.privacyNoticeVersion === 'NFC-CARD-PRIVACY-V37';
+  let policyBinding: NonNullable<NfcLead['notice']>['policyBinding'];
+  if (currentDisclosure) {
+    const policy = options.currentPolicy;
+    if (!approvedPolicy(policy) || !['NFC-CARD-FORM-V34','NFC-CARD-FORM-V36'].includes(String(input.formVersion)) ||
+        input.product !== 'branded-review-card' || !/\/solutions\/branded-review-card$/.test(sourcePath(input.sourcePage)) ||
+        (input.formVersion === 'NFC-CARD-FORM-V36') !== (input.emailProposal !== undefined) ||
+        input.privacyNoticeVersion !== policy.privacyNoticeVersion || input.currentPolicySha256 !== policy.policySha256) invalid();
+    policyBinding = {scope:policy.scope,formVersion:String(input.formVersion),privacyNoticeVersion:policy.privacyNoticeVersion,
+      policySha256:policy.policySha256,approvalReference:policy.approvalReference};
+  }
   if (!hasNotice && input.consent !== undefined && input.consent !== true) invalid();
   if (!hasNotice && input.consent === true && !isInstagram && !isMenu && !isReview3d) invalid();
   if (isInstagram && [...menuFields, ...review3dFields].some(key => key in input)) invalid();
@@ -162,7 +176,7 @@ export function parseNfcLead(value: unknown, publicRequest = false): NfcLead {
     customerName: text(input.customerName, 100)!, contact, sourcePage: sourcePath(input.sourcePage), utm, ...(selection ? { selection } : {}),
     ...(solution ? { solution } : {}), ...(instagram ? { instagram } : {}), ...(review3d ? { review3d } : {}), ...(menu ? { menu } : {}),
     ...(emailProposal ? {emailProposal} : {}), ...(hasNotice ? { notice: { formVersion: String(input.formVersion), privacyNoticeVersion: String(input.privacyNoticeVersion), consent: true as const,
-      capture: publicRequest ? 'submitted_form_consent_flag' as const : 'trusted_signed_intake' as const } } : {}) };
+      capture: publicRequest ? 'submitted_form_consent_flag' as const : 'trusted_signed_intake' as const, ...(policyBinding ? {policyBinding} : {}) } } : {}) };
 }
 function parseSolution(value: unknown, product: unknown, page: unknown, language: unknown): Solution {
   if (value && typeof value === 'object' && !Array.isArray(value) && (value as Record<string, unknown>).schemaVersion === 2)

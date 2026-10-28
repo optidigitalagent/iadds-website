@@ -1,3 +1,4 @@
+import type { ApprovedPolicy } from './v2/policy.ts';
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import type { Pool } from 'pg';
 import { verifyLeadSignature } from '../contract.ts';
@@ -22,7 +23,7 @@ async function body(request: Request): Promise<Uint8Array> {
   } finally { reader.releaseLock(); }
   return Buffer.concat(chunks, length);
 }
-export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?: () => number; log?: (line: string) => void;
+export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?: () => number; log?: (line: string) => void; currentPolicy?: ApprovedPolicy;
   save?: (lead: ReturnType<typeof parseNfcLead>, key: string, enabled: boolean) => Promise<Receipt>;
   read?: (afterAt: string, afterId: string) => Promise<Record<string, unknown>[]> } = {}) {
   const now = options.now ?? Date.now;
@@ -92,7 +93,7 @@ export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?:
       }
       let input;
       try { input = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(raw)); } catch { throw new NfcError(422, 'invalid_payload'); }
-      const lead = parseNfcLead(input, browser);
+      const lead = parseNfcLead(input, browser, {currentPolicy:options.currentPolicy});
       if (browser) {
         if (input.website !== '') throw new NfcError(422, 'invalid_payload');
         verifyChallenge(config.secret, input.challenge, lead.sourcePage, now());

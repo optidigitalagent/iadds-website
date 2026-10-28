@@ -8,12 +8,14 @@ import { database } from './nfc-card/store.ts';
 import { createNfcHandler } from './nfc-card/handler.ts';
 import { dispatcher } from './nfc-card/outbox.ts';
 import { nfcTelegram } from './nfc-card/telegram.ts';
+import { composeNfcHandlers } from './nfc-card/v2/runtime.ts';
+import { readV2Config } from './nfc-card/v2/config.ts';
 
 try {
-  const config = readConfig(), nfc = readNfcConfig();
+  const config = readConfig(), nfc = readNfcConfig(), v2 = readV2Config();
   const pool = nfc ? database(nfc.databaseUrl) : undefined;
   // Existing iADDS health/delivery remain independent of an NFC runtime database outage.
-  const handle = createGateway(config, { nfc: pool && nfc ? createNfcHandler(pool, nfc) : undefined });
+  const handle = createGateway(config, { nfc: composeNfcHandlers(pool, pool && nfc ? createNfcHandler(pool, nfc, {currentPolicy: v2.mode === 'approved-intake' ? v2.policy : undefined}) : undefined, v2) });
   const stopDispatcher = pool && nfc ? dispatcher(pool, nfc, nfcTelegram(config)) : async () => {};
   const port = Number(process.env.PORT || 8080);
   if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('invalid_gateway_configuration');
