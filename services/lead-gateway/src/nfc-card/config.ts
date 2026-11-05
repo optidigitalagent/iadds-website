@@ -1,5 +1,5 @@
 import { UUID } from './contract.ts';
-export interface NfcConfig { secret: string; databaseUrl: string; publicIntake: boolean; telegramEnabled: boolean; testOnly: boolean; testLeadId?: string; finalTestKey?: string; inboundReadSecret?: string }
+export interface NfcConfig { secret: string; databaseUrl: string; publicIntake: boolean; telegramEnabled: boolean; testOnly: boolean; testLeadId?: string; finalTestKey?: string; inboundReadSecret?: string; orderRouting?: import('./order-routing.ts').RoutingConfig }
 export function readNfcConfig(env: Record<string, string | undefined> = process.env): NfcConfig | undefined {
   const secret = env.LEAD_SOURCE_NFC_CARD_SECRET;
   if (!secret && !env.NFC_DATABASE_URL) return;

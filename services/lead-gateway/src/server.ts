@@ -7,16 +7,20 @@ import { readNfcConfig } from './nfc-card/config.ts';
 import { database } from './nfc-card/store.ts';
 import { createNfcHandler } from './nfc-card/handler.ts';
 import { dispatcher } from './nfc-card/outbox.ts';
-import { nfcTelegram } from './nfc-card/telegram.ts';
+import { nfcTelegram,orderTelegram } from './nfc-card/telegram.ts';
+import {readRoutingConfig,routingSchemaReady} from './nfc-card/order-routing.ts';
 import { composeNfcHandlers } from './nfc-card/v2/runtime.ts';
 import { readV2Config } from './nfc-card/v2/config.ts';
 
 try {
   const config = readConfig(), nfc = readNfcConfig(), v2 = readV2Config();
   const pool = nfc ? database(nfc.databaseUrl) : undefined;
+  const routing=readRoutingConfig(process.env,v2.policy);
+  if(routing&&(!pool||!await routingSchemaReady(pool)))throw Error('order_routing_schema_not_ready');
+  if(routing&&nfc){nfc.orderRouting=routing;v2.orderRouting=routing;}
   // Existing iADDS health/delivery remain independent of an NFC runtime database outage.
-  const handle = createGateway(config, { nfc: composeNfcHandlers(pool, pool && nfc ? createNfcHandler(pool, nfc, {currentPolicy: v2.mode === 'approved-intake' ? v2.policy : undefined}) : undefined, v2) });
-  const stopDispatcher = pool && nfc ? dispatcher(pool, nfc, nfcTelegram(config)) : async () => {};
+  const handle = createGateway(config, { nfc: composeNfcHandlers(pool, pool && nfc ? createNfcHandler(pool, nfc, {currentPolicy: v2.mode === 'approved-intake' ? v2.policy : undefined,previousPolicy:v2.previousPolicy}) : undefined, v2) });
+  const stopDispatcher = pool && nfc ? dispatcher(pool, nfc, nfcTelegram(config),orderTelegram(config)) : async () => {};
   const port = Number(process.env.PORT || 8080);
   if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('invalid_gateway_configuration');
   const server = createServer({ maxHeaderSize: 8192, requestTimeout: 15_000, headersTimeout: 10_000 }, async (incoming, outgoing) => {

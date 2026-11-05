@@ -3,7 +3,7 @@ import { approvedPolicy,type ApprovedPolicy } from './policy.ts';
 import { readFileSync,lstatSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { isAbsolute,dirname,join } from 'node:path';
-export type V2RuntimeConfig={mode:'disabled'|'synthetic-preview'|'approved-intake';origin:string;secret:string;databaseName:string;gatewayCommit?:string;inboundReadSecret?:string;policy?:ApprovedPolicy};
+export type V2RuntimeConfig={mode:'disabled'|'synthetic-preview'|'approved-intake';origin:string;secret:string;databaseName:string;gatewayCommit?:string;inboundReadSecret?:string;policy?:ApprovedPolicy;previousPolicy?:ApprovedPolicy;orderRouting?:import('../order-routing.ts').RoutingConfig};
 export function readV2Config(env:Record<string,string|undefined>=process.env):V2RuntimeConfig {
  const mode=env.NFC_V2_MODE??'disabled';
  if(mode==='disabled')return {mode,origin:'',secret:'',databaseName:''};
@@ -30,5 +30,8 @@ export function readV2Config(env:Record<string,string|undefined>=process.env):V2
  }
  if(mode==='synthetic-preview'&&(!/^nfc_v35_[a-z0-9_]+_test$/.test(databaseName)||!/^http:\/\/(?:localhost|127\.0\.0\.1):\d+$/.test(origin)))throw new Error('isolated_preview_configuration_required');
  if(mode==='approved-intake'&&(!/^https:\/\/[a-z0-9.-]+(?::443)?$/i.test(origin)||!approvedPolicy(policy)))throw new Error('notice_policy_not_approved');
- return {mode:mode as V2RuntimeConfig['mode'],origin,secret,databaseName,inboundReadSecret,...(/^[a-f0-9]{40}$/.test(env.RAILWAY_GIT_COMMIT_SHA??'')?{gatewayCommit:env.RAILWAY_GIT_COMMIT_SHA}:{}),...(mode==='approved-intake'?{policy:policy as import('./policy.ts').ApprovedPolicy}:{})};
+ const previousPolicy=mode==='approved-intake'&&env.NFC_V2_PREVIOUS_POLICY_FILE?readV2Config({...env,
+  NFC_V2_POLICY_FILE:env.NFC_V2_PREVIOUS_POLICY_FILE,NFC_V2_APPROVAL_FILE:env.NFC_V2_PREVIOUS_APPROVAL_FILE,
+  NFC_V2_PREVIOUS_POLICY_FILE:undefined,NFC_V2_PREVIOUS_APPROVAL_FILE:undefined}).policy:undefined;
+ return {mode:mode as V2RuntimeConfig['mode'],origin,secret,databaseName,inboundReadSecret,...(/^[a-f0-9]{40}$/.test(env.RAILWAY_GIT_COMMIT_SHA??'')?{gatewayCommit:env.RAILWAY_GIT_COMMIT_SHA}:{}),...(mode==='approved-intake'?{policy:policy as import('./policy.ts').ApprovedPolicy}:{}),...(previousPolicy?{previousPolicy}:{})};
 }

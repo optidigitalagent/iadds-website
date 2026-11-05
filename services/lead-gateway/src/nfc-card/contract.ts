@@ -81,7 +81,8 @@ export function parseNfcLead(value: unknown, publicRequest = false, options: {cu
       !/^NFC-CARD-PRIVACY-V[0-9]{1,3}$/.test(String(input.privacyNoticeVersion)))) invalid();
   // The new current disclosure is opt-in, content-bound and configured by the
   // approved server policy. It never relabels legacy V36/V35 evidence.
-  const currentDisclosure = input.currentPolicySha256 !== undefined || input.privacyNoticeVersion === 'NFC-CARD-PRIVACY-V37';
+  const currentDisclosure = input.currentPolicySha256 !== undefined || input.privacyNoticeVersion === 'NFC-CARD-PRIVACY-V37' ||
+    (options.currentPolicy!==undefined&&input.privacyNoticeVersion===options.currentPolicy.privacyNoticeVersion);
   let policyBinding: NonNullable<NfcLead['notice']>['policyBinding'];
   if (currentDisclosure) {
     const policy = options.currentPolicy;

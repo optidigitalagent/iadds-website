@@ -79,14 +79,16 @@ export function createNfcV2Handler(pool:Pool,config:PreviewConfig,options:{now?:
    }
    if(request.method!=='POST')return reply(405,{code:'method_not_allowed'});
    if(origin!==config.origin) return reply(403,{code:'origin_forbidden'});
-   const bytes=await readBody(request);const n=parseWire(bytes,{consentProfile:config.mode==='approved-intake'?config.policy:undefined});
+   const bytes=await readBody(request);let activePolicy=config.policy,n:NormalizedRequest;
+   try{n=parseWire(bytes,{consentProfile:config.mode==='approved-intake'?activePolicy:undefined});}
+   catch(e){if(!config.previousPolicy)throw e;activePolicy=config.previousPolicy;n=parseWire(bytes,{consentProfile:activePolicy});}
    if(config.mode==='synthetic-preview'&&!syntheticContact(n))throw new NfcV2Error(422,'invalid_payload');
    if(url.pathname==='/__preview/quote')return reply(200,{normalized:n,digestSha256:requestDigest(n),quote:quoteRequest(n,{quoteId:'00000000-0000-4000-8000-000000000001'})});
    const key=request.headers.get('idempotency-key')||'';if(!UUID_V4.test(key))throw new NfcV2Error(422,'invalid_id');
    const raw=JSON.parse(new TextDecoder().decode(bytes));verifyV2Challenge(config.secret,raw.challenge,n.sourcePage,now());
    const fault=request.headers.get('x-nfc-preview-fault');if(config.mode!=='synthetic-preview'&&fault)throw new NfcV2Error(422,'invalid_payload');if(fault==='unavailable')throw new NfcV2Error(503,'unavailable',true);
    if(fault&&!['timeout_after_commit','receipt_mismatch'].includes(fault))throw new NfcV2Error(422,'invalid_payload');
-   const p=config.policy;const receipt=await persistV2(pool,n,key,p?{policyBinding:{scope:p.scope,formVersion:p.formVersion,privacyNoticeVersion:p.privacyNoticeVersion,policySha256:p.policySha256,approvalReference:p.approvalReference}}:{});
+   const p=activePolicy;const receipt=await persistV2(pool,n,key,{...(p?{policyBinding:{scope:p.scope,formVersion:p.formVersion,privacyNoticeVersion:p.privacyNoticeVersion,policySha256:p.policySha256,approvalReference:p.approvalReference}}:{}),orderRouting:config.orderRouting});
    if(fault==='timeout_after_commit')throw new NfcV2Error(503,'outcome_unknown',true);
    if(fault==='receipt_mismatch'){const changed=structuredClone(receipt);changed.acceptedRequest.customerName='Synthetic Wrong Receipt';return reply(202,changed);}
    return reply(202,receipt);

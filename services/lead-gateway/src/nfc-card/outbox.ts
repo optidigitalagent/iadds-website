@@ -4,6 +4,7 @@ import { UUID, type NfcLead } from './contract.ts';
 import { formatNfc } from './format.ts';
 import { nfcLog } from './logger.ts';
 import type { Delivery, NfcSender } from './telegram.ts';
+import {drainRoutes,type RoutingSender} from './order-routing.ts';
 
 export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?: (line: string) => void): Promise<number> {
   if (!config.telegramEnabled) return 0;
@@ -11,7 +12,8 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
   // A process may have died after Telegram accepted but before its receipt committed.
   // Never blindly resend an expired in-flight claim. Operators reconcile it by lead ID.
   await pool.query(`UPDATE nfc_card.notification_outbox SET status='failed',safe_error_category='outcome_unknown',updated_at=now()
-    WHERE status='sending' AND claimed_at < now() - interval '2 minutes'`);
+    WHERE status='sending' AND claimed_at < now() - interval '2 minutes'
+    AND coalesce(to_jsonb(notification_outbox)->>'routing_route','')=''`);
   let processed = 0;
   for (let i = 0; i < 5; i++) {
     const client = await pool.connect();
@@ -24,6 +26,7 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
         l.design,l.google_location_url,l.solution,l.mini_context
         FROM nfc_card.notification_outbox o JOIN nfc_card.leads l USING(lead_id)
         WHERE o.delivery_enabled AND o.status IN ('pending','retry') AND o.next_attempt_at <= now()
+        AND coalesce(to_jsonb(o)->>'routing_route','')=''
         AND o.attempt_count < $1 AND (NOT l.is_final_test OR o.attempt_count < 1) AND ($2::uuid IS NULL OR (o.lead_id=$2 AND l.is_test))
         ORDER BY o.next_attempt_at,o.id LIMIT 1 FOR UPDATE OF o SKIP LOCKED`, [config.testOnly ? 1 : 6, config.testOnly ? config.testLeadId : null]);
       row = result.rows[0];
@@ -58,9 +61,12 @@ export async function drain(pool: Pool, config: NfcConfig, send: NfcSender, log?
   }
   return processed;
 }
-export function dispatcher(pool: Pool, config: NfcConfig, send: NfcSender) {
+export function dispatcher(pool: Pool, config: NfcConfig, send: NfcSender,routeSend?:RoutingSender) {
   let active: Promise<unknown> | undefined, stopping = false;
-  const tick = () => { if (!stopping && !active) active = drain(pool, config, send).catch(() => nfcLog({ category: 'database', status: 503 })).finally(() => { active = undefined; }); };
+  const tick = () => { if (!stopping && !active) active = (async()=>{
+    if(config.orderRouting&&routeSend)await drainRoutes(pool,config.orderRouting,routeSend);
+    await drain(pool, config, send);
+  })().catch(() => nfcLog({ category: 'database', status: 503 })).finally(() => { active = undefined; }); };
   const timer = setInterval(tick, 3000); timer.unref(); tick();
   return async () => { stopping = true; clearInterval(timer); await active; };
 }

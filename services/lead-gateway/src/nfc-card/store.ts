@@ -4,6 +4,7 @@ import { Pool, type PoolClient } from 'pg';
 import { NfcError, type NfcLead } from './contract.ts';
 import { quote, type Quote } from './commerce.ts';
 import { nfcLog } from './logger.ts';
+import {markRoute,planV1,type RoutingConfig} from './order-routing.ts';
 
 export function database(url: string): Pool {
   const pool = new Pool({ connectionString: url, max: 4, connectionTimeoutMillis: 3000, idleTimeoutMillis: 10000,
@@ -45,7 +46,7 @@ export async function migrate(pool: Pool, preflight = false): Promise<{ version:
   finally { client.release(); }
 }
 export type Receipt = { ok: true; source: 'NFC_CARD'; leadId: string; durableSaved: true; notificationStatus: 'queued' | 'disabled'; quote?: Quote };
-export type PersistOptions = { deliveryEnabled?: boolean; isTest?: boolean; isFinalTest?: boolean; leadId?: string; beforeOutbox?: (client: PoolClient) => Promise<void> };
+export type PersistOptions = { deliveryEnabled?: boolean; isTest?: boolean; isFinalTest?: boolean; leadId?: string; orderRouting?:RoutingConfig; beforeOutbox?: (client: PoolClient) => Promise<void> };
 export async function persist(pool: Pool, lead: NfcLead, key: string, options: PersistOptions = {}): Promise<Receipt> {
   // Canonical parser constructs stable field/key order. Challenge/timestamp never enter this digest.
   const digest = createHash('sha256').update(JSON.stringify(lead)).digest('hex');
@@ -55,7 +56,7 @@ export async function persist(pool: Pool, lead: NfcLead, key: string, options: P
     const inserted = await client.query(`INSERT INTO nfc_card.leads
       (id,lead_id,language,product,quantity,customer_name,phone,email,telegram,preferred_contact,source_page,utm,idempotency_key,request_digest,is_test,selection,price_quote,is_final_test,
        product_schema_version,product_id,sku,offer,instagram_url,comment,consent,intent,menu_status,menu_url,items,design,google_location_url,solution,mini_context,form_version,privacy_notice_version,processing_evidence)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36) ON CONFLICT (idempotency_key) DO NOTHING RETURNING lead_id`,
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36) ON CONFLICT (idempotency_key) DO NOTHING RETURNING lead_id,created_at`,
     [randomUUID(), leadId, lead.language, lead.product, lead.quantity, lead.customerName, lead.contact.phone, lead.contact.email,
       lead.contact.telegram, lead.contact.preferredMethod, lead.sourcePage, lead.utm, key, digest, options.isTest === true, lead.selection || null, quote(lead), options.isFinalTest === true,
       lead.instagram?.productSchemaVersion ?? lead.menu?.productSchemaVersion ?? lead.review3d?.productSchemaVersion,
@@ -79,8 +80,10 @@ export async function persist(pool: Pool, lead: NfcLead, key: string, options: P
     }
     await options.beforeOutbox?.(client);
     await client.query('INSERT INTO nfc_card.notification_outbox(id,lead_id,delivery_enabled) VALUES ($1,$2,$3)', [randomUUID(), leadId, options.deliveryEnabled === true]);
+    const routed=options.orderRouting&&!options.isTest&&!options.isFinalTest
+      ?await markRoute(client,'v1',leadId,planV1(lead),options.orderRouting,inserted.rows[0].created_at.toISOString()):false;
     await client.query('COMMIT');
-    return receipt(leadId, options.deliveryEnabled === true, quote(lead));
+    return receipt(leadId, options.deliveryEnabled === true||routed, quote(lead));
   } catch (error) { await client.query('ROLLBACK').catch(() => {}); if (error instanceof NfcError) throw error;
     const failure = error as {code?:string;constraint?:string};
     // Only the new identity fence's exact errors gain v2-compatible semantics.

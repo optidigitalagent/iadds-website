@@ -24,6 +24,7 @@ async function body(request: Request): Promise<Uint8Array> {
   return Buffer.concat(chunks, length);
 }
 export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?: () => number; log?: (line: string) => void; currentPolicy?: ApprovedPolicy;
+  previousPolicy?: ApprovedPolicy;
   save?: (lead: ReturnType<typeof parseNfcLead>, key: string, enabled: boolean) => Promise<Receipt>;
   read?: (afterAt: string, afterId: string) => Promise<Record<string, unknown>[]> } = {}) {
   const now = options.now ?? Date.now;
@@ -93,14 +94,15 @@ export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?:
       }
       let input;
       try { input = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(raw)); } catch { throw new NfcError(422, 'invalid_payload'); }
-      const lead = parseNfcLead(input, browser, {currentPolicy:options.currentPolicy});
+      const policy=options.previousPolicy&&input.currentPolicySha256===options.previousPolicy.policySha256?options.previousPolicy:options.currentPolicy;
+      const lead = parseNfcLead(input, browser, {currentPolicy:policy});
       if (browser) {
         if (input.website !== '') throw new NfcError(422, 'invalid_payload');
         verifyChallenge(config.secret, input.challenge, lead.sourcePage, now());
       }
       const enabled = config.telegramEnabled && !config.testOnly;
       const finalTest = browser && key === config.finalTestKey;
-      const result = await (options.save ? options.save(lead, key, enabled) : persist(pool, lead, key, { deliveryEnabled: enabled, isTest: finalTest, isFinalTest: finalTest }));
+      const result = await (options.save ? options.save(lead, key, enabled) : persist(pool, lead, key, { deliveryEnabled: enabled, isTest: finalTest, isFinalTest: finalTest,orderRouting:config.orderRouting }));
       nfcLog({ leadId: result.leadId, category: 'accepted', status: 202 }, options.log);
       return respond(202, { ...result, quote: result.quote ?? quote(lead) });
     } catch (error) {

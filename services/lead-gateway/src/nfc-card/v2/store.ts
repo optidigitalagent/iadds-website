@@ -3,6 +3,7 @@ import { randomUUID,createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import type { Pool,PoolClient } from 'pg';
+import {markRoute,planV2,type RoutingConfig} from '../order-routing.ts';
 import { completeRightsBodyScrub } from './rights.ts';
 import { NfcV2Error,requestDigest,buildReceipt,validateReceipt,DIGEST_PROFILE,NORMALIZATION_PROFILE,CORE_SHA256,UUID_V4,type NormalizedRequest,type Receipt } from './contract.ts';
 export const GENERATION='nfc-v35-preview-1';
@@ -19,7 +20,7 @@ export async function migrateV2(pool:Pool,options:{isolatedSyntheticDatabase:boo
   await c.query(sql);await c.query('INSERT INTO nfc_card.schema_migrations(version,checksum) VALUES($1,$2)',[version,checksum]);await c.query('COMMIT');return {applied:true,version,checksum};
  }catch(e){await c.query('ROLLBACK').catch(()=>{});throw e;}finally{c.release();}
 }
-export type SaveOptions={policyBinding?:{scope:'NFC_CARD_V2_RICH_REQUEST';formVersion:string;privacyNoticeVersion:string;policySha256:string;approvalReference:string};makeReceipt?:(n:NormalizedRequest,o:{requestId:string;acceptedAt:string;quoteId:string;notificationStatus:'disabled'})=>Receipt;beforePublish?:(c:PoolClient)=>Promise<void>};
+export type SaveOptions={orderRouting?:RoutingConfig;policyBinding?:{scope:'NFC_CARD_V2_RICH_REQUEST';formVersion:string;privacyNoticeVersion:string;policySha256:string;approvalReference:string};makeReceipt?:(n:NormalizedRequest,o:{requestId:string;acceptedAt:string;quoteId:string;notificationStatus:'disabled'|'queued'})=>Receipt;beforePublish?:(c:PoolClient)=>Promise<void>};
 export async function persistV2(pool:Pool,n:NormalizedRequest,key:string,options:SaveOptions={}):Promise<Receipt>{
  if(!UUID_V4.test(key))throw new NfcV2Error(422,'invalid_id');
  const binding=options.policyBinding,synthetic=n.consent.formVersion==='SYNTHETIC-NOT-APPROVED'&&n.consent.privacyNoticeVersion==='SYNTHETIC-NOT-APPROVED';
@@ -46,12 +47,14 @@ export async function persistV2(pool:Pool,n:NormalizedRequest,key:string,options
    await c.query('COMMIT');return row.receipt as Receipt;
   }
   const acceptedAt=new Date().toISOString(),quoteId=randomUUID();
-  const receipt=structuredClone((options.makeReceipt??buildReceipt)(n,{requestId,acceptedAt,quoteId,notificationStatus:'disabled'}));freeze(receipt);
-  if(requestDigest(n)!==digest||receipt.requestDigest.sha256!==digest||!validateReceipt(n,receipt)||receipt.requestId!==requestId||receipt.acceptedAt!==acceptedAt||receipt.quote.quoteId!==quoteId||receipt.notificationStatus!=='disabled')throw new NfcV2Error(503,'unavailable',true);
+  const plan=planV2(n),notificationStatus=options.orderRouting&&plan.chatId&&Date.parse(acceptedAt)>=Date.parse(options.orderRouting.cutover)?'queued':'disabled';
+  const receipt=structuredClone((options.makeReceipt??buildReceipt)(n,{requestId,acceptedAt,quoteId,notificationStatus}));freeze(receipt);
+  if(requestDigest(n)!==digest||receipt.requestDigest.sha256!==digest||!validateReceipt(n,receipt)||receipt.requestId!==requestId||receipt.acceptedAt!==acceptedAt||receipt.quote.quoteId!==quoteId||receipt.notificationStatus!==notificationStatus)throw new NfcV2Error(503,'unavailable',true);
   if(Buffer.byteLength(JSON.stringify(receipt))>131072)throw new NfcV2Error(413,'request_too_large');
   await c.query(`INSERT INTO nfc_card.v2_requests(request_id,idempotency_key,request_digest,normalization_profile,identity_registry_revision,normalized,receipt)
     VALUES($1,$2,$3,$4,$5,$6,$7)`,[requestId,key,digest,NORMALIZATION_PROFILE,CORE_SHA256,n,receipt]);
   await c.query(`INSERT INTO nfc_card.v2_notification_outbox(request_id,payload) VALUES($1,$2)`,[requestId,{schemaVersion:2,receipt,send_authorized:false,...(options.policyBinding?{processingEvidence:{capture:'submitted_form_consent_flag',scope:'REQUEST_SCOPED_RESPONSE',emailMarketingPermission:false,sourcePage:n.sourcePage,policyBinding:options.policyBinding}}:{})}]);
+  if(options.orderRouting)await markRoute(c,'v2',requestId,plan,options.orderRouting,acceptedAt);
   await options.beforePublish?.(c);
   // Serialized counter acquisition is the last data-changing operation, held until COMMIT.
   const counter=await c.query('UPDATE nfc_card.v2_publication_counter SET last_seq=last_seq+1 WHERE singleton RETURNING last_seq');
