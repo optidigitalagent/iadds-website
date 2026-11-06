@@ -6,6 +6,7 @@ import { persistV2,publicationPage,GENERATION } from './store.ts';
 import { approvedPolicy } from './policy.ts';
 import type { V2RuntimeConfig } from './config.ts';
 import { CONTRACT_ID,pricingRevision } from './registry.ts';
+import {CONTROL_HEADER,resolveControlContext,controlSchemaReady} from '../control-context.ts';
 export const V2_ENDPOINT='/v2/public/requests/nfc-card';
 export type PreviewConfig=V2RuntimeConfig;
 export function syntheticContact(n:NormalizedRequest):boolean {
@@ -44,7 +45,7 @@ export function createNfcV2Handler(pool:Pool,config:PreviewConfig,options:{now?:
   const headers=new Headers({'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Vary':'Origin'});
   if(request.headers.get('origin')===config.origin&&url.pathname!=='/v2/internal/nfc-card/requests'){
    headers.set('Access-Control-Allow-Origin',config.origin);headers.set('Access-Control-Allow-Methods','GET, POST, OPTIONS');
-   headers.set('Access-Control-Allow-Headers','Content-Type, Idempotency-Key'+(config.mode==='synthetic-preview'?', X-Nfc-Preview-Fault':''));headers.set('Access-Control-Max-Age','600');
+   headers.set('Access-Control-Allow-Headers','Content-Type, Idempotency-Key, X-Nfc-Control-Context'+(config.mode==='synthetic-preview'?', X-Nfc-Preview-Fault':''));headers.set('Access-Control-Max-Age','600');
   }
   const reply=(status:number,data:unknown)=>Response.json(data,{status,headers});
   if(config.mode==='disabled')return reply(503,errorEnvelope(new NfcV2Error(503,'notice_policy_not_approved')));
@@ -68,7 +69,7 @@ export function createNfcV2Handler(pool:Pool,config:PreviewConfig,options:{now?:
    const origin=request.headers.get('origin');if(origin&&origin!==config.origin) return reply(403,{code:'origin_forbidden'});
    if(request.method==='OPTIONS'){
     const method=request.headers.get('access-control-request-method'),requested=(request.headers.get('access-control-request-headers')??'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
-    const allowed=['content-type','idempotency-key',...(config.mode==='synthetic-preview'?['x-nfc-preview-fault']:[])];
+    const allowed=['content-type','idempotency-key',CONTROL_HEADER,...(config.mode==='synthetic-preview'?['x-nfc-preview-fault']:[])];
     if(origin!==config.origin||method!==(url.pathname.endsWith('/challenge')?'GET':'POST')||requested.some(h=>!allowed.includes(h)))return reply(403,{code:'origin_forbidden'});
     return new Response(null,{status:204,headers});
    }
@@ -88,7 +89,9 @@ export function createNfcV2Handler(pool:Pool,config:PreviewConfig,options:{now?:
    const raw=JSON.parse(new TextDecoder().decode(bytes));verifyV2Challenge(config.secret,raw.challenge,n.sourcePage,now());
    const fault=request.headers.get('x-nfc-preview-fault');if(config.mode!=='synthetic-preview'&&fault)throw new NfcV2Error(422,'invalid_payload');if(fault==='unavailable')throw new NfcV2Error(503,'unavailable',true);
    if(fault&&!['timeout_after_commit','receipt_mismatch'].includes(fault))throw new NfcV2Error(422,'invalid_payload');
-   const p=activePolicy;const receipt=await persistV2(pool,n,key,{...(p?{policyBinding:{scope:p.scope,formVersion:p.formVersion,privacyNoticeVersion:p.privacyNoticeVersion,policySha256:p.policySha256,approvalReference:p.approvalReference}}:{}),orderRouting:config.orderRouting});
+   const controlContext=resolveControlContext(request.headers.get(CONTROL_HEADER),key,n,config.secret,now());
+   if(controlContext&&!(await controlSchemaReady(pool)))throw new NfcV2Error(503,'unavailable',true);
+   const p=activePolicy;const receipt=await persistV2(pool,n,key,{...(p?{policyBinding:{scope:p.scope,formVersion:p.formVersion,privacyNoticeVersion:p.privacyNoticeVersion,policySha256:p.policySha256,approvalReference:p.approvalReference}}:{}),orderRouting:config.orderRouting,controlContext});
    if(fault==='timeout_after_commit')throw new NfcV2Error(503,'outcome_unknown',true);
    if(fault==='receipt_mismatch'){const changed=structuredClone(receipt);changed.acceptedRequest.customerName='Synthetic Wrong Receipt';return reply(202,changed);}
    return reply(202,receipt);

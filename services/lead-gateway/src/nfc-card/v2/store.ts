@@ -4,6 +4,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import type { Pool,PoolClient } from 'pg';
 import {markRoute,planV2,type RoutingConfig} from '../order-routing.ts';
+import type {ControlContext} from '../control-context.ts';
 import { completeRightsBodyScrub } from './rights.ts';
 import { NfcV2Error,requestDigest,buildReceipt,validateReceipt,DIGEST_PROFILE,NORMALIZATION_PROFILE,CORE_SHA256,UUID_V4,type NormalizedRequest,type Receipt } from './contract.ts';
 export const GENERATION='nfc-v35-preview-1';
@@ -20,7 +21,7 @@ export async function migrateV2(pool:Pool,options:{isolatedSyntheticDatabase:boo
   await c.query(sql);await c.query('INSERT INTO nfc_card.schema_migrations(version,checksum) VALUES($1,$2)',[version,checksum]);await c.query('COMMIT');return {applied:true,version,checksum};
  }catch(e){await c.query('ROLLBACK').catch(()=>{});throw e;}finally{c.release();}
 }
-export type SaveOptions={orderRouting?:RoutingConfig;policyBinding?:{scope:'NFC_CARD_V2_RICH_REQUEST';formVersion:string;privacyNoticeVersion:string;policySha256:string;approvalReference:string};makeReceipt?:(n:NormalizedRequest,o:{requestId:string;acceptedAt:string;quoteId:string;notificationStatus:'disabled'|'queued'})=>Receipt;beforePublish?:(c:PoolClient)=>Promise<void>};
+export type SaveOptions={controlContext?:ControlContext|null;orderRouting?:RoutingConfig;policyBinding?:{scope:'NFC_CARD_V2_RICH_REQUEST';formVersion:string;privacyNoticeVersion:string;policySha256:string;approvalReference:string};makeReceipt?:(n:NormalizedRequest,o:{requestId:string;acceptedAt:string;quoteId:string;notificationStatus:'disabled'|'queued'})=>Receipt;beforePublish?:(c:PoolClient)=>Promise<void>};
 export async function persistV2(pool:Pool,n:NormalizedRequest,key:string,options:SaveOptions={}):Promise<Receipt>{
  if(!UUID_V4.test(key))throw new NfcV2Error(422,'invalid_id');
  const binding=options.policyBinding,synthetic=n.consent.formVersion==='SYNTHETIC-NOT-APPROVED'&&n.consent.privacyNoticeVersion==='SYNTHETIC-NOT-APPROVED';
@@ -53,6 +54,7 @@ export async function persistV2(pool:Pool,n:NormalizedRequest,key:string,options
   if(Buffer.byteLength(JSON.stringify(receipt))>131072)throw new NfcV2Error(413,'request_too_large');
   await c.query(`INSERT INTO nfc_card.v2_requests(request_id,idempotency_key,request_digest,normalization_profile,identity_registry_revision,normalized,receipt)
     VALUES($1,$2,$3,$4,$5,$6,$7)`,[requestId,key,digest,NORMALIZATION_PROFILE,CORE_SHA256,n,receipt]);
+  if(options.controlContext)await c.query('UPDATE nfc_card.v2_requests SET control_context=$2 WHERE request_id=$1',[requestId,options.controlContext]);
   await c.query(`INSERT INTO nfc_card.v2_notification_outbox(request_id,payload) VALUES($1,$2)`,[requestId,{schemaVersion:2,receipt,send_authorized:false,...(options.policyBinding?{processingEvidence:{capture:'submitted_form_consent_flag',scope:'REQUEST_SCOPED_RESPONSE',emailMarketingPermission:false,sourcePage:n.sourcePage,policyBinding:options.policyBinding}}:{})}]);
   if(options.orderRouting)await markRoute(c,'v2',requestId,plan,options.orderRouting,acceptedAt);
   await options.beforePublish?.(c);
@@ -60,13 +62,13 @@ export async function persistV2(pool:Pool,n:NormalizedRequest,key:string,options
   const counter=await c.query('UPDATE nfc_card.v2_publication_counter SET last_seq=last_seq+1 WHERE singleton RETURNING last_seq');
   await c.query(`INSERT INTO nfc_card.v2_publications(seq,generation,entity_kind,cart_request_id) VALUES($1,$2,'cart_request',$3)`,[counter.rows[0].last_seq,GENERATION,requestId]);
   await c.query('COMMIT');return receipt;
- }catch(e){await c.query('ROLLBACK').catch(()=>{});if(e instanceof NfcV2Error)throw e;if((e as {code?:string})?.code==='55P03')throw new NfcV2Error(409,'request_in_progress',true);throw new NfcV2Error(503,'unavailable',true);}finally{c.release();}
+ }catch(e){await c.query('ROLLBACK').catch(()=>{});if(e instanceof NfcV2Error)throw e;if((e as {code?:string})?.code==='55P03'||(e as {constraint?:string})?.constraint==='v2_control_context_case')throw new NfcV2Error(409,'request_in_progress',true);throw new NfcV2Error(503,'unavailable',true);}finally{c.release();}
 }
 export async function publicationPage(pool:Pool,afterSeq:number,generation=GENERATION){
  if(generation!==GENERATION||!Number.isSafeInteger(afterSeq)||afterSeq<0)throw new NfcV2Error(422,'invalid_payload');
  // This additive consumer is cart-only. Legacy publications stay on the unchanged v1 feed.
  // Filter the typed stream before pagination; legacy-only tails never advance the cart cursor.
- const rows=await pool.query(`SELECT p.seq,p.generation,p.entity_kind,p.cart_request_id AS published_request_id,r.request_id,r.normalized,r.normalization_profile,r.identity_registry_revision,r.state,r.receipt,k.cart_request_id,k.tombstoned,k.idempotency_key,k.request_digest,k.digest_profile,o.payload AS outbox_payload
+ const rows=await pool.query(`SELECT p.seq,p.generation,p.entity_kind,p.cart_request_id AS published_request_id,r.request_id,r.normalized,r.normalization_profile,r.identity_registry_revision,r.state,r.receipt,to_jsonb(r)->'control_context' control_context,k.cart_request_id,k.tombstoned,k.idempotency_key,k.request_digest,k.digest_profile,o.payload AS outbox_payload
  FROM nfc_card.v2_publications p LEFT JOIN nfc_card.v2_requests r ON r.request_id=p.cart_request_id
  LEFT JOIN nfc_card.v2_identity_keys k ON k.cart_request_id=p.cart_request_id
  LEFT JOIN nfc_card.v2_notification_outbox o ON o.request_id=r.request_id
@@ -87,6 +89,8 @@ export async function publicationPage(pool:Pool,afterSeq:number,generation=GENER
    cursor=Number(v.seq);continue;
   }
   if(v.entity_kind!=='cart_request'||!v.receipt||!v.idempotency_key||v.tombstoned||v.state!=='accepted'||v.normalization_profile!==NORMALIZATION_PROFILE||v.identity_registry_revision!==CORE_SHA256||v.request_id!==v.cart_request_id||v.request_id!==v.published_request_id||v.receipt.requestId!==v.request_id||!isDeepStrictEqual(v.normalized,v.receipt.acceptedRequest)||v.digest_profile!==DIGEST_PROFILE||!validateReceipt(v.receipt.acceptedRequest,v.receipt)||v.request_digest!==v.receipt.requestDigest.sha256)throw new NfcV2Error(503,'unavailable',true);
+  // Preserve the ordinary publication cursor, without publishing control data to working consumers.
+  if(v.control_context?.trusted===true){cursor=Number(v.seq);continue;}
   const item={schemaVersion:2,entityKind:'cart_request',sourceIdentity:{source:'NFC_CARD',requestId:v.receipt.requestId,idempotencyKey:v.idempotency_key,digestProfile:v.digest_profile,digestSha256:v.request_digest},publication:{generation,seq:Number(v.seq)},receipt:v.receipt};
   const candidate={schemaVersion:2,generation,items:[...items,item],next:{generation,afterSeq:Number(v.seq)}};
   if(Buffer.byteLength(JSON.stringify(candidate))>2*1024*1024){if(!items.length)throw new NfcV2Error(503,'unavailable',true);break;}

@@ -17,11 +17,11 @@ try{
  const old=await pool.query('SELECT version,checksum FROM nfc_card.schema_migrations ORDER BY version');
  for(const row of old.rows){
   if(row.version===target)continue;
-  if(!/^0(?:0[1-9]|1[013])_[a-z0-9_]+$/.test(row.version))throw Error('unreviewed_schema_version');
+  if(!/^0(?:0[1-9]|1[0134])_[a-z0-9_]+$/.test(row.version))throw Error('unreviewed_schema_version');
   const source=await readFile(new URL('../migrations/nfc-card/'+row.version+'.sql',import.meta.url));
   if(createHash('sha256').update(source).digest('hex')!==row.checksum)throw Error('legacy_schema_checksum_mismatch');
  }
- if(old.rows.filter(x=>x.version!==target&&x.version!=='013_order_routing').length!==11)throw Error('complete_legacy_schema_required');
+ if(old.rows.filter(x=>x.version!==target&&x.version!=='013_order_routing'&&x.version!=='014_control_context').length!==11)throw Error('complete_legacy_schema_required');
  const integrity=(await pool.query("SELECT count(*)::int AS missing_outbox FROM nfc_card.leads l LEFT JOIN nfc_card.notification_outbox o USING(lead_id) WHERE o.lead_id IS NULL")).rows[0];
  if(integrity.missing_outbox!==0)throw Error('legacy_identity_set_reconciliation_required');
  const applied=old.rows.find(x=>x.version===target);if(applied&&applied.checksum!==V2_MIGRATION_SHA256)throw Error('migration_checksum_mismatch');

@@ -8,8 +8,8 @@ try{
  const info=(await pool.query("SELECT current_database() db,current_setting('server_version_num') version")).rows[0];
  if(!String(info.version).startsWith('17')||!(info.db==='nfc_card'||/^nfc_v35_[a-z0-9_]+_test$/.test(info.db)&&['127.0.0.1','localhost'].includes(url.hostname)))throw Error('verified_database_required');
  const old=(await pool.query('SELECT version,checksum FROM nfc_card.schema_migrations ORDER BY version')).rows;
- for(const row of old){if(!/^0(?:0[1-9]|1[0-3])_[a-z0-9_]+$/.test(row.version))throw Error('unreviewed_schema');const bytes=readFileSync(new URL('../migrations/nfc-card/'+row.version+'.sql',import.meta.url));if(createHash('sha256').update(bytes).digest('hex')!==row.checksum)throw Error('migration_checksum_mismatch');}
- if(old.filter(x=>x.version!==version).length!==12)throw Error('complete_prior_schema_required');
+ for(const row of old){if(!/^0(?:0[1-9]|1[0-4])_[a-z0-9_]+$/.test(row.version))throw Error('unreviewed_schema');const bytes=readFileSync(new URL('../migrations/nfc-card/'+row.version+'.sql',import.meta.url));if(createHash('sha256').update(bytes).digest('hex')!==row.checksum)throw Error('migration_checksum_mismatch');}
+ if(old.filter(x=>x.version!==version&&x.version!=='014_control_context').length!==12)throw Error('complete_prior_schema_required');
  if(operation==='preflight'){
   const ready=await routingSchemaReady(pool),states:unknown[]=[],uncertain:unknown[]=[];
   if(ready)for(const [table,state,key]of [['notification_outbox','status','lead_id'],['v2_notification_outbox','state','request_id']]){

@@ -6,6 +6,7 @@ import type {NfcLead} from './contract.ts';
 import type {NormalizedRequest,Receipt} from './v2/contract.ts';
 import type {ApprovedPolicy} from './v2/policy.ts';
 import {nfcLog} from './logger.ts';
+import {controlMessageLine,type ControlContext} from './control-context.ts';
 
 export const ROUTING_APPROVAL='NFC-CARD-SITE-ORDERS-OWNER-20261105';
 export const ROUTES=Object.freeze({ORIG:'-5531022071',BRAND:'-5441287655'});
@@ -55,7 +56,7 @@ export async function markRoute(c:PoolClient,kind:'v1'|'v2',id:string,plan:Route
 export type RoutingMessage={chatId:string;caption:string;fileName:string;bytes:Uint8Array};
 export type RoutingDelivery={status:'sent';messageId:number;chatId:string;documentUniqueId?:string}|{status:'retry'|'failed';category:'rate_limit'|'upstream'|'configuration'|'outcome_unknown';retryAfter?:number};
 export type RoutingSender=(message:RoutingMessage)=>Promise<RoutingDelivery>;
-export function routingMessage(kind:'v1'|'v2',id:string,chatId:string,data:Record<string,unknown>):RoutingMessage {
+export function routingMessage(kind:'v1'|'v2',id:string,chatId:string,data:Record<string,unknown>,control?:{context:ControlContext;secret:string}):RoutingMessage {
  const receipt=kind==='v2'?data as unknown as Receipt:undefined;
  const n=receipt?.acceptedRequest;
  const legacy=data.lead as Record<string,any>|undefined;
@@ -65,12 +66,13 @@ export function routingMessage(kind:'v1'|'v2',id:string,chatId:string,data:Recor
   (legacy?.intent==='menu_consultation'||legacy?.solution?.schemaVersion===1||['advice','free_design_concepts'].includes(legacy?.mini_context?.quantity_mode)?null:legacy?.quantity);
  const customer=n?.customerName??legacy?.customer_name??legacy?.customerName;
  const caption=['NEW NFC CARD LEAD','/nfc_lead@skdfjeriobot','Order #'+id,'Source: NFC_CARD '+kind,
+  ...(control?['ТЕСТ — НЕ ИЗГОТАВЛИВАТЬ','Case ID: '+(control.context.caseId??'неподтверждён'),controlMessageLine(control.context,id,control.secret)]:[]),
   'SKU: '+[...new Set(entries)].join(', '),quantity===null||quantity===undefined?null:'Quantity: '+quantity,
   customer?'Client: '+customer:null,'LEAD — seller, agreement and payment unconfirmed.',
   'Full submitted fields and original quote: attached source document.'].filter(Boolean).join('\n');
  if(caption.length>1024)throw Error('routing_caption_overflow');
  const document={source:'NFC_CARD',sourceApplicationId:id,sourceVersion:kind,recordType:'LEAD',sellerStatus:'UNKNOWN',
-  paymentStatus:'UNCONFIRMED',agreedOrder:false,priceMeaning:'SOURCE_QUOTE_NOT_AGREED_SALE_OR_PAYMENT',sourceRecord:data};
+  paymentStatus:'UNCONFIRMED',agreedOrder:false,priceMeaning:'SOURCE_QUOTE_NOT_AGREED_SALE_OR_PAYMENT',sourceRecord:data,...(control?{controlContext:control.context}: {})};
  return {chatId,caption,fileName:'NFC_CARD_'+id+'.json',bytes:Buffer.from(JSON.stringify(document,null,2)+'\n')};
 }
 function legacyData(row:Record<string,any>):Record<string,unknown>{
@@ -99,7 +101,9 @@ export async function drainRoutes(pool:Pool,config:RoutingConfig|undefined,send:
      await c.query(`UPDATE nfc_card.${table} SET ${state}='failed',delivery_enabled=false,safe_error_category='SOURCE_NOT_SENDABLE',updated_at=now() WHERE ${key}=$1`,[row[key]]);
     }else{
      const data=kind==='v2'?source.receipt:legacyData(source);
-     message=routingMessage(kind,row[key],String(row.routing_chat_id),data);
+     const context=source.control_context as ControlContext|undefined;
+     if(context&&(!process.env.NFC_V2_SECRET||process.env.NFC_V2_SECRET.length<32))throw Error('control_signer_required');
+     message=routingMessage(kind,row[key],String(row.routing_chat_id),data,context?{context,secret:process.env.NFC_V2_SECRET!}:undefined);
      await c.query(`UPDATE nfc_card.${table} SET ${state}='sending',attempt_count=attempt_count+1,claimed_at=now(),updated_at=now(),delivery_payload_sha256=$2 WHERE ${key}=$1`,[row[key],createHash('sha256').update(message.bytes).digest('hex')]);
     }
    }
