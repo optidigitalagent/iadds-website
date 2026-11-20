@@ -13,9 +13,13 @@ import {ACTIVE_ENTRIES,MENU_VARIANTS} from '../src/nfc-card/v2/registry.ts';
 import {readV2Config} from '../src/nfc-card/v2/config.ts';
 import {drain} from '../src/nfc-card/outbox.ts';
 import type {GatewayConfig} from '../src/config.ts';
-const fixtures=JSON.parse(readFileSync(new URL('./fixtures/nfc-v35-requests.json',import.meta.url),'utf8'));
+import type {NormalizedRequest,NormalizedLine,ServiceContext,Receipt} from '../src/nfc-card/v2/contract.ts';
+type Wire=Pick<NormalizedRequest,'schemaVersion'|'kind'|'language'|'sourcePage'|'customerName'|'contact'|'consent'>&{lines:Pick<NormalizedLine,'lineId'|'entryId'|'productId'|'offerId'|'quantity'|'configuration'|'variantId'>[];serviceContext?:Pick<ServiceContext,'entryId'|'productId'|'offerId'|'intent'|'configuration'>;website:string;challenge:string};
+type RoutingDocument={sourceApplicationId:string;sourceRecord:unknown;recordType:'LEAD';sellerStatus:'UNKNOWN';paymentStatus:'UNCONFIRMED'};
+type CapturedDocument={chat:FormDataEntryValue|null;caption:FormDataEntryValue|null;body:RoutingDocument};
+const fixtures:{positive:{wire:Wire}[]}=JSON.parse(readFileSync(new URL('./fixtures/nfc-v35-requests.json',import.meta.url),'utf8'));
 const wireFor=(entry:string)=>{
- const f=fixtures.positive.find((x:any)=>x.wire.kind==='physical_order'&&x.wire.lines.length===1&&x.wire.lines[0].entryId===entry);
+ const f=fixtures.positive.find((x)=>x.wire.kind==='physical_order'&&x.wire.lines.length===1&&x.wire.lines[0].entryId===entry);
  assert.ok(f,entry);const w=structuredClone(f.wire);w.customerName='Synthetic order routing';
  w.contact=entry==='nfc-instagram-card'?{preferredMethod:'whatsapp',phone:'+12025550123'}:{preferredMethod:'email',email:'routing@example.invalid'};
  return w;
@@ -38,7 +42,7 @@ test('routing opt-in requires exact owner policy and explicit UTC new-event boun
  assert.throws(()=>parseNfcLead({language:'uk',product:'branded-review-card',quantity:2,customerName:'Synthetic missing binding',contact:{preferredMethod:'viber',phone:'+12025550123'},sourcePage:'/nfc-card-website/solutions/branded-review-card',selection:{variant:'branded',quantity:'2'},consent:true,formVersion:'NFC-CARD-FORM-V34',privacyNoticeVersion:c.policy!.privacyNoticeVersion},true,{currentPolicy:c.policy}));
  assert.equal(readRoutingConfig({NFC_ORDER_ROUTING_ENABLED:'true',NFC_ORDER_ROUTING_CUTOVER:'2026-11-05T00:00:00.000Z'},c.policy)?.approvalReference,ROUTING_APPROVAL);
 });
-const cfg:GatewayConfig={sources:new Map(),token:'8722696590:synthetic_DO_NOT_SEND_123456789',chatId:'5674963513',apiTimeoutMs:1000,requestsPerMinute:30,idempotencyTtlMs:1000,maxEntries:10};
+const cfg:GatewayConfig={sources:new Map(),token:'8722696590:'+randomUUID().replaceAll('-',''),chatId:'5674963513',apiTimeoutMs:1000,requestsPerMinute:30,idempotencyTtlMs:1000,maxEntries:10};
 test('one document transport retains full source, verifies chat and receipt, classifies retry versus uncertain outcome',async()=>{
  const message={chatId:'-5441287655',caption:'NEW NFC CARD LEAD\n/nfc_lead@skdfjeriobot\nOrder #'+randomUUID(),fileName:'synthetic.json',bytes:Buffer.from('{"notes":"full original"}')};let calls=0;
  const send=orderTelegram(cfg,async(url,options)=>{calls++;assert.ok(String(url).endsWith('/sendDocument'));const form=options?.body as FormData;assert.equal(form.get('chat_id'),message.chatId);assert.equal(form.get('caption'),message.caption);assert.equal(await(form.get('document') as File).text(),Buffer.from(message.bytes).toString());assert.equal(JSON.parse(form.get('caption_entities') as string)[0].type,'bot_command');return Response.json({ok:true,result:{message_id:81,chat:{id:-5441287655},document:{file_unique_id:'SYNTHETIC_ONLY'}}});});
@@ -60,13 +64,13 @@ test('durable existing PG17 outboxes: new-only, exact-key replay, concurrent rep
   assert.deepEqual(await persistV2(pool,oldN,oldKey,{orderRouting:config}),oldReceipt);
   assert.equal((await pool.query('SELECT routing_route,delivery_enabled,state FROM nfc_card.v2_notification_outbox WHERE request_id=$1',[oldReceipt.requestId])).rows[0].routing_route,null);
   assert.equal(before.delivery_enabled,false);
-  const saved:any[]=[],documents:any[]=[],keys:string[]=[];let count=0;
+  const saved:Receipt[]=[],documents:CapturedDocument[]=[],keys:string[]=[];let count=0;
   const sender=orderTelegram(cfg,async(_url,opts)=>{const f=opts?.body as FormData,d=JSON.parse(await(f.get('document') as File).text());documents.push({chat:f.get('chat_id'),caption:f.get('caption'),body:d});count++;return Response.json({ok:true,result:{message_id:100+count,chat:{id:Number(f.get('chat_id'))},document:{file_unique_id:'SYNTHETIC_'+count}}});});
   await t.test('every active exact entry commits and all original configurations/quotes survive fake delivery',async()=>{
    for(const entry of ACTIVE_ENTRIES){const n=normalizeRequest(wireFor(entry.entryId)),key=randomUUID(),r=await persistV2(pool,n,key,{orderRouting:config});keys.push(key);saved.push(r);assert.equal(r.notificationStatus,'queued');assert.deepEqual(await persistV2(pool,n,key,{orderRouting:config}),r);}
    for(let i=0;i<9;i++)await drainRoutes(pool,config,sender);
    assert.equal(count,9);assert.equal(documents.filter(x=>x.chat==='-5531022071').length,4);assert.equal(documents.filter(x=>x.chat==='-5441287655').length,5);
-   for(const r of saved){const doc=documents.find(x=>x.body.sourceApplicationId===r.requestId);assert.deepEqual(doc.body.sourceRecord,r);assert.equal(doc.body.recordType,'LEAD');assert.equal(doc.body.sellerStatus,'UNKNOWN');assert.equal(doc.body.paymentStatus,'UNCONFIRMED');assert.ok(doc.caption.includes('NEW NFC CARD LEAD'));}
+   for(const r of saved){const doc=documents.find(x=>x.body.sourceApplicationId===r.requestId)!;assert.deepEqual(doc.body.sourceRecord,r);assert.equal(doc.body.recordType,'LEAD');assert.equal(doc.body.sellerStatus,'UNKNOWN');assert.equal(doc.body.paymentStatus,'UNCONFIRMED');assert.ok((doc.caption as string).includes('NEW NFC CARD LEAD'));}
    const rows=(await pool.query("SELECT * FROM nfc_card.v2_notification_outbox WHERE state='sent'")).rows;assert.equal(rows.length,9);assert.ok(rows.every(x=>x.telegram_message_id&&x.delivery_payload_sha256&&x.attempt_count===1));
    assert.deepEqual(await persistV2(pool,saved[0].acceptedRequest,keys[0],{orderRouting:config}),saved[0]);await drainRoutes(pool,config,sender);assert.equal(count,9);
   });

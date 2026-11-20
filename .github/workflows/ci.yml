@@ -62,15 +62,17 @@ jobs:
       postgres:
         image: postgres:17
         env:
-          POSTGRES_DB: nfc_gateway_test
+          POSTGRES_DB: postgres
           POSTGRES_USER: nfc_test
           POSTGRES_HOST_AUTH_METHOD: trust
-        ports: ['5432:5432']
+        ports: ['55105:5432', '55106:5432']
         options: >-
-          --health-cmd "pg_isready -U nfc_test -d nfc_gateway_test"
+          --health-cmd "pg_isready -U nfc_test -d postgres"
           --health-interval 5s --health-timeout 5s --health-retries 10
     env:
-      NFC_TEST_DATABASE_URL: postgres://nfc_test@127.0.0.1:5432/nfc_gateway_test
+      NFC_TEST_DATABASE_URL: postgres://nfc_test@127.0.0.1:55105/nfc_v35_routing_test
+      NFC_ROUTING_HTTP_DATABASE_URL: postgres://nfc_test@127.0.0.1:55105/nfc_v35_routing_http_test
+      NFC_CONTROL_TEST_DATABASE_URL: postgres://nfc_test@127.0.0.1:55106/nfc_v35_control_test
       NFC_TELEGRAM_ENABLED: 'false'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -100,9 +102,18 @@ jobs:
             chmod 700 "$NFC_PG17_BIN/$program"
           done
           "$NFC_PG17_BIN/pg_dump" --version
-      - run: npm run typecheck && npm test && npm run build
+      - run: npm run typecheck && node scripts/run-isolated-ci-tests.mjs && npm run build
         env:
           NFC_PG17_BIN: ${{ runner.temp }}/nfc-pg17-client
           NFC_PG17_CONTAINER_ID: ${{ job.services.postgres.id }}
+          NFC_CI_REPORT_DIR: ${{ runner.temp }}/nfc-isolated-evidence
         working-directory: services/lead-gateway
       - run: git diff --exit-code
+      - name: Preserve isolated gateway evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: nfc-isolated-${{ github.run_id }}
+          path: ${{ runner.temp }}/nfc-isolated-evidence/
+          if-no-files-found: error
+          retention-days: 7

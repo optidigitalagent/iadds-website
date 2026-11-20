@@ -1,3 +1,4 @@
+import {nfcBrowserOriginAllowed} from './browser-origin.ts';
 import type { ApprovedPolicy } from './v2/policy.ts';
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
 import type { Pool } from 'pg';
@@ -40,9 +41,11 @@ export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?:
     const inboundFeed = url.pathname === '/v1/internal/nfc-card/leads';
     if (!signed && !inboundFeed && url.pathname !== ENDPOINT && url.pathname !== ENDPOINT + '/challenge') return;
     const origin = request.headers.get('origin'), browser = !signed;
+    const publicPath=url.pathname===ENDPOINT||url.pathname===ENDPOINT+'/challenge';
+    const originAllowed=nfcBrowserOriginAllowed(origin,ORIGIN,publicPath);
     const headers = new Headers({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Vary': 'Origin' });
-    if (browser && origin === ORIGIN) {
-      headers.set('Access-Control-Allow-Origin', ORIGIN);
+    if (browser && originAllowed) {
+      headers.set('Access-Control-Allow-Origin', origin!);
       headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       headers.set('Access-Control-Allow-Headers', 'Content-Type, Idempotency-Key');
       headers.set('Access-Control-Max-Age', '600');
@@ -63,7 +66,7 @@ export function createNfcHandler(pool: Pool, config: NfcConfig, options: { now?:
         const items = await (options.read ? options.read(afterAt, afterId) : inboundRows(pool, afterAt, afterId));
         return respond(200, { items, next: items.length ? { afterAt: items.at(-1)!.created_at, afterId: items.at(-1)!.lead_id } : null });
       }
-      if (browser && origin !== ORIGIN) throw new NfcError(403, 'origin_not_allowed');
+      if (browser && !originAllowed) throw new NfcError(403, 'origin_not_allowed');
       if (browser && request.method === 'OPTIONS') {
         const method = request.headers.get('access-control-request-method');
         const requested = (request.headers.get('access-control-request-headers') ?? '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);

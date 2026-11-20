@@ -1,3 +1,4 @@
+import {nfcBrowserOriginAllowed} from '../browser-origin.ts';
 /** Opt-in versioned transport with exact policy/schema gates; notification delivery remains disabled. */
 import { createHmac,randomBytes,timingSafeEqual } from 'node:crypto';
 import type { Pool } from 'pg';
@@ -42,9 +43,12 @@ export function createNfcV2Handler(pool:Pool,config:PreviewConfig,options:{now?:
  const now=options.now??Date.now;let rate={until:0,count:0};
  return async(request:Request):Promise<Response|undefined>=>{
   const url=new URL(request.url);if(![V2_ENDPOINT,V2_ENDPOINT+'/challenge',V2_ENDPOINT+'/status','/__preview/quote','/v2/internal/nfc-card/requests'].includes(url.pathname))return;
+  const origin=request.headers.get('origin');
+  const publicPath=[V2_ENDPOINT,V2_ENDPOINT+'/challenge',V2_ENDPOINT+'/status'].includes(url.pathname);
+  const originAllowed=nfcBrowserOriginAllowed(origin,config.origin,config.mode==='approved-intake'&&publicPath);
   const headers=new Headers({'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Vary':'Origin'});
-  if(request.headers.get('origin')===config.origin&&url.pathname!=='/v2/internal/nfc-card/requests'){
-   headers.set('Access-Control-Allow-Origin',config.origin);headers.set('Access-Control-Allow-Methods','GET, POST, OPTIONS');
+  if(originAllowed&&url.pathname!=='/v2/internal/nfc-card/requests'){
+   headers.set('Access-Control-Allow-Origin',origin!);headers.set('Access-Control-Allow-Methods','GET, POST, OPTIONS');
    headers.set('Access-Control-Allow-Headers','Content-Type, Idempotency-Key, X-Nfc-Control-Context'+(config.mode==='synthetic-preview'?', X-Nfc-Preview-Fault':''));headers.set('Access-Control-Max-Age','600');
   }
   const reply=(status:number,data:unknown)=>Response.json(data,{status,headers});
@@ -66,11 +70,11 @@ export function createNfcV2Handler(pool:Pool,config:PreviewConfig,options:{now?:
      pricingRevision:{UA:pricingRevision('UA'),PL:pricingRevision('PL')},gatewayCommit:config.gatewayCommit??null});
    }
    if(config.mode==='approved-intake'&&url.pathname==='/__preview/quote')return reply(404,{code:'not_found'});
-   const origin=request.headers.get('origin');if(origin&&origin!==config.origin) return reply(403,{code:'origin_forbidden'});
+   if(origin&&!originAllowed) return reply(403,{code:'origin_forbidden'});
    if(request.method==='OPTIONS'){
     const method=request.headers.get('access-control-request-method'),requested=(request.headers.get('access-control-request-headers')??'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
     const allowed=['content-type','idempotency-key',CONTROL_HEADER,...(config.mode==='synthetic-preview'?['x-nfc-preview-fault']:[])];
-    if(origin!==config.origin||method!==(url.pathname.endsWith('/challenge')?'GET':'POST')||requested.some(h=>!allowed.includes(h)))return reply(403,{code:'origin_forbidden'});
+    if(!originAllowed||method!==(url.pathname.endsWith('/challenge')?'GET':'POST')||requested.some(h=>!allowed.includes(h)))return reply(403,{code:'origin_forbidden'});
     return new Response(null,{status:204,headers});
    }
    if(url.pathname.endsWith('/challenge')){
@@ -79,7 +83,7 @@ export function createNfcV2Handler(pool:Pool,config:PreviewConfig,options:{now?:
     return reply(200,{challenge:issueChallenge(config.secret,path,now()),minimumDelayMs:2000,expiresInSeconds:1800});
    }
    if(request.method!=='POST')return reply(405,{code:'method_not_allowed'});
-   if(origin!==config.origin) return reply(403,{code:'origin_forbidden'});
+   if(!originAllowed) return reply(403,{code:'origin_forbidden'});
    const bytes=await readBody(request);let activePolicy=config.policy,n:NormalizedRequest;
    try{n=parseWire(bytes,{consentProfile:config.mode==='approved-intake'?activePolicy:undefined});}
    catch(e){if(!config.previousPolicy)throw e;activePolicy=config.previousPolicy;n=parseWire(bytes,{consentProfile:activePolicy});}

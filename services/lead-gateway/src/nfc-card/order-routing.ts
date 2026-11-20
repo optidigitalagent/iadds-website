@@ -2,7 +2,7 @@
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import type {Pool,PoolClient} from 'pg';
-import type {NfcLead} from './contract.ts';
+import type {NfcLead,MiniSolution,LegacySolution,MenuDetails} from './contract.ts';
 import type {NormalizedRequest,Receipt} from './v2/contract.ts';
 import type {ApprovedPolicy} from './v2/policy.ts';
 import {nfcLog} from './logger.ts';
@@ -56,14 +56,16 @@ export async function markRoute(c:PoolClient,kind:'v1'|'v2',id:string,plan:Route
 export type RoutingMessage={chatId:string;caption:string;fileName:string;bytes:Uint8Array};
 export type RoutingDelivery={status:'sent';messageId:number;chatId:string;documentUniqueId?:string}|{status:'retry'|'failed';category:'rate_limit'|'upstream'|'configuration'|'outcome_unknown';retryAfter?:number};
 export type RoutingSender=(message:RoutingMessage)=>Promise<RoutingDelivery>;
+type LegacyRoutingLead=Partial<Pick<NfcLead,'product'|'quantity'|'customerName'>>&{customer_name?:string|null;mini_context?:MiniSolution|null;solution?:LegacySolution|null;intent?:MenuDetails['intent']|null};
+type RoutingOutboxRow={attempt_count:number;routing_chat_id:string|null}&({lead_id:string;request_id?:never}|{request_id:string;lead_id?:never});
 export function routingMessage(kind:'v1'|'v2',id:string,chatId:string,data:Record<string,unknown>,control?:{context:ControlContext;secret:string}):RoutingMessage {
  const receipt=kind==='v2'?data as unknown as Receipt:undefined;
  const n=receipt?.acceptedRequest;
- const legacy=data.lead as Record<string,any>|undefined;
+ const legacy=data.lead as LegacyRoutingLead|undefined;
  const entries=n?(n.lines.length?n.lines.map(x=>x.entryId):n.serviceContext?[n.serviceContext.entryId]:[]):
   [String(legacy?.mini_context?.solution_id??legacy?.solution?.solution_id??legacy?.product??'')];
  const quantity=n?(n.kind==='physical_order'?n.lines.reduce((s,x)=>s+x.quantity,0):null):
-  (legacy?.intent==='menu_consultation'||legacy?.solution?.schemaVersion===1||['advice','free_design_concepts'].includes(legacy?.mini_context?.quantity_mode)?null:legacy?.quantity);
+  (legacy?.intent==='menu_consultation'||legacy?.solution?.schemaVersion===1||(['advice','free_design_concepts'] as (string|undefined)[]).includes(legacy?.mini_context?.quantity_mode)?null:legacy?.quantity);
  const customer=n?.customerName??legacy?.customer_name??legacy?.customerName;
  const caption=['NEW NFC CARD LEAD','/nfc_lead@skdfjeriobot','Order #'+id,'Source: NFC_CARD '+kind,
   ...(control?['ТЕСТ — НЕ ИЗГОТАВЛИВАТЬ','Case ID: '+(control.context.caseId??'неподтверждён'),controlMessageLine(control.context,id,control.secret)]:[]),
@@ -75,7 +77,7 @@ export function routingMessage(kind:'v1'|'v2',id:string,chatId:string,data:Recor
   paymentStatus:'UNCONFIRMED',agreedOrder:false,priceMeaning:'SOURCE_QUOTE_NOT_AGREED_SALE_OR_PAYMENT',sourceRecord:data,...(control?{controlContext:control.context}: {})};
  return {chatId,caption,fileName:'NFC_CARD_'+id+'.json',bytes:Buffer.from(JSON.stringify(document,null,2)+'\n')};
 }
-function legacyData(row:Record<string,any>):Record<string,unknown>{
+function legacyData(row:Record<string,unknown>):Record<string,unknown>{
  // Preserve every persisted application field and its original quote, without database-only identity/queue metadata.
  const skip=new Set(['id','idempotency_key','request_digest','routing_route','routing_chat_id']);
  return {acceptedAt:row.created_at instanceof Date?row.created_at.toISOString():row.created_at,
@@ -88,10 +90,10 @@ export async function drainRoutes(pool:Pool,config:RoutingConfig|undefined,send:
   const expired=await pool.query(`UPDATE nfc_card.${table} SET ${state}='outcome_unknown',safe_error_category='outcome_unknown',updated_at=now()
    WHERE routing_route IS NOT NULL AND ${state}='sending' AND claimed_at<now()-interval '2 minutes' RETURNING ${key} source_id`);
   for(const item of expired.rows)nfcLog({leadId:item.source_id,category:'outcome_unknown'});
-  const c=await pool.connect();let row:any,message:RoutingMessage|undefined;
+  const c=await pool.connect();let row:RoutingOutboxRow|undefined,message:RoutingMessage|undefined;
   try{
    await c.query('BEGIN');
-   row=(await c.query(`SELECT * FROM nfc_card.${table} WHERE routing_route IN ('ORIG','BRAND') AND delivery_enabled
+   row=(await c.query<RoutingOutboxRow>(`SELECT * FROM nfc_card.${table} WHERE routing_route IN ('ORIG','BRAND') AND delivery_enabled
     AND routing_approval_reference=$1 AND routing_source_accepted_at>=routing_enabled_after AND routing_enabled_after=$2
     AND ${state} IN ('pending','retry') AND attempt_count<4 AND next_attempt_at<=now()
     ORDER BY next_attempt_at,${key} LIMIT 1 FOR UPDATE SKIP LOCKED`,[config.approvalReference,config.cutover])).rows[0];
@@ -103,7 +105,7 @@ export async function drainRoutes(pool:Pool,config:RoutingConfig|undefined,send:
      const data=kind==='v2'?source.receipt:legacyData(source);
      const context=source.control_context as ControlContext|undefined;
      if(context&&(!process.env.NFC_V2_SECRET||process.env.NFC_V2_SECRET.length<32))throw Error('control_signer_required');
-     message=routingMessage(kind,row[key],String(row.routing_chat_id),data,context?{context,secret:process.env.NFC_V2_SECRET!}:undefined);
+     message=routingMessage(kind,row[key]!,String(row.routing_chat_id),data,context?{context,secret:process.env.NFC_V2_SECRET!}:undefined);
      await c.query(`UPDATE nfc_card.${table} SET ${state}='sending',attempt_count=attempt_count+1,claimed_at=now(),updated_at=now(),delivery_payload_sha256=$2 WHERE ${key}=$1`,[row[key],createHash('sha256').update(message.bytes).digest('hex')]);
     }
    }

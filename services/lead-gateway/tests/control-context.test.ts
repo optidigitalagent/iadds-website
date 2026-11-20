@@ -12,11 +12,17 @@ import {readV2Config} from '../src/nfc-card/v2/config.ts';
 import {migrationSql,migrationSha,drainRoutes,ROUTING_APPROVAL,planV2,routingSchemaReady} from '../src/nfc-card/order-routing.ts';
 import {v2SchemaReady} from '../src/nfc-card/v2/runtime.ts';
 import {fileURLToPath} from 'node:url';
-const fixtures=JSON.parse(readFileSync(new URL('./fixtures/nfc-v35-requests.json',import.meta.url),'utf8'));
+import type {NormalizedRequest,NormalizedLine,ServiceContext,Receipt} from '../src/nfc-card/v2/contract.ts';
+import type {RoutingMessage,RoutingConfig} from '../src/nfc-card/order-routing.ts';
+type Wire=Pick<NormalizedRequest,'schemaVersion'|'kind'|'language'|'sourcePage'|'customerName'|'contact'|'consent'>&{lines:Pick<NormalizedLine,'lineId'|'entryId'|'productId'|'offerId'|'quantity'|'configuration'|'variantId'>[];serviceContext?:Pick<ServiceContext,'entryId'|'productId'|'offerId'|'intent'|'configuration'>;website:string;challenge:string};
+type RoutingDocument={sourceApplicationId:string;sourceRecord:unknown;controlContext?:unknown};
+type CapturedMessage=Pick<RoutingMessage,'caption'|'chatId'|'fileName'>&{document:RoutingDocument;documentBase64:string;sha256:string};
+type SavedControl={caseId:string;key:string;body:Wire;token:string;receipt:Receipt;chat:string};
+const fixtures:{positive:{wire:Wire}[]}=JSON.parse(readFileSync(new URL('./fixtures/nfc-v35-requests.json',import.meta.url),'utf8'));
 const secret='x'.repeat(48),run=CONTROL_RUN;
 const wire=(entry='branded-review-card')=>{
- const f=fixtures.positive.find((x:any)=>x.wire.kind==='physical_order'&&x.wire.lines.length===1&&x.wire.lines[0].entryId===entry);
- const w=structuredClone(f.wire);w.customerName='Synthetic scoped control';w.lines[0].quantity=1;return w;
+ const f=fixtures.positive.find((x)=>x.wire.kind==='physical_order'&&x.wire.lines.length===1&&x.wire.lines[0].entryId===entry);
+ const w=structuredClone(f!.wire);w.customerName='Synthetic scoped control';w.lines[0].quantity=1;return w;
 };
 test('trusted grant binds existing UUID nonce, one exact case/SKU, expiry; public flags/words never authorize',()=>{
  const key=randomUUID(),n=normalizeRequest(wire()),token=issueControlGrant(secret,run+'-WEB-BRAND',key,1000);
@@ -37,12 +43,12 @@ test('trusted grant binds existing UUID nonce, one exact case/SKU, expiry; publi
 test('existing real HTTP + PG + outbox path with trusted, forged, repeated contexts',{skip:!process.env.NFC_CONTROL_TEST_DATABASE_URL},async t=>{
  const u=new URL(process.env.NFC_CONTROL_TEST_DATABASE_URL!);
  assert.equal(u.hostname,'127.0.0.1');assert.equal(u.port,'55106');assert.equal(u.pathname,'/nfc_v35_control_test');
- const pool=database(u.href);let clock=Date.now();const route={cutover:new Date(clock-10000).toISOString(),approvalReference:ROUTING_APPROVAL};
+ const pool=database(u.href);let clock=Date.now();const route:RoutingConfig={cutover:new Date(clock-10000).toISOString(),approvalReference:ROUTING_APPROVAL};
  const origin='https://optidigitalagent.github.io';
  const cfg=readV2Config({NFC_V2_MODE:'approved-intake',NFC_V2_ORIGIN:origin,NFC_V2_SECRET:secret,NFC_V2_INBOUND_READ_SECRET:'y'.repeat(48),NFC_DATABASE_URL:u.href,
   NFC_V2_POLICY_FILE:fileURLToPath(new URL('../policies/nfc-card-v38-orders-approved.json',import.meta.url)),NFC_V2_APPROVAL_FILE:fileURLToPath(new URL('../policies/ORDER_ROUTING_OWNER_APPROVAL.json',import.meta.url))});cfg.orderRouting=route;
  const policy=cfg.policy!;
- const bind=(w:any)=>({...w,consent:{...w.consent,formVersion:policy.formVersion,privacyNoticeVersion:policy.privacyNoticeVersion}});
+ const bind=(w:Wire)=>({...w,consent:{...w.consent,formVersion:policy.formVersion,privacyNoticeVersion:policy.privacyNoticeVersion}});
  let requests=0,dropAfterCommit=false;
  const handler=createNfcV2Handler(pool,cfg,{now:()=>clock,ready:()=>v2SchemaReady(pool)});
  const server=createServer(async(req,res)=>{
@@ -57,10 +63,10 @@ test('existing real HTTP + PG + outbox path with trusted, forged, repeated conte
  });
  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
  const address=server.address();assert.ok(address&&typeof address!=='string');const base='http://127.0.0.1:'+address.port;
- async function post(w:any,key:string,token?:string){
+ async function post(w:Wire,key:string,token?:string){
   const c=await fetch(base+V2_ENDPOINT+'/challenge?'+new URLSearchParams({sourcePage:w.sourcePage}),{headers:{Origin:origin}});const challenge=await c.json();assert.equal(c.status,200);clock+=2100;
   const response=await fetch(base+V2_ENDPOINT,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','Idempotency-Key':key,...(token?{'X-Nfc-Control-Context':token}: {})},body:JSON.stringify({...w,challenge:challenge.challenge})});
-  return {status:response.status,body:await response.json()};
+  return {status:response.status,body:await response.json() as Record<string,unknown>};
  }
  const reset=async()=>{
   const tables=(await pool.query("SELECT tablename FROM pg_tables WHERE schemaname='nfc_card' AND tablename<>'schema_migrations'")).rows.map(x=>'nfc_card.'+x.tablename);
@@ -75,21 +81,21 @@ test('existing real HTTP + PG + outbox path with trusted, forged, repeated conte
   await reset();
   await t.test('ordinary receipt unchanged; two approved source rows reach the existing fake Telegram sender, excluded from working publication',async()=>{
    const normal=await post(bind(wire('review-card')),randomUUID());assert.equal(normal.status,202);assert.equal(normal.body.notificationStatus,'queued');
-   const messages:any[]=[];const saves:any[]=[];
+   const messages:CapturedMessage[]=[];const saves:SavedControl[]=[];
    for(const [name,entry,chat]of [['WEB-BRAND','branded-review-card','-5441287655'],['WEB-ORIG','review-card','-5531022071']]){
     const key=randomUUID(),body=bind(wire(entry));body.lines[0].configuration.notes='ТЕСТ — НЕ ИЗГОТАВЛИВАТЬ\nrun_id: '+run+'\ncase_id: '+run+'-'+name;
     const token=issueControlGrant(secret,run+'-'+name,key,clock),r=await post(body,key,token);assert.equal(r.status,202);
-    assert.deepEqual(await post(body,key,token),r);saves.push({caseId:run+'-'+name,key,body,token,receipt:r.body,chat});
+    assert.deepEqual(await post(body,key,token),r);saves.push({caseId:run+'-'+name,key,body,token,receipt:r.body as Receipt,chat});
    }
-   const sender=async(m:any)=>{
-    const source=JSON.parse(Buffer.from(m.bytes).toString());
+   const sender=async(m:RoutingMessage)=>{
+    const source:RoutingDocument=JSON.parse(Buffer.from(m.bytes).toString());
     assert.equal((await pool.query('SELECT count(*)::int n FROM nfc_card.v2_requests WHERE request_id=$1',[source.sourceApplicationId])).rows[0].n,1);
     messages.push({caption:m.caption,chatId:m.chatId,fileName:m.fileName,document:source,documentBase64:Buffer.from(m.bytes).toString('base64'),sha256:createHash('sha256').update(m.bytes).digest('hex')});
     return {status:'sent' as const,chatId:m.chatId,messageId:100+messages.length};
    };
    for(let i=0;i<3;i++)await drainRoutes(pool,route,sender);
    assert.equal(messages.length,3);
-   for(const item of saves){const m=messages.find(x=>x.document.sourceApplicationId===item.receipt.requestId);assert.equal(m.chatId,item.chat);assert.ok(m.caption.includes('ТЕСТ — НЕ ИЗГОТАВЛИВАТЬ'));assert.ok(m.caption.includes('CT1|'));assert.ok(m.caption.length<=1024);assert.deepEqual(m.document.sourceRecord,item.receipt);}
+   for(const item of saves){const m=messages.find(x=>x.document.sourceApplicationId===item.receipt.requestId)!;assert.equal(m.chatId,item.chat);assert.ok(m.caption.includes('ТЕСТ — НЕ ИЗГОТАВЛИВАТЬ'));assert.ok(m.caption.includes('CT1|'));assert.ok(m.caption.length<=1024);assert.deepEqual(m.document.sourceRecord,item.receipt);}
    const published=await publicationPage(pool,0);assert.equal(published.items.length,1);assert.equal(published.next.afterSeq,3);
    assert.equal((await pool.query('SELECT count(*)::int n FROM nfc_card.v2_requests')).rows[0].n,3);
    // Cross-language fixture uses only synthetic secrets/data and fake receipts.
@@ -110,7 +116,7 @@ test('existing real HTTP + PG + outbox path with trusted, forged, repeated conte
    const rows=(await pool.query('SELECT control_context FROM nfc_card.v2_requests')).rows;
    assert.equal(rows.length,2);assert.ok(rows.every(x=>!x.control_context.trusted&&x.control_context.blockEffects&&x.control_context.state==='QUARANTINED'));
    assert.equal((await publicationPage(pool,0)).items.length,2);
-   const injected=bind(wire());injected.is_test=true;assert.equal((await post(injected,randomUUID())).status,422);
+   const injected=bind(wire()) as ReturnType<typeof bind>&{is_test?:boolean};injected.is_test=true;assert.equal((await post(injected,randomUUID())).status,422);
   });
   await reset();
   await t.test('content conflict keeps trusted consequence guard while ordinary SKU selects actual route',async()=>{
