@@ -39,7 +39,7 @@ test('both Origins: existing v1/v2 challenge/status surface and exact preflight 
    const r=await probe(endpoint+'/challenge?sourcePage='+encodeURIComponent('/nfc-card-website/order/'),origin);assert.equal(r.status,200);allowed(r,origin);
    const post=await probe(endpoint,origin,'OPTIONS',{'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'content-type,idempotency-key'});assert.equal(post.status,204);allowed(post,origin);assert.equal(post.headers.get('access-control-allow-methods'),'GET, POST, OPTIONS');assert.equal(post.headers.get('access-control-allow-headers'),endpoint===ENDPOINT?'Content-Type, Idempotency-Key':'Content-Type, Idempotency-Key, X-Nfc-Control-Context');
    const get=await probe(endpoint+'/challenge',origin,'OPTIONS',{'Access-Control-Request-Method':'GET','Access-Control-Request-Headers':'content-type'});assert.equal(get.status,204);allowed(get,origin);
-   for(const patch of [{'Access-Control-Request-Method':'DELETE'},{'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'authorization'},{'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'x-nfc-preview-fault'}])assert.equal((await probe(endpoint,origin,'OPTIONS',patch)).status,403);
+   for(const patch of ([{'Access-Control-Request-Method':'DELETE'},{'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'authorization'},{'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'x-nfc-preview-fault'}] as Array<Record<string,string>>))assert.equal((await probe(endpoint,origin,'OPTIONS',patch)).status,403);
    assert.equal((await probe(endpoint+'/challenge?sourcePage='+encodeURIComponent('/order/'),origin)).status,422);
   }
   const status=await probe(V2_ENDPOINT+'/status',origin);assert.equal(status.status,200);allowed(status,origin);const body=await status.json();assert.equal(body.policySha256,policy.policySha256);assert.equal(body.contractId,'NFC-CARD-V35-P4-02-CF-01');
@@ -65,7 +65,7 @@ test('custom Origin gains no internal, signed, iADDS, health or preview-only COR
  }
  const preview=createNfcV2Handler(pool,{mode:'synthetic-preview',origin:'http://127.0.0.1:4196',secret,inboundReadSecret:reader,databaseName:'nfc_v35_preview_test'});
  const r=await preview(new Request('http://local'+V2_ENDPOINT+'/challenge?sourcePage=/nfc-card-website/order/',{headers:{Origin:NFC_CUSTOM_DOMAIN_ORIGIN}}));assert.equal(r?.status,403);assert.equal(r?.headers.get('access-control-allow-origin'),null);
- const gateway=createGateway({sources:new Map(),maxRequestsPerMinute:10} as GatewayConfig,{nfc:async r=>(await v2(r))??await legacy(r),send:async()=>{throw Error('external send forbidden')},log:()=>{}});
+ const gateway=createGateway({sources:new Map(),maxRequestsPerMinute:10} as unknown as GatewayConfig,{nfc:async r=>(await v2(r))??await legacy(r),send:async()=>{throw Error('external send forbidden')},log:()=>{}});
  for(const path of ['/healthz','/v1/leads','/unrelated']){
   const r=await gateway(new Request('http://local'+path,{headers:{Origin:NFC_CUSTOM_DOMAIN_ORIGIN}}));assert.equal(r.headers.get('access-control-allow-origin'),null);
  }
